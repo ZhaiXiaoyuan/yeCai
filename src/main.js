@@ -1,18 +1,27 @@
 import Vue from 'vue';
 import App from './App';
 import router from './router';
+import vueResource from 'vue-resource';
 import axios from 'axios';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';    // 默认主题
 // import '../static/css/theme-green/index.css';       // 浅绿色主题
 import "babel-polyfill";
-import Distpicker from 'v-distpicker'
+
+import api from './utils/api'
+import tools from './utils/tools'
+import components from './components'
 
 Vue.use(ElementUI, { size: 'small' });
 Vue.prototype.$axios = axios;
 
-//
-Vue.component('v-distpicker', Distpicker)
+/*---安装第三方插件---*/
+Vue.use(vueResource);
+
+/*---安装自定义插件---*/
+Vue.use(api);
+Vue.use(tools);
+Vue.use(components);
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {

@@ -9,7 +9,7 @@
         <div class="container">
             <el-row class="handle-box">
                 <el-col :span="14">
-                    <v-distpicker class="cm-area-picker" :province="areaSelect.province" :city="areaSelect.city" :area="areaSelect.area"></v-distpicker>
+                    <v-distpicker class="cm-area-picker" :callback="changeArea"></v-distpicker>
                 </el-col>
                 <el-col :span="10" style="text-align: right">
                     <el-button type="primary" class="mr10" @click="uploadFile()">
@@ -21,14 +21,14 @@
                 </el-col>
             </el-row>
             <el-table :data="entryList" border style="width: 100%;" ref="multipleTable" @selection-change="handleSelectionChange">
-                <el-table-column prop="" label="编号" align="center"></el-table-column>
-                <el-table-column prop="" label="公司名"  align="center"></el-table-column>
-                <el-table-column prop="" label="社会信用代码"  align="center"></el-table-column>
-                <el-table-column prop="" label="电话"  align="center"></el-table-column>
-                <el-table-column prop="" label="省份"  align="center"></el-table-column>
-                <el-table-column prop="" label="市区"  align="center"></el-table-column>
-                <el-table-column prop="" label="县/区" align="center"></el-table-column>
-                <el-table-column prop="" label="详细地址" width="200"  align="center"></el-table-column>
+                <el-table-column prop="channelId" label="编号" align="center"></el-table-column>
+                <el-table-column prop="companyName" label="公司名"  align="center"></el-table-column>
+                <el-table-column prop="socialCreditCode" label="社会信用代码"  align="center"></el-table-column>
+                <el-table-column prop="telephoneNums" label="电话"  align="center"></el-table-column>
+                <el-table-column prop="province" label="省份"  align="center"></el-table-column>
+                <el-table-column prop="city" label="市区"  align="center"></el-table-column>
+                <el-table-column prop="county" label="县/区" align="center"></el-table-column>
+                <el-table-column prop="address" label="详细地址" width="200"  align="center"></el-table-column>
                 <el-table-column label="操作"  align="center">
                     <template slot-scope="scope">
                         <el-button size="small" @click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
@@ -59,8 +59,13 @@
     }
 </style>
 <script>
+    import Vue from 'vue'
+   /* import Distpicker from '../../components/Distpicker'*/
     let XLSX = require('xlsx');
     export default {
+        components: {
+
+        },
         data() {
             return {
                 url: './static/vuetable.json',
@@ -72,61 +77,20 @@
                 del_list: [],
                 is_search: false,
 
-                areaSelect: { province: '', city: '', area: '' },
+                province:null,
+                city:null,
+                county:null,
+                regionKeyword:null,
                 entryList:[],
+                timer:null,
+                previous:null,
 
                 fullscreenLoading: false, // 加载中
                 imFile: '', // 导入文件el
                 outFile: '',  // 导出文件el
                 errorDialog: false, // 错误信息弹窗
                 errorMsg: '', // 错误信息内容
-                excelData: [  // 测试数据
-                    {
-                        name: '红烧鱼', size: '大', taste: '微辣', price: '40', remain: '100'
-                    },
-                    {
-                        name: '麻辣小龙虾', size: '大', taste: '麻辣', price: '138', remain: '200'
-                    },
-                    {
-                        name: '清蒸小龙虾', size: '大', taste: '清淡', price: '138', remain: '200'
-                    },
-                    {
-                        name: '香辣小龙虾', size: '大', taste: '特辣', price: '138', remain: '200'
-                    },
-                    {
-                        name: '十三香小龙虾', size: '大', taste: '中辣', price: '138', remain: '108'
-                    },
-                    {
-                        name: '蒜蓉小龙虾', size: '大', taste: '中辣', price: '138', remain: '100'
-                    },
-                    {
-                        name: '凉拌牛肉', size: '中', taste: '中辣', price: '48', remain: '60'
-                    },
-                    {
-                        name: '虾仁寿司', size: '大', taste: '清淡', price: '29', remain: '无限'
-                    },
-                    {
-                        name: '海苔寿司', size: '大', taste: '微辣', price: '26', remain: '无限'
-                    },
-                    {
-                        name: '金针菇寿司', size: '大', taste: '清淡', price: '23', remain: '无限'
-                    },
-                    {
-                        name: '泡菜寿司', size: '大', taste: '微辣', price: '24', remain: '无限'
-                    },
-                    {
-                        name: '鳗鱼寿司', size: '大', taste: '清淡', price: '28', remain: '无限'
-                    },
-                    {
-                        name: '肉松寿司', size: '大', taste: '清淡', price: '22', remain: '无限'
-                    },
-                    {
-                        name: '三文鱼寿司', size: '大', taste: '清淡', price: '30', remain: '无限'
-                    },
-                    {
-                        name: '蛋黄寿司', size: '大', taste: '清淡', price: '20', remain: '无限'
-                    }
-                ],
+                excelData: [],
             }
         },
         created(){
@@ -135,26 +99,10 @@
 
             }]
         },
+        watch:{
+
+        },
         computed: {
-            data(){
-                return this.tableData.filter((d) => {
-                    let is_del = false;
-                    for (let i = 0; i < this.del_list.length; i++) {
-                        if(d.name === this.del_list[i].name){
-                            is_del = true;
-                            break;
-                        }
-                    }
-                    if(!is_del){
-                        if(d.address.indexOf(this.select_cate) > -1 &&
-                            (d.name.indexOf(this.select_word) > -1 ||
-                            d.address.indexOf(this.select_word) > -1)
-                        ){
-                            return d;
-                        }
-                    }
-                })
-            }
         },
         methods: {
             // 分页导航
@@ -232,10 +180,12 @@
                             type: 'binary'
                         })
                     }
-                    for(let i=0;i<$t.wb.SheetNames.length;i++){
+                 /*   for(let i=0;i<$t.wb.SheetNames.length;i++){
                         let json = XLSX.utils.sheet_to_json($t.wb.Sheets[$t.wb.SheetNames[i]]);
                         $t.dealFile($t.analyzeData(json)) // analyzeData: 解析导入数据
-                    }
+                    }*/
+                    let json = XLSX.utils.sheet_to_json($t.wb.Sheets[$t.wb.SheetNames[0]]);
+                    $t.dealFile($t.analyzeData(json)) // analyzeData: 解析导入数据
                 }
                 if (this.rABS) {
                     reader.readAsArrayBuffer(f)
@@ -293,7 +243,49 @@
                     this.errorDialog = true
                     this.errorMsg = '请导入正确信息'
                 } else {
-                    this.excelData = data
+                    this.excelData = [];
+                    data.forEach((item,key)=>{
+                     /*   console.log('item:',item);*/
+                        if(parseInt(item['夜彩门店信息'])>=1&&item.__EMPTY){
+                           /* console.log('item:',item);*/
+                            this.excelData.push({
+                              /*  "accountState":"enable",*/
+                              /*  "monthSale":0.0,*/
+                                "marketingRebates":item.__EMPTY_12,
+                                "address":item.__EMPTY_6,
+                               /* "marketingChannelsId":"223b4de2161743d0aa4521fb8bb81fff",*/
+                                "telephoneNums":item.__EMPTY_2,
+                              /*  "otherId":"aa264325ecfc4370b66ba0b6dd55c451",*/
+                                "city":item.__EMPTY_4,
+                               /* "daySale":0.0,*/
+                                "companyName":item.__EMPTY,
+                                "county":item.__EMPTY_5,
+                              /*  "qRCodeId":"6729ecdba5b248069628fffe2905da39",*/
+                             /*   "monthRankings":-1,*/
+                                "socialCreditCode":item.__EMPTY_1,
+                                "otherRebates":item.__EMPTY_15,
+                              /*  "dayRankings":-1,*/
+                              /*  "yearSale":0.0,*/
+                              /*  "companyPic":"",*/
+                                "province":item.__EMPTY_3,
+                                "shopRebates":item.__EMPTY_9,
+                            /*    "id":"6729ecdba5b248069628fffe2905da39",*/
+                               /* "yearRankings":-1,*/
+                              /*  "channelId":"482013a527964df68ce7a92d4584fb52"*/
+                            });
+                        }
+                    });
+                   /* console.log('test:', this.excelData);*/
+                   /**/
+                   if(this.excelData.length>0){
+                       Vue.api.addShopBatch({...Vue.sessionInfo(),shopData:JSON.stringify(this.excelData)}).then((resp)=>{
+                           if(resp.respStatus=='success'){
+
+                           }else{
+
+                           }
+                       });
+                   }
                 }
             },
             s2ab: function (s) { // 字符串转字符流
@@ -323,7 +315,41 @@
                 }
                 o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w)))
                 return o
-            }
+            },
+
+            getList:function () {
+                let params={
+                    ...Vue.sessionInfo(),
+                    pageIndex:1,
+                    pageSize:20,
+                    searchContent:this.regionKeyword?this.regionKeyword:null,
+                }
+                Vue.api.getShopList(params).then((resp)=>{
+                    if(resp.respStatus=='success'){
+                        this.entryList=JSON.parse(resp.respMsg);
+                    }
+                });
+            },
+            changeArea:function (data) {
+                console.log('data:',data);
+                let that=this;
+                var now = +new Date();
+                if (!this.previous) this.previous = now;
+                if (1000 && now - this.previous > 1000) {
+                    that.regionKeyword=data.value;
+                    that.getList();
+                    // 重置上一次开始时间为本次结束时间
+                    this.previous = now;
+                    clearTimeout(this.timer);
+                } else {
+                    clearTimeout(this.timer);
+                    this.timer = setTimeout(function() {
+                        that.regionKeyword=data.value;
+                        that.getList();
+                        this.previous = null;
+                    }, 500);
+                }
+            },
         },
         mounted () {
             this.imFile = document.getElementById('imFile');
@@ -359,6 +385,10 @@
                     "subbranch":"地球分行",
                     "email":"aaa@qq.com"
                 }]
+
+            //
+            this.getList();
+
         },
     }
 </script>
