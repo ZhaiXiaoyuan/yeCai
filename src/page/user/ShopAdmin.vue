@@ -31,8 +31,7 @@
                 <el-table-column prop="address" label="详细地址" width="200"  align="center"></el-table-column>
                 <el-table-column label="操作"  align="center">
                     <template slot-scope="scope">
-                        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
-
+                        <router-link :to="'/shopDetail/'+scope.row.id" size="small" @click="handleEdit(scope.$index, scope.row)">查看详情</router-link>
                     </template>
                 </el-table-column>
             </el-table>
@@ -247,15 +246,15 @@
                     data.forEach((item,key)=>{
                      /*   console.log('item:',item);*/
                         if(parseInt(item['夜彩门店信息'])>=1&&item.__EMPTY){
-                           /* console.log('item:',item);*/
+                            console.log('item:',item);
                             this.excelData.push({
                               /*  "accountState":"enable",*/
                               /*  "monthSale":0.0,*/
                                 "marketingRebates":item.__EMPTY_12,
                                 "address":item.__EMPTY_6,
-                               /* "marketingChannelsId":"223b4de2161743d0aa4521fb8bb81fff",*/
+                                "marketingChannelsId":item.__EMPTY_11,
                                 "telephoneNums":item.__EMPTY_2,
-                              /*  "otherId":"aa264325ecfc4370b66ba0b6dd55c451",*/
+                                "otherId":item.__EMPTY_14,
                                 "city":item.__EMPTY_4,
                                /* "daySale":0.0,*/
                                 "companyName":item.__EMPTY,
@@ -271,11 +270,11 @@
                                 "shopRebates":item.__EMPTY_9,
                             /*    "id":"6729ecdba5b248069628fffe2905da39",*/
                                /* "yearRankings":-1,*/
-                              /*  "channelId":"482013a527964df68ce7a92d4584fb52"*/
+                                "channelId":item.__EMPTY_8,
                             });
                         }
                     });
-                   /* console.log('test:', this.excelData);*/
+                    console.log('test:', this.excelData);
                    /**/
                    if(this.excelData.length>0){
                        Vue.api.addShopBatch({...Vue.sessionInfo(),shopData:JSON.stringify(this.excelData)}).then((resp)=>{
@@ -388,6 +387,77 @@
 
             //
             this.getList();
+
+           let test=[
+                {"accountState":"enable",
+                    "monthSale":0.0,
+                    "marketingRebates":3.15,
+                    "address":"地球村",
+                    "marketingChannelsId":"223b4de2161743d0aa4521fb8bb81fff",
+                    "telephoneNums":"13700000005",
+                    "otherId":"aa264325ecfc4370b66ba0b6dd55c451",
+                    "city":"深圳",
+                    "daySale":0.0,
+                    "companyName":"地球科技",
+                    "county":"南山区",
+                    "qRCodeId":"6729ecdba5b248069628fffe2905da39",
+                    "monthRankings":-1,
+                    "socialCreditCode":"123456789",
+                    "otherRebates":1.37,
+                    "dayRankings":-1,
+                    "yearSale":0.0,
+                    "companyPic":"",
+                    "province":"广东省",
+                    "shopRebates":4.15,
+                    "id":"6729ecdba5b248069628fffe2905da39",
+                    "yearRankings":-1,
+                    "channelId":"482013a527964df68ce7a92d4584fb52"},
+                {"accountState":"enable",
+                    "monthSale":0.0,
+                    "marketingRebates":3.15,
+                    "address":"地球村",
+                    "marketingChannelsId":"4a9e84b697ef4d35adb9b6926747337f",
+                    "telephoneNums":"13700000002",
+                    "otherId":"76a6e0ef8a124a5ab6fa27af7b3af3b8",
+                    "city":"深圳",
+                    "daySale":0.0,
+                    "companyName":"地球科技",
+                    "county":"南山区",
+                    "qRCodeId":"8b00076c4b85451988806f1d9b101bb0",
+                    "monthRankings":-1,
+                    "socialCreditCode":"123456789",
+                    "otherRebates":1.37,
+                    "dayRankings":-1,
+                    "yearSale":0.0,
+                    "companyPic":"",
+                    "province":"广东省",
+                    "shopRebates":4.15,
+                    "id":"8b00076c4b85451988806f1d9b101bb0",
+                    "yearRankings":-1,
+                    "channelId":"db1afecea8bc484fa0034e951ac4eb43"},
+                {"accountState":"enable",
+                    "monthSale":0.0,
+                    "marketingRebates":3.15,
+                    "address":"地球村",
+                    "marketingChannelsId":"4f0714e968e44a2ba3afaa37936d99b4",
+                    "telephoneNums":"13700000003",
+                    "otherId":"3764029e65fb4b2189e84156d8c068ba",
+                    "city":"深圳",
+                    "daySale":0.0,
+                    "companyName":"地球科技",
+                    "county":"南山区",
+                    "qRCodeId":"a13579b46c4e408681b1eb74cb5ec7de",
+                    "monthRankings":-1,
+                    "socialCreditCode":"123456789",
+                    "otherRebates":1.37,
+                    "dayRankings":-1,
+                    "yearSale":0.0,
+                    "companyPic":"",
+                    "province":"广东省",
+                    "shopRebates":4.15,
+                    "id":"a13579b46c4e408681b1eb74cb5ec7de",
+                    "yearRankings":-1,
+                    "channelId":"c9dfe145de5046a193cc3fe2b5b99d15"}]
 
         },
     }

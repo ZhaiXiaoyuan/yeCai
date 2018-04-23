@@ -154,7 +154,8 @@
                     delivery: false,
                     type: [],
                     resource: '',
-                    desc: ''
+                    desc: '',
+                    id:null,
                 },
                 formLabelWidth: '120px'
             }
@@ -169,7 +170,9 @@
 
         },
         mounted () {
-
+            /**/
+            this.id=this.$route.params.id;
+            console.log('test:',this.$route);
         },
     }
 </script>
