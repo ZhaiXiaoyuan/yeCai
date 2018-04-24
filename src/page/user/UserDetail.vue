@@ -10,30 +10,35 @@
         <div class="container">
             <el-row class="container-hd">
                 <el-col :span="12">
-                    <el-button type="primary" icon="el-icon-back">返回</el-button>
+                    <el-button type="primary" icon="el-icon-back" @click="$router.go(-1)">返回</el-button>
                 </el-col>
                 <el-col :span="12" style="text-align: right;">
-                    <el-button type="primary" icon="el-icon-delete">删除</el-button>
-                    <el-button type="primary" icon="el-icon-edit" @click="dialogFormVisible=true">编辑</el-button>
+                    <el-button type="primary" icon="el-icon-delete" @click="del()" v-if="userDetail.accountState=='enable'">删除</el-button>
+                    <el-button type="primary" icon="el-icon-edit" @click="dialogFormVisible=true" v-if="userDetail.accountState=='enable'">编辑</el-button>
                 </el-col>
             </el-row>
             <div class="container-bd">
                 <el-row class="block">
                     <el-row class="info-row">
-                        <el-col :span="10">手机号：13700000000</el-col>
-                        <el-col :span="14">状态:可用</el-col>
+                        <el-col :span="10">手机号：{{userDetail.phoneNums}}</el-col>
+                        <el-col :span="14">
+                            状态:
+                            <span v-if="userDetail.accountState=='enable'">可用</span>
+                            <span v-if="userDetail.accountState=='disable'">禁止</span>
+                            <span v-if="userDetail.accountState=='del'">已删除</span>
+                        </el-col>
                     </el-row>
-                    <el-row class="info-row">姓名：xxxx</el-row>
-                    <el-row class="info-row">身份证：1234567980</el-row>
-                    <el-row class="info-row">邮箱：1234567890</el-row>
-                    <el-row class="info-row">返点比例：5%</el-row>
-                    <el-row class="info-row">开户行：xxxx</el-row>
-                    <el-row class="info-row">支行：xxxx</el-row>
-                    <el-row class="info-row">银行账户：xxxx</el-row>
+                    <el-row class="info-row">姓名：{{userDetail.name}}</el-row>
+                    <el-row class="info-row">身份证：{{userDetail.idCard}}</el-row>
+                    <el-row class="info-row">邮箱：{{userDetail.email}}</el-row>
+                    <el-row class="info-row">返点比例：{{userDetail.revenue}}%</el-row>
+                    <el-row class="info-row">开户行：{{userDetail.bankName}}</el-row>
+                    <el-row class="info-row">支行：{{userDetail.subbranch}}</el-row>
+                    <el-row class="info-row">银行账户：{{userDetail.bankAccount}}</el-row>
                 </el-row>
                 <el-row class="block">
                     <el-row class="info-row">
-                        <h2>总收益:50000元</h2>
+                        <h2>总收益:{{userDetail.subject?userDetail.subject:0}}元</h2>
                     </el-row>
                 </el-row>
             </div>
@@ -42,37 +47,51 @@
             <el-row type="flex">
                 <el-col :sm="24" :md="22" :lg="20">
                     <el-form :model="form">
-                        <el-form-item label="门店编号" :label-width="formLabelWidth">
-                            <el-input v-model="form.name" auto-complete="off"></el-input>
+                        <el-form-item label="手机号码" :label-width="formLabelWidth">
+                            <el-input v-model="form.phoneNums" maxLength="50" auto-complete="off"></el-input>
                         </el-form-item>
-                        <el-form-item label="公司" :label-width="formLabelWidth">
-                            <el-input v-model="form.name" auto-complete="off"></el-input>
+                        <el-form-item label="姓名" :label-width="formLabelWidth">
+                            <el-input v-model="form.name" maxLength="50" auto-complete="off"></el-input>
                         </el-form-item>
-                        <el-form-item label="社会信用代码" :label-width="formLabelWidth">
-                            <el-input v-model="form.name" auto-complete="off"></el-input>
+                        <el-form-item label="身份证" :label-width="formLabelWidth">
+                            <el-input v-model="form.idCard" maxLength="50" auto-complete="off"></el-input>
                         </el-form-item>
-                        <el-form-item label="电话" :label-width="formLabelWidth">
-                            <el-input v-model="form.name" auto-complete="off"></el-input>
+                        <el-form-item label="邮件" :label-width="formLabelWidth">
+                            <el-input v-model="form.email" maxLength="50" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="银行名称" :label-width="formLabelWidth">
+                            <el-input v-model="form.bankName" maxLength="50" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="分行" :label-width="formLabelWidth">
+                            <el-input v-model="form.subbranch" maxLength="50" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="银行账号" :label-width="formLabelWidth">
+                            <el-input v-model="form.bankAccount" maxLength="50" auto-complete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="地区" :label-width="formLabelWidth">
-                            <v-distpicker class="cm-area-picker" :province="areaSelect.province" :city="areaSelect.city" :area="areaSelect.area"></v-distpicker>
+                            <v-distpicker class="cm-area-picker" :province="form.province" :city="form.city" :area="form.county"></v-distpicker>
                         </el-form-item>
                         <el-form-item label="详细地址" :label-width="formLabelWidth">
-                            <el-input v-model="form.name" auto-complete="off"></el-input>
-                        </el-form-item>
-                        <el-form-item label="状态" :label-width="formLabelWidth">
-                            <el-select v-model="form.region" placeholder="请选择状态">
-                                <el-option label="可用" value="shanghai"></el-option>
-                                <el-option label="禁用" value="beijing"></el-option>
-                                <el-option label="失效" value="beijing"></el-option>
-                            </el-select>
+                            <el-input v-model="form.address" maxLength="100" auto-complete="off"></el-input>
                         </el-form-item>
                     </el-form>
                 </el-col>
             </el-row>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false">提交</el-button>
+                <el-button type="primary"
+                           :disabled="!form.phoneNums||form.phoneNums==''
+                           ||!form.name||form.name==''
+                           ||!form.idCard||form.idCard==''
+                           ||!form.email||form.email==''
+                           ||!form.bankName||form.bankName==''
+                           ||!form.subbranch||form.subbranch==''
+                           ||!form.bankAccount||form.bankAccount==''
+                           ||!form.province||form.province==''
+                           ||!form.city||form.city==''
+                           ||!form.county||form.county==''
+                           ||!form.address||form.address==''"
+                           @click="update()">提交</el-button>
             </div>
         </el-dialog>
     </div>
@@ -110,22 +129,16 @@
     }
 </style>
 <script>
+    import Vue from 'vue'
     export default {
         data() {
             return {
                 dialogFormVisible: false,
-                areaSelect: { province: '', city: '', area: '' },
-                form: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
-                },
-                formLabelWidth: '120px'
+                form:{province: '', city: '', county: ''},
+                formLabelWidth: '120px',
+
+                id:null,
+                userDetail:{},
             }
         },
         created(){
@@ -134,10 +147,55 @@
 
         },
         methods: {
+            getUserDetail:function () {
+                Vue.api.getUserDetail({...Vue.sessionInfo(),userId:this.id}).then((resp)=>{
+                    if(resp.respCode=='00'){
+                        this.userDetail=JSON.parse(resp.respMsg);
+                        this.form=Object.assign({},this.userDetail);
+                        console.log('this.form:',this.form);
+                    }
+                });
+            },
+            del:function () {
+                this.$confirm('确定删除该用户?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then((data) => {
+                    let fb=Vue.operationFeedback({text:'删除中...'});
+                    Vue.api.setUserState({...Vue.sessionInfo(),userId:this.id,state:'del'}).then((resp)=>{
+                        if(resp.respCode=='00'){
+                            this.userDetail.accountState='del';
+                            fb.setOptions({type:'complete',text:'删除成功'});
+                        }else{
+                            fb.setOptions({type:'warn',text:'删除失败，'+resp.respMsg});
+                        }
+                    });
+                }).catch((data) => {
 
+                });
+            },
+            update:function () {
+                let params={
+                    ...Vue.sessionInfo(),
+                    ...this.form
+                }
+                let fb=Vue.operationFeedback({text:'保存中...'});
+                Vue.api.updateUserInfo(params).then((resp)=>{
+                    if(resp.respCode=='00'){
+                        this.dialogFormVisible = false;
+                        fb.setOptions({type:'complete',text:'保存成功'});
+                    }else{
+                        fb.setOptions({type:'warn',text:'保存失败，'+resp.respMsg});
+                    }
+                });
+            }
         },
         mounted () {
-
+            /**/
+            this.id=this.$route.params.id;
+            /**/
+            this.getUserDetail();
         },
     }
 </script>

@@ -68,7 +68,7 @@
                                 title: '门店管理'
                             },
                             {
-                                index: 'user',
+                                index: '/user',
                                 title: '用户管理'
                             }
                         ]
@@ -79,11 +79,11 @@
                         title: '排名',
                         subs: [
                             {
-                                index: 'benefitRank',
+                                index: '/benefitRank',
                                 title: '收益排名'
                             },
                             {
-                                index: 'oddsRank',
+                                index: '/oddsRank',
                                 title: '中奖率排名'
                             }
                         ]
@@ -94,23 +94,23 @@
                         title: '财务系统',
                         subs: [
                             {
-                                index: 'rebatesRecord',
+                                index: '/rebatesRecord',
                                 title: '返点记录'
                             },
                             {
-                                index: 'log',
+                                index: '/log',
                                 title: '操作日志'
                             }
                         ]
                     },
                     {
                         icon: '#icon-permissions',
-                        index: 'permission',
+                        index: '/permission',
                         title: '权限管理',
                     },
                     {
                         icon: '#icon-xitongshezhi',
-                        index: 'setting',
+                        index: '/setting',
                         title: '系统设置',
                     },
                 ]

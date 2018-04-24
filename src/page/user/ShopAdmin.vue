@@ -271,17 +271,22 @@
                             /*    "id":"6729ecdba5b248069628fffe2905da39",*/
                                /* "yearRankings":-1,*/
                                 "channelId":item.__EMPTY_8,
+                                shopChannelsPhoneNums:item.__EMPTY_7,
+                                marketingChannelsPhoneNums:item.__EMPTY_10,
+                                otherPhoneNums:item.__EMPTY_13
                             });
                         }
                     });
                     console.log('test:', this.excelData);
                    /**/
                    if(this.excelData.length>0){
+                       let fb=Vue.operationFeedback({text:'导入中...'});
                        Vue.api.addShopBatch({...Vue.sessionInfo(),shopData:JSON.stringify(this.excelData)}).then((resp)=>{
                            if(resp.respStatus=='success'){
-
+                               this.getList();
+                               fb.setOptions({type:'complete',text:'导入成功'});
                            }else{
-
+                               fb.setOptions({type:'warn',text:'导入失败，'+resp.respMsg});
                            }
                        });
                    }
@@ -324,7 +329,7 @@
                     searchContent:this.regionKeyword?this.regionKeyword:null,
                 }
                 Vue.api.getShopList(params).then((resp)=>{
-                    if(resp.respStatus=='success'){
+                    if(resp.respCode=='00'){
                         this.entryList=JSON.parse(resp.respMsg);
                     }
                 });

@@ -9,8 +9,8 @@
         <div class="container">
             <el-row class="handle-box">
                 <el-col :span="14">
-                    <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
-                    <el-button type="primary" icon="search" @click="search">搜索</el-button>
+                    <el-input v-model="keyword" placeholder="筛选关键词" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="search" @click="getList()">搜索</el-button>
                 </el-col>
                 <el-col :span="10" style="text-align: right">
                     <el-button type="primary" class="mr10" @click="uploadFile()">
@@ -18,21 +18,21 @@
                         <input type="file" @change="importFile(this)" id="imFile" style="display: none"
                                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
                     </el-button>
+                    <el-button type="primary" @click="dialogFormVisible=true">新建用户</el-button>
                 </el-col>
             </el-row>
             <el-table :data="entryList" border style="width: 100%;" ref="multipleTable">
-                <el-table-column prop="" label="手机号" align="center"></el-table-column>
-                <el-table-column prop="" label="姓名"  align="center"></el-table-column>
-                <el-table-column prop="" label="身份证"  align="center"></el-table-column>
-                <el-table-column prop="" label="邮箱"  align="center"></el-table-column>
-                <el-table-column prop="" label="返点比例"  align="center"></el-table-column>
-                <el-table-column prop="" label="开户行"  align="center"></el-table-column>
-                <el-table-column prop="" label="支行" align="center"></el-table-column>
-                <el-table-column prop="" label="银行账户" width="200"  align="center"></el-table-column>
+                <el-table-column prop="phoneNums" label="手机号" align="center"></el-table-column>
+                <el-table-column prop="name" label="姓名"  align="center"></el-table-column>
+                <el-table-column prop="idCard" label="身份证"  align="center"></el-table-column>
+                <el-table-column prop="email" label="邮箱"  align="center"></el-table-column>
+                <el-table-column prop="revenue" :formatter="percentFormatter" label="返点比例"  align="center"></el-table-column>
+                <el-table-column prop="bankName" label="开户行"  align="center"></el-table-column>
+                <el-table-column prop="subbranch" label="支行" align="center"></el-table-column>
+                <el-table-column prop="bankAccount" label="银行账户" width="200"  align="center"></el-table-column>
                 <el-table-column label="操作"  align="center">
                     <template slot-scope="scope">
-                        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
-
+                        <router-link :to="'/userDetail/'+scope.row.id" size="small">查看详情</router-link>
                     </template>
                 </el-table-column>
             </el-table>
@@ -43,6 +43,57 @@
                     :total="1000">
                 </el-pagination>
             </div>
+            <el-dialog title="新建" class="edit-dialog" :visible.sync="dialogFormVisible" width="40%">
+                <el-row type="flex">
+                    <el-col :sm="24" :md="22" :lg="20">
+                        <el-form :model="form">
+                            <el-form-item label="手机号码" :label-width="formLabelWidth">
+                                <el-input v-model="form.phoneNums" maxLength="50" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="姓名" :label-width="formLabelWidth">
+                                <el-input v-model="form.name" maxLength="50" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="身份证" :label-width="formLabelWidth">
+                                <el-input v-model="form.idCard" maxLength="50" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="邮件" :label-width="formLabelWidth">
+                                <el-input v-model="form.email" maxLength="50" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="银行名称" :label-width="formLabelWidth">
+                                <el-input v-model="form.bankName" maxLength="50" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="分行" :label-width="formLabelWidth">
+                                <el-input v-model="form.subbranch" maxLength="50" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="银行账号" :label-width="formLabelWidth">
+                                <el-input v-model="form.bankAccount" maxLength="50" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="地区" :label-width="formLabelWidth">
+                                <v-distpicker class="cm-area-picker"  :callback="addUserChangeArea"></v-distpicker>
+                            </el-form-item>
+                            <el-form-item label="详细地址" :label-width="formLabelWidth">
+                                <el-input v-model="form.address" maxLength="100" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-form>
+                    </el-col>
+                </el-row>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取 消{{form.province}}</el-button>
+                    <el-button type="primary"
+                               :disabled="!form.phoneNums||form.phoneNums==''
+                           ||!form.name||form.name==''
+                           ||!form.idCard||form.idCard==''
+                           ||!form.email||form.email==''
+                           ||!form.bankName||form.bankName==''
+                           ||!form.subbranch||form.subbranch==''
+                           ||!form.bankAccount||form.bankAccount==''
+                           ||!form.province||form.province==''
+                           ||!form.city||form.city==''
+                           ||!form.county||form.county==''
+                           ||!form.address||form.address==''"
+                               @click="add()">提交</el-button>
+                </div>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -59,6 +110,7 @@
     }
 </style>
 <script>
+    import Vue from 'vue'
     let XLSX = require('xlsx');
     export default {
         data() {
@@ -72,7 +124,7 @@
                 del_list: [],
                 is_search: false,
 
-                areaSelect: { province: '', city: '', area: '' },
+                keyword:null,
                 entryList:[],
 
                 fullscreenLoading: false, // 加载中
@@ -80,53 +132,11 @@
                 outFile: '',  // 导出文件el
                 errorDialog: false, // 错误信息弹窗
                 errorMsg: '', // 错误信息内容
-                excelData: [  // 测试数据
-                    {
-                        name: '红烧鱼', size: '大', taste: '微辣', price: '40', remain: '100'
-                    },
-                    {
-                        name: '麻辣小龙虾', size: '大', taste: '麻辣', price: '138', remain: '200'
-                    },
-                    {
-                        name: '清蒸小龙虾', size: '大', taste: '清淡', price: '138', remain: '200'
-                    },
-                    {
-                        name: '香辣小龙虾', size: '大', taste: '特辣', price: '138', remain: '200'
-                    },
-                    {
-                        name: '十三香小龙虾', size: '大', taste: '中辣', price: '138', remain: '108'
-                    },
-                    {
-                        name: '蒜蓉小龙虾', size: '大', taste: '中辣', price: '138', remain: '100'
-                    },
-                    {
-                        name: '凉拌牛肉', size: '中', taste: '中辣', price: '48', remain: '60'
-                    },
-                    {
-                        name: '虾仁寿司', size: '大', taste: '清淡', price: '29', remain: '无限'
-                    },
-                    {
-                        name: '海苔寿司', size: '大', taste: '微辣', price: '26', remain: '无限'
-                    },
-                    {
-                        name: '金针菇寿司', size: '大', taste: '清淡', price: '23', remain: '无限'
-                    },
-                    {
-                        name: '泡菜寿司', size: '大', taste: '微辣', price: '24', remain: '无限'
-                    },
-                    {
-                        name: '鳗鱼寿司', size: '大', taste: '清淡', price: '28', remain: '无限'
-                    },
-                    {
-                        name: '肉松寿司', size: '大', taste: '清淡', price: '22', remain: '无限'
-                    },
-                    {
-                        name: '三文鱼寿司', size: '大', taste: '清淡', price: '30', remain: '无限'
-                    },
-                    {
-                        name: '蛋黄寿司', size: '大', taste: '清淡', price: '20', remain: '无限'
-                    }
-                ],
+                excelData: [ ],
+
+                dialogFormVisible: false,
+                form:{},
+                formLabelWidth: '120px',
             }
         },
         created(){
@@ -232,10 +242,12 @@
                             type: 'binary'
                         })
                     }
-                    for(let i=0;i<$t.wb.SheetNames.length;i++){
+                    /*for(let i=0;i<$t.wb.SheetNames.length;i++){
                         let json = XLSX.utils.sheet_to_json($t.wb.Sheets[$t.wb.SheetNames[i]]);
                         $t.dealFile($t.analyzeData(json)) // analyzeData: 解析导入数据
-                    }
+                    }*/
+                    let json = XLSX.utils.sheet_to_json($t.wb.Sheets[$t.wb.SheetNames[1]]);
+                    $t.dealFile($t.analyzeData(json)) // analyzeData: 解析导入数据
                 }
                 if (this.rABS) {
                     reader.readAsArrayBuffer(f)
@@ -293,7 +305,36 @@
                     this.errorDialog = true
                     this.errorMsg = '请导入正确信息'
                 } else {
-                    this.excelData = data
+                    this.excelData = [];
+                    data.forEach((item,key)=>{
+                            if(parseInt(item['用户账户登记'])>=1&&item.__EMPTY){
+                                this.excelData.push(
+                                    {
+                                        "bankAccount":item.__EMPTY_2,
+                                        "idCard":item.__EMPTY_5,
+                                        "bankName":item.__EMPTY,
+                                        "phoneNums":item.__EMPTY_3,
+                                        "name":item.__EMPTY_4,
+                                        "subbranch":item.__EMPTY_1,
+                                        "email":item.__EMPTY_6,
+                                        "province":'**',
+                                        "city":'**',
+                                        "county":'**',
+                                        "address":'**',
+                                    }
+                                )
+                            }
+                    })
+                    let fb=Vue.operationFeedback({text:'导入中...'});
+                    Vue.api.addUserBatch({...Vue.sessionInfo(),userData:JSON.stringify(this.excelData)}).then((resp)=>{
+                        if(resp.respStatus=='success'){
+                            this.getList();
+                            fb.setOptions({type:'complete',text:'导入成功'});
+                        }else{
+                            fb.setOptions({type:'warn',text:'导入失败，'+resp.respMsg});
+                        }
+                    });
+
                 }
             },
             s2ab: function (s) { // 字符串转字符流
@@ -323,42 +364,57 @@
                 }
                 o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w)))
                 return o
-            }
+            },
+
+            percentFormatter(row, column) {
+                return row.revenue+'%';
+            },
+            getList:function () {
+                let params={
+                    ...Vue.sessionInfo(),
+                    pageIndex:0,//值有误，临时测试
+                    pageSize:20,
+                    searchContent:this.keyword,
+                }
+                Vue.api.getUserList(params).then((resp)=>{
+                    if(resp.respCode=='00'){
+                        this.entryList=JSON.parse(resp.respMsg);
+                    }
+                });
+            },
+            add:function () {
+                let params={
+                    ...Vue.sessionInfo(),
+                    ...this.form
+                }
+                let fb=Vue.operationFeedback({text:'保存中...'});
+                Vue.api.addUser(params).then((resp)=>{
+                    if(resp.respCode=='00'){
+                        this.getList();
+                        this.dialogFormVisible = false;
+                        fb.setOptions({type:'complete',text:'新建成功'});
+                    }else{
+                        fb.setOptions({type:'warn',text:'新建失败，'+resp.respMsg});
+                    }
+                });
+            },
+            addUserChangeArea:function (data) {
+                if(data.type=='province'){
+                    this.form.province=data.value;
+                }else if(data.type=='city'){
+                    this.form.city=data.value;
+                }else if(data.type=='area'){
+                    this.form.county=data.value;
+                }
+            },
         },
         mounted () {
             this.imFile = document.getElementById('imFile');
             this.outFile = document.getElementById('downlink');
-            //临时测试
-            let testObj=[
-                {"bankAccount":"1234567890",
-                    "address":"xxxx",
-                    "city":"广州",
-                    "idCard":"440602199302262151",
-                    "county":"海珠区",
-                    "bankName":"中国建设银行",
-                    "userCode":"0",
-                    "password":"00000002",
-                    "phoneNums":"13700000000",
-                    "province":"广东",
-                    "name":"bbb",
-                    "subbranch":"地球分行",
-                    "email":"aaa@qq.com"
-                },
-                {
-                    "bankAccount":"1234567890",
-                    "address":"xxxx",
-                    "city":"广州",
-                    "idCard":"440602199302262151",
-                    "county":"海珠区",
-                    "bankName":"中国建设银行",
-                    "userCode":"0",
-                    "password":"00000002",
-                    "phoneNums":"13700000001",
-                    "province":"广东",
-                    "name":"bbb",
-                    "subbranch":"地球分行",
-                    "email":"aaa@qq.com"
-                }]
+
+            /**/
+            this.getList();
+
         },
     }
 </script>

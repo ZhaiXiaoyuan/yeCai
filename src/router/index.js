@@ -11,10 +11,12 @@ export default new Router({
             children:[
                 {
                     path: '/',
+                    name:'shop',
                     component: resolve => require(['../page/user/ShopAdmin.vue'], resolve)
                 },
                 {
                     path: '/shopDetail/:id',
+                    name:'shopDetail',
                     component: resolve => require(['../page/user/ShopDetail'], resolve)
                 },
                 {
