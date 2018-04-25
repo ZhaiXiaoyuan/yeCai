@@ -130,6 +130,38 @@ export default {
                 params: params
             });
         },
+        //设置门店账号状态
+        setShopState:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl+'/shop/setShopState',
+                params: params
+            });
+        },
+        //更新门店信息
+        updateShopInfo:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl+'/shop/updateShopInfo',
+                params: params
+            });
+        },
+        //上传公司照片
+        uploadShopPic:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl+'/shop/uploadPic',
+                params: params
+            });
+        },
+        //添加门店账户
+        addShop:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl+'/shop/addShop',
+                params: params
+            });
+        },
     }
   },
 

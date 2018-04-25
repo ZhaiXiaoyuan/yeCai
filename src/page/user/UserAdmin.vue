@@ -10,15 +10,15 @@
             <el-row class="handle-box">
                 <el-col :span="14">
                     <el-input v-model="keyword" placeholder="筛选关键词" class="handle-input mr10"></el-input>
-                    <el-button type="primary" icon="search" @click="getList()">搜索</el-button>
+                    <el-button type="primary" icon="search" @click="getList(true)">搜索</el-button>
                 </el-col>
                 <el-col :span="10" style="text-align: right">
+                    <el-button type="primary" @click="dialogFormVisible=true">新建用户</el-button>
                     <el-button type="primary" class="mr10" @click="uploadFile()">
                         批量导入
                         <input type="file" @change="importFile(this)" id="imFile" style="display: none"
                                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
                     </el-button>
-                    <el-button type="primary" @click="dialogFormVisible=true">新建用户</el-button>
                 </el-col>
             </el-row>
             <el-table :data="entryList" border style="width: 100%;" ref="multipleTable">
@@ -38,9 +38,9 @@
             </el-table>
             <div class="pagination">
                 <el-pagination
-                    @current-change ="handleCurrentChange"
+                    @current-change ="getList"
                     layout="prev, pager, next"
-                    :total="1000">
+                    :total="pager.total">
                 </el-pagination>
             </div>
             <el-dialog title="新建" class="edit-dialog" :visible.sync="dialogFormVisible" width="40%">
@@ -78,7 +78,7 @@
                     </el-col>
                 </el-row>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false">取 消{{form.province}}</el-button>
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
                     <el-button type="primary"
                                :disabled="!form.phoneNums||form.phoneNums==''
                            ||!form.name||form.name==''
@@ -124,6 +124,11 @@
                 del_list: [],
                 is_search: false,
 
+                pager:{
+                  pageIndex:1,
+                  pageSize:20,
+                  total:0,
+                },
                 keyword:null,
                 entryList:[],
 
@@ -140,76 +145,10 @@
             }
         },
         created(){
-            this.getData();
-            this.entryList=[{
-
-            }]
         },
         computed: {
-            data(){
-                return this.tableData.filter((d) => {
-                    let is_del = false;
-                    for (let i = 0; i < this.del_list.length; i++) {
-                        if(d.name === this.del_list[i].name){
-                            is_del = true;
-                            break;
-                        }
-                    }
-                    if(!is_del){
-                        if(d.address.indexOf(this.select_cate) > -1 &&
-                            (d.name.indexOf(this.select_word) > -1 ||
-                            d.address.indexOf(this.select_word) > -1)
-                        ){
-                            return d;
-                        }
-                    }
-                })
-            }
         },
         methods: {
-            // 分页导航
-            handleCurrentChange(val){
-                this.cur_page = val;
-                this.getData();
-            },
-            // 获取 easy-mock 的模拟数据
-            getData(){
-                // 开发环境使用 easy-mock 数据，正式环境使用 json 文件
-                if(process.env.NODE_ENV === 'development'){
-                    this.url = '/ms/table/list';
-                };
-                this.$axios.post(this.url, {page:this.cur_page}).then((res) => {
-                    this.tableData = res.data.list;
-                })
-            },
-            search(){
-                this.is_search = true;
-            },
-            formatter(row, column) {
-                return row.address;
-            },
-            filterTag(value, row) {
-                return row.tag === value;
-            },
-            handleEdit(index, row) {
-                this.$message('编辑第'+(index+1)+'行');
-            },
-            handleDelete(index, row) {
-                this.$message.error('删除第'+(index+1)+'行');
-            },
-            delAll(){
-                const length = this.multipleSelection.length;
-                let str = '';
-                this.del_list = this.del_list.concat(this.multipleSelection);
-                for (let i = 0; i < length; i++) {
-                    str += this.multipleSelection[i].name + ' ';
-                }
-                this.$message.error('删除了'+str);
-                this.multipleSelection = [];
-            },
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
-            },
             uploadFile: function () { // 按钮导入
                 this.imFile.click()
             },
@@ -369,16 +308,19 @@
             percentFormatter(row, column) {
                 return row.revenue+'%';
             },
-            getList:function () {
+            getList:function (pageIndex) {
+                this.pager.pageIndex=pageIndex?pageIndex:1;
                 let params={
                     ...Vue.sessionInfo(),
-                    pageIndex:0,//值有误，临时测试
-                    pageSize:20,
+                    pageIndex:this.pager.pageIndex,
+                    pageSize:this.pager.pageSize,
                     searchContent:this.keyword,
                 }
                 Vue.api.getUserList(params).then((resp)=>{
                     if(resp.respCode=='00'){
-                        this.entryList=JSON.parse(resp.respMsg);
+                        let data=JSON.parse(resp.respMsg);
+                        this.entryList=JSON.parse(data.userList);
+                        this.pager.total=data.userCount;
                     }
                 });
             },

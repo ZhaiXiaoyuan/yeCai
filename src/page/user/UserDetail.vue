@@ -13,8 +13,10 @@
                     <el-button type="primary" icon="el-icon-back" @click="$router.go(-1)">返回</el-button>
                 </el-col>
                 <el-col :span="12" style="text-align: right;">
-                    <el-button type="primary" icon="el-icon-delete" @click="del()" v-if="userDetail.accountState=='enable'">删除</el-button>
-                    <el-button type="primary" icon="el-icon-edit" @click="dialogFormVisible=true" v-if="userDetail.accountState=='enable'">编辑</el-button>
+                    <el-button type="primary" icon="el-icon-delete" v-if="userDetail.accountState!='del'" @click="del()">删除</el-button>
+                    <el-button type="primary" icon="el-icon-warning" v-if="userDetail.accountState=='enable'" @click="disable()">禁用</el-button>
+                    <el-button type="primary" icon="el-icon-view" v-if="userDetail.accountState=='disable'" @click="enable()">恢复</el-button>
+                    <el-button type="primary" icon="el-icon-edit" v-if="userDetail.accountState=='enable'" @click="dialogFormVisible=true">编辑</el-button>
                 </el-col>
             </el-row>
             <div class="container-bd">
@@ -48,7 +50,7 @@
                 <el-col :sm="24" :md="22" :lg="20">
                     <el-form :model="form">
                         <el-form-item label="手机号码" :label-width="formLabelWidth">
-                            <el-input v-model="form.phoneNums" maxLength="50" auto-complete="off"></el-input>
+                            <el-input v-model="form.phoneNums" disabled maxLength="50" auto-complete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="姓名" :label-width="formLabelWidth">
                             <el-input v-model="form.name" maxLength="50" auto-complete="off"></el-input>
@@ -175,14 +177,55 @@
 
                 });
             },
+            disable:function () {
+                this.$confirm('确定禁用该用户?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then((data) => {
+                    let fb=Vue.operationFeedback({text:'操作中...'});
+                    Vue.api.setUserState({...Vue.sessionInfo(),userId:this.id,state:'disable'}).then((resp)=>{
+                        if(resp.respCode=='00'){
+                            this.userDetail.accountState='disable';
+                            fb.setOptions({type:'complete',text:'操作成功'});
+                        }else{
+                            fb.setOptions({type:'warn',text:'操作失败，'+resp.respMsg});
+                        }
+                    });
+                }).catch((data) => {
+
+                });
+            },
+            enable:function () {
+                this.$confirm('确定恢复该用户?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then((data) => {
+                    let fb=Vue.operationFeedback({text:'操作中...'});
+                    Vue.api.setUserState({...Vue.sessionInfo(),userId:this.id,state:'enable'}).then((resp)=>{
+                        if(resp.respCode=='00'){
+                            this.userDetail.accountState='enable';
+                            fb.setOptions({type:'complete',text:'操作成功'});
+                        }else{
+                            fb.setOptions({type:'warn',text:'操作失败，'+resp.respMsg});
+                        }
+                    });
+                }).catch((data) => {
+
+                });
+            },
             update:function () {
+                this.form.phoneNums=undefined;
                 let params={
                     ...Vue.sessionInfo(),
+                    userId:this.id,
                     ...this.form
                 }
                 let fb=Vue.operationFeedback({text:'保存中...'});
                 Vue.api.updateUserInfo(params).then((resp)=>{
                     if(resp.respCode=='00'){
+                        Object.assign(this.userDetail,this.form);
                         this.dialogFormVisible = false;
                         fb.setOptions({type:'complete',text:'保存成功'});
                     }else{

@@ -12,15 +12,19 @@
                     <v-distpicker class="cm-area-picker" :callback="changeArea"></v-distpicker>
                 </el-col>
                 <el-col :span="10" style="text-align: right">
+                    <el-button type="primary" @click="dialogFormVisible=true">新建门店</el-button>
                     <el-button type="primary" class="mr10" @click="uploadFile()">
                         批量导入
                         <input type="file" @change="importFile(this)" id="imFile" style="display: none"
                                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
                     </el-button>
-                    <el-button type="primary" class="mr10">导出二维码</el-button>
+                    <el-button type="primary" class="mr10" @click="getAllList()">
+                        导出二维码
+                    </el-button>
+                    <a id="downlink"></a>
                 </el-col>
             </el-row>
-            <el-table :data="entryList" border style="width: 100%;" ref="multipleTable" @selection-change="handleSelectionChange">
+            <el-table :data="entryList" border style="width: 100%;" ref="multipleTable" >
                 <el-table-column prop="channelId" label="编号" align="center"></el-table-column>
                 <el-table-column prop="companyName" label="公司名"  align="center"></el-table-column>
                 <el-table-column prop="socialCreditCode" label="社会信用代码"  align="center"></el-table-column>
@@ -37,24 +41,76 @@
             </el-table>
             <div class="pagination">
                 <el-pagination
-                    @current-change ="handleCurrentChange"
+                    @current-change ="getList"
                     layout="prev, pager, next"
-                    :total="1000">
+                    :total="pager.total">
                 </el-pagination>
             </div>
+            <el-dialog title="新建" class="edit-dialog" :visible.sync="dialogFormVisible" width="40%">
+                <el-row type="flex">
+                    <el-col :sm="24" :md="22" :lg="20">
+                        <el-form :model="form">
+                            <el-form-item label="公司名称" :label-width="formLabelWidth">
+                                <el-input v-model="form.companyName" maxLength="50" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="企业信用码" :label-width="formLabelWidth">
+                                <el-input v-model="form.socialCreditCode" maxLength="50" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="手机号码" :label-width="formLabelWidth">
+                                <el-input v-model="form.telephoneNums" maxLength="50" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="门店渠道账户号码" :label-width="formLabelWidth">
+                                <el-input v-model="form.shopChannelsPhoneNums" maxLength="50" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="门店渠道返点" :label-width="formLabelWidth">
+                                <el-input v-model="form.shopRebates" maxLength="50" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="中介渠道账户号码" :label-width="formLabelWidth">
+                                <el-input v-model="form.marketingChannelsPhoneNums" maxLength="50" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="中介渠道返点" :label-width="formLabelWidth">
+                                <el-input v-model="form.marketingRebates" maxLength="50" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="其他渠道账户号码" :label-width="formLabelWidth">
+                                <el-input v-model="form.otherPhoneNums" maxLength="50" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="其他渠道返点" :label-width="formLabelWidth">
+                                <el-input v-model="form.otherRebates" maxLength="50" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="地区" :label-width="formLabelWidth">
+                                <v-distpicker class="cm-area-picker"  :callback="addShopChangeArea"></v-distpicker>
+                            </el-form-item>
+                            <el-form-item label="详细地址" :label-width="formLabelWidth">
+                                <el-input v-model="form.address" maxLength="100" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-form>
+                    </el-col>
+                </el-row>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary"
+                               :disabled="!form.companyName||form.companyName==''
+                           ||!form.socialCreditCode||form.socialCreditCode==''
+                           ||!form.telephoneNums||form.telephoneNums==''
+                           ||!form.shopChannelsPhoneNums||form.shopChannelsPhoneNums==''
+                           ||!form.shopRebates||form.shopRebates==''
+                           ||!form.marketingChannelsPhoneNums||form.marketingChannelsPhoneNums==''
+                           ||!form.marketingRebates||form.marketingRebates==''
+                           ||!form.otherPhoneNums||form.otherPhoneNums==''
+                           ||!form.otherRebates||form.otherRebates==''
+                           ||!form.province||form.province==''
+                           ||!form.city||form.city==''
+                           ||!form.county||form.county==''
+                           ||!form.address||form.address==''"
+                               @click="add()">提交</el-button>
+                </div>
+            </el-dialog>
         </div>
     </div>
 </template>
 <style scoped>
     .handle-box{
         margin-bottom: 20px;
-    }
-    .handle-select{
-        width: 120px;
-    }
-    .handle-input{
-        width: 300px;
-        display: inline-block;
     }
 </style>
 <script>
@@ -67,19 +123,16 @@
         },
         data() {
             return {
-                url: './static/vuetable.json',
-                tableData: [],
-                cur_page: 1,
-                multipleSelection: [],
-                select_cate: '',
-                select_word: '',
-                del_list: [],
-                is_search: false,
 
                 province:null,
                 city:null,
                 county:null,
                 regionKeyword:null,
+                pager:{
+                    pageIndex:1,
+                    pageSize:20,
+                    total:0,
+                },
                 entryList:[],
                 timer:null,
                 previous:null,
@@ -90,13 +143,16 @@
                 errorDialog: false, // 错误信息弹窗
                 errorMsg: '', // 错误信息内容
                 excelData: [],
+
+                dialogFormVisible: false,
+                form:{province:'',city:'',county:''},
+                formLabelWidth: '140px',
+
+                downLoadFb:null,
             }
         },
         created(){
-            this.getData();
-            this.entryList=[{
 
-            }]
         },
         watch:{
 
@@ -104,49 +160,6 @@
         computed: {
         },
         methods: {
-            // 分页导航
-            handleCurrentChange(val){
-                this.cur_page = val;
-                this.getData();
-            },
-            // 获取 easy-mock 的模拟数据
-            getData(){
-                // 开发环境使用 easy-mock 数据，正式环境使用 json 文件
-                if(process.env.NODE_ENV === 'development'){
-                    this.url = '/ms/table/list';
-                };
-                this.$axios.post(this.url, {page:this.cur_page}).then((res) => {
-                    this.tableData = res.data.list;
-                })
-            },
-            search(){
-                this.is_search = true;
-            },
-            formatter(row, column) {
-                return row.address;
-            },
-            filterTag(value, row) {
-                return row.tag === value;
-            },
-            handleEdit(index, row) {
-                this.$message('编辑第'+(index+1)+'行');
-            },
-            handleDelete(index, row) {
-                this.$message.error('删除第'+(index+1)+'行');
-            },
-            delAll(){
-                const length = this.multipleSelection.length;
-                let str = '';
-                this.del_list = this.del_list.concat(this.multipleSelection);
-                for (let i = 0; i < length; i++) {
-                    str += this.multipleSelection[i].name + ' ';
-                }
-                this.$message.error('删除了'+str);
-                this.multipleSelection = [];
-            },
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
-            },
             uploadFile: function () { // 按钮导入
                 this.imFile.click()
             },
@@ -193,6 +206,8 @@
                 }
             },
             downloadExl: function (json, downName, type) {  // 导出到excel
+                let that=this;
+                //
                 let keyMap = [] // 获取键
                 for (let k in json[0]) {
                     keyMap.push(k)
@@ -227,6 +242,7 @@
                 this.outFile.download = downName + '.xlsx'  // 下载名称
                 this.outFile.href = href  // 绑定a标签
                 this.outFile.click()  // 模拟点击实现下载
+                this.downLoadFb.setOptions({type:'complete',text:'导出成功，请留意浏览器的下载文件'});
                 setTimeout(function () {  // 延时释放
                     URL.revokeObjectURL(tmpDown) // 用URL.revokeObjectURL()来释放这个object URL
                 }, 100)
@@ -321,16 +337,66 @@
                 return o
             },
 
-            getList:function () {
+            getList:function (pageIndex) {
+                this.pager.pageIndex=pageIndex?pageIndex:1;
                 let params={
                     ...Vue.sessionInfo(),
-                    pageIndex:1,
-                    pageSize:20,
+                    pageIndex:this.pager.pageIndex,
+                    pageSize:this.pager.pageSize,
                     searchContent:this.regionKeyword?this.regionKeyword:null,
                 }
                 Vue.api.getShopList(params).then((resp)=>{
                     if(resp.respCode=='00'){
-                        this.entryList=JSON.parse(resp.respMsg);
+                        let data=JSON.parse(resp.respMsg);
+                        this.entryList=JSON.parse(data.shopList);
+                        this.pager.total=data.userCount;
+                        console.log('this.entryList:',this.entryList[0]);
+                    }
+                });
+            },
+            getAllList:function (pageIndex) {
+                let params={
+                    ...Vue.sessionInfo(),
+                    pageIndex:1,
+                    pageSize:this.pager.total,
+                    searchContent:this.regionKeyword?this.regionKeyword:null,
+                }
+                this.downLoadFb=Vue.operationFeedback({text:'导出 中...'});
+                Vue.api.getShopList(params).then((resp)=>{
+                    if(resp.respCode=='00'){
+                        let data=JSON.parse(resp.respMsg);
+                        let allList=JSON.parse(data.shopList);
+                        let jsonData=[
+                            {
+                                1:'序号',
+                                2:'公司名',
+                                3:'省份',
+                                4:'市区',
+                                5:'县',
+                                6:'详细地址',
+                                7:'手机号码',
+                                8:'姓名',
+                                9:'外链',
+                                10:'信息'
+                            }
+                        ];
+                        allList.forEach((item,i)=>{
+                            jsonData.push({
+                                1:i+1,
+                                2:item.companyName,//公司名
+                                3:item.province,//省份
+                                4:item.city,//市区
+                                5:item.county,//县
+                                6:item.address,//详细地址
+                                7:'**',//手机号码
+                                8:'**',//姓名
+                                9:Vue.basicConfig.basicUrl+item.qRCodeId,//外链
+                                10:'www.yeahcai.com/channels='+item.channelId,//信息
+                            });
+                        });
+                        this.downloadExl(jsonData,'二维码导出表');
+                    }else{
+                        this.downLoadFb.setOptions({type:'warn',text:'导出失败，'+resp.respMsg});
                     }
                 });
             },
@@ -354,115 +420,38 @@
                     }, 500);
                 }
             },
+            addShopChangeArea:function (data) {
+                if(data.type=='province'){
+                    this.form.province=data.value;
+                }else if(data.type=='city'){
+                    this.form.city=data.value;
+                }else if(data.type=='area'){
+                    this.form.county=data.value;
+                }
+            },
+            add:function () {
+                let params={
+                    ...Vue.sessionInfo(),
+                    ...this.form
+                }
+                let fb=Vue.operationFeedback({text:'保存中...'});
+                Vue.api.addShop(params).then((resp)=>{
+                    if(resp.respCode=='00'){
+                        this.getList();
+                        this.dialogFormVisible = false;
+                        fb.setOptions({type:'complete',text:'新建成功'});
+                    }else{
+                        fb.setOptions({type:'warn',text:'新建失败，'+resp.respMsg});
+                    }
+                });
+            },
         },
         mounted () {
             this.imFile = document.getElementById('imFile');
             this.outFile = document.getElementById('downlink');
-            //临时测试
-            let testObj=[
-                {"bankAccount":"1234567890",
-                    "address":"xxxx",
-                    "city":"广州",
-                    "idCard":"440602199302262151",
-                    "county":"海珠区",
-                    "bankName":"中国建设银行",
-                    "userCode":"0",
-                    "password":"00000002",
-                    "phoneNums":"13700000000",
-                    "province":"广东",
-                    "name":"bbb",
-                    "subbranch":"地球分行",
-                    "email":"aaa@qq.com"
-                },
-                {
-                    "bankAccount":"1234567890",
-                    "address":"xxxx",
-                    "city":"广州",
-                    "idCard":"440602199302262151",
-                    "county":"海珠区",
-                    "bankName":"中国建设银行",
-                    "userCode":"0",
-                    "password":"00000002",
-                    "phoneNums":"13700000001",
-                    "province":"广东",
-                    "name":"bbb",
-                    "subbranch":"地球分行",
-                    "email":"aaa@qq.com"
-                }]
 
             //
             this.getList();
-
-           let test=[
-                {"accountState":"enable",
-                    "monthSale":0.0,
-                    "marketingRebates":3.15,
-                    "address":"地球村",
-                    "marketingChannelsId":"223b4de2161743d0aa4521fb8bb81fff",
-                    "telephoneNums":"13700000005",
-                    "otherId":"aa264325ecfc4370b66ba0b6dd55c451",
-                    "city":"深圳",
-                    "daySale":0.0,
-                    "companyName":"地球科技",
-                    "county":"南山区",
-                    "qRCodeId":"6729ecdba5b248069628fffe2905da39",
-                    "monthRankings":-1,
-                    "socialCreditCode":"123456789",
-                    "otherRebates":1.37,
-                    "dayRankings":-1,
-                    "yearSale":0.0,
-                    "companyPic":"",
-                    "province":"广东省",
-                    "shopRebates":4.15,
-                    "id":"6729ecdba5b248069628fffe2905da39",
-                    "yearRankings":-1,
-                    "channelId":"482013a527964df68ce7a92d4584fb52"},
-                {"accountState":"enable",
-                    "monthSale":0.0,
-                    "marketingRebates":3.15,
-                    "address":"地球村",
-                    "marketingChannelsId":"4a9e84b697ef4d35adb9b6926747337f",
-                    "telephoneNums":"13700000002",
-                    "otherId":"76a6e0ef8a124a5ab6fa27af7b3af3b8",
-                    "city":"深圳",
-                    "daySale":0.0,
-                    "companyName":"地球科技",
-                    "county":"南山区",
-                    "qRCodeId":"8b00076c4b85451988806f1d9b101bb0",
-                    "monthRankings":-1,
-                    "socialCreditCode":"123456789",
-                    "otherRebates":1.37,
-                    "dayRankings":-1,
-                    "yearSale":0.0,
-                    "companyPic":"",
-                    "province":"广东省",
-                    "shopRebates":4.15,
-                    "id":"8b00076c4b85451988806f1d9b101bb0",
-                    "yearRankings":-1,
-                    "channelId":"db1afecea8bc484fa0034e951ac4eb43"},
-                {"accountState":"enable",
-                    "monthSale":0.0,
-                    "marketingRebates":3.15,
-                    "address":"地球村",
-                    "marketingChannelsId":"4f0714e968e44a2ba3afaa37936d99b4",
-                    "telephoneNums":"13700000003",
-                    "otherId":"3764029e65fb4b2189e84156d8c068ba",
-                    "city":"深圳",
-                    "daySale":0.0,
-                    "companyName":"地球科技",
-                    "county":"南山区",
-                    "qRCodeId":"a13579b46c4e408681b1eb74cb5ec7de",
-                    "monthRankings":-1,
-                    "socialCreditCode":"123456789",
-                    "otherRebates":1.37,
-                    "dayRankings":-1,
-                    "yearSale":0.0,
-                    "companyPic":"",
-                    "province":"广东省",
-                    "shopRebates":4.15,
-                    "id":"a13579b46c4e408681b1eb74cb5ec7de",
-                    "yearRankings":-1,
-                    "channelId":"c9dfe145de5046a193cc3fe2b5b99d15"}]
 
         },
     }

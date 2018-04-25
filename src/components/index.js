@@ -4,6 +4,8 @@
 
 import Distpicker from './Distpicker';
 import OperationFeedback from './OperationFeedback';
+import ViewPicModal from './ViewPicModal';
+
 
 /*全局组件注册配置*/
 export default {
@@ -11,9 +13,11 @@ export default {
     /*标签调度方式*/
     Vue.component('v-distpicker',Distpicker);
     Vue.component('OperationFeedback',OperationFeedback);
+    Vue.component('ViewPicModal',ViewPicModal);
 
     /*方法调度方式*/
     let OperationFeedbackConstructor = Vue.extend(OperationFeedback);
+    let ViewPicModalConstructor = Vue.extend(ViewPicModal);
     const functionObject={
         /**
          * 操作提示
@@ -47,6 +51,22 @@ export default {
             return{
                 setOptions:setOptions
             }
+        },
+        /**
+         * 查看照片弹窗
+         * @param options
+         */
+        viewPicModal:function (options) {
+            options={...{
+               imgUrl:null,
+            },...options};
+            //
+            let parentEle=document.getElementById('app');
+            //
+            let instance=new ViewPicModalConstructor({});
+            instance.options=options;
+            instance.$mount();
+            parentEle.appendChild(instance.$el);
         },
     }
     /**/
