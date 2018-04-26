@@ -349,8 +349,8 @@
                     if(resp.respCode=='00'){
                         let data=JSON.parse(resp.respMsg);
                         this.entryList=JSON.parse(data.shopList);
-                        this.pager.total=data.userCount;
-                        console.log('this.entryList:',this.entryList[0]);
+                        this.pager.total=data.shopCount;
+                      /*  console.log('this.entryList:',this.entryList[0]);*/
                     }
                 });
             },
@@ -361,7 +361,7 @@
                     pageSize:this.pager.total,
                     searchContent:this.regionKeyword?this.regionKeyword:null,
                 }
-                this.downLoadFb=Vue.operationFeedback({text:'导出 中...'});
+                this.downLoadFb=Vue.operationFeedback({text:'导出中...'});
                 Vue.api.getShopList(params).then((resp)=>{
                     if(resp.respCode=='00'){
                         let data=JSON.parse(resp.respMsg);
@@ -388,8 +388,8 @@
                                 4:item.city,//市区
                                 5:item.county,//县
                                 6:item.address,//详细地址
-                                7:'**',//手机号码
-                                8:'**',//姓名
+                                7:item['shopChannelsId-phoneNums'],//手机号码
+                                8:item['shopChannelsId-name'],//姓名
                                 9:Vue.basicConfig.basicUrl+item.qRCodeId,//外链
                                 10:'www.yeahcai.com/channels='+item.channelId,//信息
                             });
