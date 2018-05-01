@@ -10,6 +10,7 @@ import "babel-polyfill";
 
 import api from './utils/api'
 import tools from './utils/tools'
+import './utils/filters'
 import components from './components'
 
 Vue.use(ElementUI, { size: 'small' });

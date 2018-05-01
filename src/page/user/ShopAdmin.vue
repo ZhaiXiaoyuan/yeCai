@@ -12,7 +12,7 @@
                     <v-distpicker class="cm-area-picker" :callback="changeArea"></v-distpicker>
                 </el-col>
                 <el-col :span="10" style="text-align: right">
-                    <el-button type="primary" @click="dialogFormVisible=true">新建门店</el-button>
+                    <el-button type="primary" icon="el-icon-plus" @click="dialogFormVisible=true">新建门店</el-button>
                     <el-button type="primary" class="mr10" @click="uploadFile()">
                         批量导入
                         <input type="file" @change="importFile(this)" id="imFile" style="display: none"
@@ -452,6 +452,8 @@
 
             //
             this.getList();
+            //
+            console.log('test:',process.env);
 
         },
     }

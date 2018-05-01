@@ -10,10 +10,10 @@
             <el-row class="handle-box">
                 <el-col :span="14">
                     <el-input v-model="keyword" placeholder="筛选关键词" class="handle-input mr10"></el-input>
-                    <el-button type="primary" icon="search" @click="getList(true)">搜索</el-button>
+                    <el-button type="primary" icon="search" @click="getList()">搜索</el-button>
                 </el-col>
                 <el-col :span="10" style="text-align: right">
-                    <el-button type="primary" @click="dialogFormVisible=true">新建用户</el-button>
+                    <el-button type="primary" icon="el-icon-plus" @click="dialogFormVisible=true">新建用户</el-button>
                     <el-button type="primary" class="mr10" @click="uploadFile()">
                         批量导入
                         <input type="file" @change="importFile(this)" id="imFile" style="display: none"

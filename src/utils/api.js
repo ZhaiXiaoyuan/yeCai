@@ -40,7 +40,8 @@ export default {
     }
 
     /**/
-    let basicUrl='http://zyu-server.wicp.net:19356/yecai';
+    //临时测试
+    let basicUrl=false&&process.env.NODE_ENV=='development'?'http://zyu-server.wicp.net:19356/yecai':'http://api.yeahcai.com/yecai';
     Vue.api={
         //获取用户详细信息
       getUserDetail:function (params) {
@@ -162,6 +163,118 @@ export default {
                 params: params
             });
         },
+        //超级管理员登陆
+        superManagerLogin:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl+'/admin/superManagerLogin',
+                params: params
+            });
+        },
+        //获取系统开放时间
+        getQRTime:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl+'/sys/getQRTime',
+                params: params
+            });
+        },
+        //设置二维码开始时间
+        setQRStartTime:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl+'/sys/setQRStartTime',
+                params: params
+            });
+        },
+        //设置二维码关闭时间
+        setQREndTime:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl+'/sys/setQREndTime',
+                params: params
+            });
+        },
+        //获取市场管理员列表
+        getMarketManagerList:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl+'/admin/getMarketManagerList',
+                params: params
+            });
+        },
+        //添加市场管理员
+        addMarketManager:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl+'/admin/addMarketManager',
+                params: params
+            });
+        },
+        //设置市场管理员状态
+        setMarketManagerState:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl+'/admin/setMarketManagerState',
+                params: params
+            });
+        },
+        //更新市场管理员
+        updateMarketManager:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl+'/admin/updateMarketManager',
+                params: params
+            });
+        },
+        //获取财务管理员列表
+        getAccountantManagerList:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl+'/admin/getAccountantManagerList',
+                params: params
+            });
+        },
+        //添加财务管理员
+        addAccountantManager:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl+'/admin/addAccountantManager',
+                params: params
+            });
+        },
+        //更新财务管理员
+        updateAccountantManager:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl + '/admin/updateAccountantManager',
+                params: params
+            });
+        },
+        //设置财务管理员状态
+        setAccountantManagerState:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl + '/admin/setAccountantManagerState',
+                params: params
+            });
+        },
+        //marketManagerLogin
+        marketManagerLogin:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl + '/admin/marketManagerLogin',
+                params: params
+            });
+        },
+        //财务管理员登陆
+        accountantManagerLogin:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl + '/admin/accountantManagerLogin',
+                params: params
+            });
+        }
     }
   },
 
