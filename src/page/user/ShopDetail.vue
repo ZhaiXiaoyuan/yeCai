@@ -69,15 +69,15 @@
                 <el-row class="block">
                     <el-row class="info-row">
                         <el-col :span="8">门店账户：{{shopChannelsUser.name}}&nbsp;{{shopChannelsUser.phoneNums}}</el-col>
-                        <el-col :span="15" :offset="1">返点比例：{{shopChannelsUser.userCode}}% </el-col>
+                        <el-col :span="15" :offset="1">返点比例：{{shopDetail.shopRebates}}% </el-col>
                     </el-row>
                     <el-row class="info-row">
                         <el-col :span="8">渠道账户：{{marketingChannelsUser.name}}&nbsp;{{marketingChannelsUser.phoneNums}}</el-col>
-                        <el-col :span="15" :offset="1">返点比例：{{marketingChannelsUser.userCode}}%</el-col>
+                        <el-col :span="15" :offset="1">返点比例：{{shopDetail.marketingRebates}}%</el-col>
                     </el-row>
                     <el-row class="info-row">
                         <el-col :span="8">店家账户：{{otherUser.name}}&nbsp;{{otherUser.phoneNums}}</el-col>
-                        <el-col :span="15" :offset="1">返点比例：{{otherUser.userCode}}% </el-col>
+                        <el-col :span="15" :offset="1">返点比例：{{shopDetail.otherRebates}}% </el-col>
                     </el-row>
                 </el-row>
             </div>

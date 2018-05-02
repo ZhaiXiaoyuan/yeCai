@@ -22,6 +22,11 @@
                 </el-col>
             </el-row>
             <el-table :data="entryList" border style="width: 100%;" ref="multipleTable">
+                <el-table-column label="序号" align="center" width="50">
+                    <template slot-scope="scope">
+                        {{scope.$index+1}}
+                    </template>
+                </el-table-column>
                 <el-table-column prop="phoneNums" label="手机号" align="center"></el-table-column>
                 <el-table-column prop="name" label="姓名"  align="center"></el-table-column>
                 <el-table-column prop="idCard" label="身份证"  align="center"></el-table-column>

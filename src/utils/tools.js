@@ -4,7 +4,6 @@
 /*一般的工具方法*/
 import Vue from 'vue'
 import router from '../router'
-import App from '../App.vue'
 import md5 from 'js-md5'
 
 export default {
@@ -50,7 +49,8 @@ export default {
         //
       Vue.tools = {
           basicConfig:{
-              basicUrl:'http://zyu-server.wicp.net:19356/'
+              //临时测试
+              basicUrl:false&&process.env.NODE_ENV=='development'?'http://zyu-server.wicp.net:19356/':'http://api.yeahcai.com/'
           },
         /*生成请求时间戳*/
         genTimestamp:function () {
@@ -109,7 +109,7 @@ export default {
             }
           }
         },
-          throttle:function (fn, delay, atleast) {
+        throttle:function (fn, delay, atleast) {
               var timer = null;
               var previous = null;
               return function() {
@@ -129,7 +129,17 @@ export default {
                       }, delay);
                   }
               }
-          }
+          },
+        getAccountInfo:function () {
+            let loginPage=localStorage.getItem('loginPage');
+            let account=Vue.cookie.get('account');
+            if(account){
+                return JSON.parse(account);
+            }else{
+                router.push({name:loginPage?loginPage:'login'});
+                return{};
+            }
+        }
       }
 
       Object.assign(Vue, Vue.tools);

@@ -25,6 +25,11 @@
                 </el-col>
             </el-row>
             <el-table :data="entryList" border style="width: 100%;" ref="multipleTable" >
+                <el-table-column label="序号" align="center" width="50">
+                    <template slot-scope="scope">
+                        {{scope.$index+1}}
+                    </template>
+                </el-table-column>
                 <el-table-column prop="channelId" label="编号" align="center"></el-table-column>
                 <el-table-column prop="companyName" label="公司名"  align="center"></el-table-column>
                 <el-table-column prop="socialCreditCode" label="社会信用代码"  align="center"></el-table-column>
@@ -453,7 +458,6 @@
             //
             this.getList();
             //
-            console.log('test:',process.env);
 
         },
     }

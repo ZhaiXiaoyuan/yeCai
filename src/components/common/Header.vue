@@ -3,12 +3,12 @@
         <div class="collapse-btn" @click="collapseChage">
             <i class="el-icon-menu"></i>
         </div>
-        <div class="logo">夜彩平台·超级管理员</div>
+        <div class="logo">夜彩平台·<span v-if="accountInfo.type=='superManager'">超级</span><span v-if="accountInfo.type=='marketManager'">市场</span><span v-if="accountInfo.type=='accountantManager'">财务</span>管理员</div>
         <div class="user-info">
             <el-dropdown trigger="click" @command="handleCommand">
                 <span class="el-dropdown-link">
                     <img class="user-logo" src="../../../static/img/img.jpg">
-                   root
+                 {{accountInfo.account}}
                 </span>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
@@ -18,31 +18,34 @@
     </div>
 </template>
 <script>
+    import Vue from 'vue'
     import bus from '../common/bus';
     export default {
         data() {
             return {
                 collapse: false,
-                name: 'linxin'
+                name: 'linxin',
+                accountInfo:{},
             }
         },
         computed:{
-            username(){
-                let username = localStorage.getItem('ms_username');
-                return username ? username : this.name;
-            }
+
         },
         methods:{
             handleCommand(command) {
                 if(command == 'loginout'){
-                    localStorage.removeItem('ms_username')
-                    this.$router.push('/login');
+                    Vue.cookie.set('account','');
+                    let loginPage=localStorage.getItem('loginPage');
+                    this.$router.push({name:loginPage?loginPage:'login'});
                 }
             },
             collapseChage(){
                 this.collapse = !this.collapse;
                 bus.$emit('collapse', this.collapse);
             }
+        },
+        created(){
+            this.accountInfo=this.getAccountInfo();
         }
     }
 </script>

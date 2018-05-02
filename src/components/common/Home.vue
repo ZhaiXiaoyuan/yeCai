@@ -9,6 +9,7 @@
 </template>
 
 <script>
+    import Vue from 'vue'
     import vHead from './Header.vue';
     import vSidebar from './Sidebar.vue';
     import bus from '../common/bus';
@@ -21,10 +22,19 @@
         components:{
             vHead, vSidebar
         },
+        watch:{
+
+        },
         created(){
             bus.$on('collapse', msg => {
                 this.collapse = msg;
-            })
-        }
+            });
+        },
+        beforeRouteEnter (to, from, next) {
+            Vue.getAccountInfo();
+            next(vm =>{
+
+            });
+        },
     }
 </script>

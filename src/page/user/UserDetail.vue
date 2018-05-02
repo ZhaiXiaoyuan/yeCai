@@ -33,7 +33,8 @@
                     <el-row class="info-row">姓名：{{userDetail.name}}</el-row>
                     <el-row class="info-row">身份证：{{userDetail.idCard}}</el-row>
                     <el-row class="info-row">邮箱：{{userDetail.email}}</el-row>
-                    <el-row class="info-row">返点比例：{{userDetail.revenue}}%</el-row>
+                    <!--临时测试-->
+                   <!-- <el-row class="info-row">返点比例：{{userDetail.revenue}}%</el-row>-->
                     <el-row class="info-row">开户行：{{userDetail.bankName}}</el-row>
                     <el-row class="info-row">支行：{{userDetail.subbranch}}</el-row>
                     <el-row class="info-row">银行账户：{{userDetail.bankAccount}}</el-row>

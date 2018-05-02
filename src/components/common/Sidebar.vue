@@ -57,8 +57,9 @@
         data() {
             return {
                 collapse: false,
-                items: [
+                itemsConfig:[
                     {
+                        code:'01',
                         icon: '#icon-user',
                         index: '1',
                         title: '账户系统',
@@ -74,6 +75,7 @@
                         ]
                     },
                     {
+                        code:'02',
                         icon: '#icon-paiming',
                         index: '2',
                         title: '排名',
@@ -89,6 +91,7 @@
                         ]
                     },
                     {
+                        code:'03',
                         icon: '#icon-caiwu2',
                         index: '3',
                         title: '财务系统',
@@ -104,16 +107,19 @@
                         ]
                     },
                     {
+                        code:'04',
                         icon: '#icon-permissions',
                         index: '/permission',
                         title: '权限管理',
                     },
                     {
+                        code:'05',
                         icon: '#icon-xitongshezhi',
                         index: '/setting',
                         title: '系统设置',
                     },
-                ]
+                ],
+                items: []
             }
         },
         computed:{
@@ -125,7 +131,28 @@
             // 通过 Event Bus 进行组件间通信，来折叠侧边栏
             bus.$on('collapse', msg => {
                 this.collapse = msg;
-            })
+            });
+            //
+            this.accountInfo=this.getAccountInfo();
+            this.accountAccess=null;
+            if(this.accountInfo.type=='superManager'){
+                this.accountAccess='all';
+            }else if(this.accountInfo.type=='marketManager'){
+                this.accountAccess=['02'];
+            }else if(this.accountInfo.type=='accountantManager'){
+                this.accountAccess=['03'];
+            }
+            if(this.accountAccess=='all'){
+                this.items=this.itemsConfig;
+            }else if(this.accountAccess&&this.accountAccess.length>0){
+                this.accountAccess.forEach((value,index)=>{
+                    for(let i=0;i<this.itemsConfig.length;i++){
+                        if(value==this.itemsConfig[i].code){
+                            this.items.push(this.itemsConfig[i]);
+                        }
+                    }
+                })
+            }
         }
     }
 </script>
