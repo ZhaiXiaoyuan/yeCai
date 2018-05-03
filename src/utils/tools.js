@@ -8,10 +8,6 @@ import md5 from 'js-md5'
 
 export default {
     install: function (Vue, options) {
-        //
-        basicConfig:{
-            basicUrl:'http://zyu-server.wicp.net:19356/'
-        }
         //常用正则
         window.regex={
           illegal :new RegExp("((?=[\x21-\x7e]+)[^A-Za-z0-9])"),
@@ -50,7 +46,7 @@ export default {
       Vue.tools = {
           basicConfig:{
               //临时测试
-              basicUrl:false&&process.env.NODE_ENV=='development'?'http://zyu-server.wicp.net:19356/':'http://api.yeahcai.com/'
+              basicUrl:false&&process.env.NODE_ENV=='development'?'http://zyu-server.wicp.net:19356/':'http://api.yeahcai.com/yecai'
           },
         /*生成请求时间戳*/
         genTimestamp:function () {

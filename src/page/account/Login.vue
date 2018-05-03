@@ -16,10 +16,10 @@
                 <el-form-item prop="password">
                     <el-input type="password" placeholder="密码" v-model="ruleForm.password" @keyup.enter.native="submitForm()"></el-input>
                 </el-form-item>
-                <el-form-item prop="identifyCode" style="position:relative;">
+               <!-- <el-form-item prop="identifyCode" style="position:relative;">
                     <el-input type="password" placeholder="验证码" v-model="ruleForm.identifyCode" @keyup.enter.native="submitForm()" style="padding-right: 100px;"></el-input>
                     <identify style="position:absolute;top:0px;bottom: 0px;right: 0px;margin: auto;"></identify>
-                </el-form-item>
+                </el-form-item>-->
                 <div class="login-btn">
                     <el-button type="primary" size="large" @click="submitForm()">登&nbsp;录</el-button>
                 </div>
