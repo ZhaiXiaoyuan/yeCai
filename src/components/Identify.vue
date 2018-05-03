@@ -1,19 +1,17 @@
+<script src="../../config/index.js"></script>
 <template>
-    <div class="s-canvas">
+    <div class="s-canvas" @click="reset()">
         <canvas id="s-canvas" :width="contentWidth" :height="contentHeight"></canvas>
+        <input type="hidden" class="code-value" v-model="identifyCode">
     </div>
 </template>
 <script>
     export default{
         name: 'identify',
         props: {
-            identifyCode: {
-                type: String,
-                /*default: '1234'*/
-            },
             fontSizeMin: {
                 type: Number,
-                default: 16
+                default: 30
             },
             fontSizeMax: {
                 type: Number,
@@ -58,6 +56,14 @@
             contentHeight: {
                 type: Number,
                 default: 44
+            },
+            options:{
+                callback:null
+            }
+        },
+        data() {
+            return {
+                identifyCode:null
             }
         },
         methods: {
@@ -120,8 +126,9 @@
                 }
             },
             reset:function () {
-                this.identifyCode=this.randomNum(10000,99999)+'';
+                this.identifyCode=this.randomNum(1000,9999)+'';
                 this.drawPic();
+                this.options&&this.options.callback&&this.options.callback(this.identifyCode);
             }
         },
         watch: {
