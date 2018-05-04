@@ -57,7 +57,7 @@
         background: #fff;
         font-size: 16px;
     }
-    .el-input--small .el-input__inner{
+    .ms-login .el-input--small .el-input__inner{
         height:44px !important;
     }
     .login-btn{

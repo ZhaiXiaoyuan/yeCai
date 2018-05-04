@@ -18,7 +18,7 @@
                         <p>{{timeData.endtTime|hoursFormat}}</p>
                         <el-button class="edit-btn" type="primary">编辑</el-button>
                     </div>-->
-                    <el-time-picker
+                  <!--  <el-time-picker
                         is-range
                         size="medium"
                         v-model="timeData"
@@ -28,6 +28,22 @@
                         end-placeholder="结束时间"
                         @change="selectTime"
                         placeholder="选择时间范围">
+                    </el-time-picker>-->
+
+                    <el-time-picker
+                        size="medium"
+                        value-format="HH:mm"
+                        v-model="startTime"
+                        @change="selectTime('startTime')"
+                        placeholder="开始时间">
+                    </el-time-picker>
+                    <span class="gap">至</span>
+                    <el-time-picker
+                        size="medium"
+                        value-format="HH:mm"
+                        v-model="endTime"
+                        @change="selectTime('endTime')"
+                        placeholder="结束时间">
                     </el-time-picker>
                 </div>
             </div>
@@ -63,6 +79,10 @@
             margin: auto;
         }
     }
+    .gap{
+        font-size: 16px;
+        color: #999;
+    }
 </style>
 <script>
     import Vue from 'vue'
@@ -70,6 +90,8 @@
         data() {
             return {
                 timeData: [],
+                startTime:null,
+                endTime:null,
             }
         },
         created(){
@@ -92,27 +114,33 @@
                 Vue.api.getQRTime({...Vue.sessionInfo()}).then((resp)=>{
                     if(resp.respCode=='00'){
                         let data=JSON.parse(resp.respMsg);
-                        this.timeData.push(this.hoursFormat(data.startTime),this.hoursFormat(data.endtTime));
+                        this.startTime=this.hoursFormat(data.startTime);
+                        this.endTime=this.hoursFormat(data.endtTime);
+                      /*  this.timeData.push(this.hoursFormat(data.startTime),this.hoursFormat(data.endtTime));*/
                     }
                 });
             },
-            selectTime:function () {
-                let startTime=parseInt(this.timeData[0].replace(':',''));
-                let endTime=parseInt(this.timeData[1].replace(':',''));
+            selectTime:function (type) {
                 let fb=Vue.operationFeedback({text:'设置中...'});
-                Vue.api.setQRStartTime({...Vue.sessionInfo(),startTime:startTime}).then((resp)=>{
-                    if(resp.respCode=='00'){
-                        Vue.api.setQREndTime({...Vue.sessionInfo(),endTime:endTime}).then((resp)=>{
-                            if(resp.respCode=='00'){
-                                fb.setOptions({type:'complete',text:'设置成功'});
-                            }else{
-                                fb.setOptions({type:'warn',text:'设置失败，'+resp.respMsg});
-                            }
-                        });
-                    }else{
-                        fb.setOptions({type:'warn',text:'设置失败，'+resp.respMsg});
-                    }
-                });
+                if(type=='startTime'){
+                    let startTime=parseInt(this.startTime.replace(':',''));
+                    Vue.api.setQRStartTime({...Vue.sessionInfo(),startTime:startTime}).then((resp)=>{
+                        if(resp.respCode=='00'){
+                            fb.setOptions({type:'complete',text:'设置成功'});
+                        }else{
+                            fb.setOptions({type:'warn',text:'设置失败，'+resp.respMsg});
+                        }
+                    });
+                }else{
+                    let endTime=parseInt(this.endTime.replace(':',''));
+                    Vue.api.setQREndTime({...Vue.sessionInfo(),endTime:endTime}).then((resp)=>{
+                        if(resp.respCode=='00'){
+                            fb.setOptions({type:'complete',text:'设置成功'});
+                        }else{
+                            fb.setOptions({type:'warn',text:'设置失败，'+resp.respMsg});
+                        }
+                    });
+                }
 
             }
         },
