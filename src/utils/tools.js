@@ -46,7 +46,7 @@ export default {
       Vue.tools = {
           basicConfig:{
               //临时测试
-              basicUrl:false&&process.env.NODE_ENV=='development'?'http://zyu-server.wicp.net:19356/':'http://api.yeahcai.com/yecai'
+              basicUrl:false&&process.env.NODE_ENV=='development'?'http://zyu-server.wicp.net:19356/':'http://api.yeahcai.com'
           },
         /*生成请求时间戳*/
         genTimestamp:function () {
