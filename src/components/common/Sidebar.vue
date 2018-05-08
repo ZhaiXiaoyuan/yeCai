@@ -81,6 +81,10 @@
                         title: '排名',
                         subs: [
                             {
+                                index: '/saleRank',
+                                title: '销售排名'
+                            },
+                            {
                                 index: '/benefitRank',
                                 title: '收益排名'
                             },
@@ -118,6 +122,24 @@
                         index: '/setting',
                         title: '系统设置',
                     },
+                    {
+                        code:'06',
+                        icon: '#icon-tongji',
+                        index: '/saleStatistics',
+                        title: '销售统计',
+                    },
+                    {
+                        code:'07',
+                        icon: '#icon-dingdan',
+                        index: '/orderStatistics',
+                        title: '订单统计',
+                    },
+                    {
+                        code:'08',
+                        icon: '#icon-weibiaoti4',
+                        index: '/statistics',
+                        title: '统计',
+                    },
                 ],
                 items: []
             }
@@ -136,6 +158,7 @@
             this.accountInfo=this.getAccountInfo();
             this.accountAccess=null;
             if(this.accountInfo.type=='superManager'){
+               /* this.accountAccess=['01','02','03','04','05'];*/
                 this.accountAccess='all';
             }else if(this.accountInfo.type=='marketManager'){
                 this.accountAccess=['02'];

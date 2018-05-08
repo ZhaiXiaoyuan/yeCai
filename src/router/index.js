@@ -35,6 +35,11 @@ export default new Router({
                     component: resolve => require(['../page/rank/BenefitRank.vue'], resolve)
                 },
                 {
+                    path: '/saleRank',
+                    name:'saleRank',
+                    component: resolve => require(['../page/rank/SaleRank.vue'], resolve)
+                },
+                {
                     path: '/oddsRank',
                     name:'oddsRank',
                     component: resolve => require(['../page/rank/OddsRank.vue'], resolve)
@@ -58,6 +63,21 @@ export default new Router({
                     path: '/permission',
                     name:'permission',
                     component: resolve => require(['../page/permission/Permission.vue'], resolve)
+                },
+                {
+                    path: '/saleStatistics/:id?',
+                    name:'saleStatistics',
+                    component: resolve => require(['../page/shop/SaleStatistics.vue'], resolve)
+                },
+                {
+                    path: '/orderStatistics',
+                    name:'orderStatistics',
+                    component: resolve => require(['../page/shop/OrderStatistics.vue'], resolve)
+                },
+                {
+                    path: '/statistics',
+                    name:'statistics',
+                    component: resolve => require(['../page/shop/Statistics.vue'], resolve)
                 },
             ]
         },
