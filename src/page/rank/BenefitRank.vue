@@ -6,9 +6,43 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-            <div class="container-bd">
-                <p style="font-size:20px;padding:40px;color:#666;text-align:center">敬请期待</p>
-            </div>
+            <el-row class="handle-box">
+                <el-col :span="14">
+                    <span style="margin-right: 5px;">年份</span>
+                    <el-select v-model="selectedYear" @change="getList()" placeholder="请选择">
+                        <el-option
+                            v-for="(item,index) in yearArr"
+                            :key="index"
+                            :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
+                    <span style="margin-left:20px;margin-right: 5px;">月份</span>
+                    <el-select v-model="selectedMonth" @change="getList()" placeholder="请选择">
+                        <el-option
+                            v-for="(item,index) in monthArr"
+                            :key="index"
+                            :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-col>
+            </el-row>
+            <el-table :data="entryList" border style="width: 100%;" ref="multipleTable">
+                <el-table-column label="序号" align="center" width="50">
+                    <template slot-scope="scope">
+                        {{scope.$index+1}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="phoneNums" label="账号" align="center"></el-table-column>
+                <el-table-column prop="name" label="姓名"  align="center"></el-table-column>
+                <el-table-column prop="revenue" label="累计收益"  align="center"></el-table-column>
+                <el-table-column label="操作"  align="center">
+                    <template slot-scope="scope">
+                        <router-link :to="'/userDetail/'+scope.row.id" size="small">查看详情</router-link>
+                    </template>
+                </el-table-column>
+            </el-table>
         </div>
     </div>
 </template>
@@ -49,12 +83,15 @@
     export default {
         data() {
             return {
-                dialogFormVisible: false,
-                form:{province: '', city: '', county: ''},
-                formLabelWidth: '120px',
-
-                id:null,
-                userDetail:{},
+                curYear:null,
+                curMonth:null,
+                selectedYear:null,
+                yearArr:[
+                  /*  {label:'全部',value:0}*/
+                    ],
+                selectedMonth:null,
+                monthArr:[{label:'全部',value:0}],
+                entryList:[],
             }
         },
         created(){
@@ -63,96 +100,57 @@
 
         },
         methods: {
-            getUserDetail:function () {
-                Vue.api.getUserDetail({...Vue.sessionInfo(),userId:this.id}).then((resp)=>{
-                    if(resp.respCode=='00'){
-                        this.userDetail=JSON.parse(resp.respMsg);
-                        this.form=Object.assign({},this.userDetail);
-                        console.log('this.form:',this.form);
-                    }
-                });
-            },
-            del:function () {
-                this.$confirm('确定删除该用户?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then((data) => {
-                    let fb=Vue.operationFeedback({text:'删除中...'});
-                    Vue.api.setUserState({...Vue.sessionInfo(),userId:this.id,state:'del'}).then((resp)=>{
-                        if(resp.respCode=='00'){
-                            this.userDetail.accountState='del';
-                            fb.setOptions({type:'complete',text:'删除成功'});
-                        }else{
-                            fb.setOptions({type:'warn',text:'删除失败，'+resp.respMsg});
-                        }
-                    });
-                }).catch((data) => {
-
-                });
-            },
-            disable:function () {
-                this.$confirm('确定禁用该用户?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then((data) => {
-                    let fb=Vue.operationFeedback({text:'操作中...'});
-                    Vue.api.setUserState({...Vue.sessionInfo(),userId:this.id,state:'disable'}).then((resp)=>{
-                        if(resp.respCode=='00'){
-                            this.userDetail.accountState='disable';
-                            fb.setOptions({type:'complete',text:'操作成功'});
-                        }else{
-                            fb.setOptions({type:'warn',text:'操作失败，'+resp.respMsg});
-                        }
-                    });
-                }).catch((data) => {
-
-                });
-            },
-            enable:function () {
-                this.$confirm('确定恢复该用户?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then((data) => {
-                    let fb=Vue.operationFeedback({text:'操作中...'});
-                    Vue.api.setUserState({...Vue.sessionInfo(),userId:this.id,state:'enable'}).then((resp)=>{
-                        if(resp.respCode=='00'){
-                            this.userDetail.accountState='enable';
-                            fb.setOptions({type:'complete',text:'操作成功'});
-                        }else{
-                            fb.setOptions({type:'warn',text:'操作失败，'+resp.respMsg});
-                        }
-                    });
-                }).catch((data) => {
-
-                });
-            },
-            update:function () {
-                this.form.phoneNums=undefined;
+            getList:function () {
+                let year=this.selectedYear;
+                let month=this.selectedMonth;
+                let rankingType=null;
+                let dateString=Vue.formatDate(new Date(year,month?month:12,0),'yyyy-MM-dd');
+                if(year==this.curYear){
+                    rankingType='thisYear';
+                }else{
+                    rankingType='year';
+                }
+                if(month==this.curMonth){
+                    rankingType='thisMonth';
+                }else{
+                    rankingType='month';
+                }
                 let params={
                     ...Vue.sessionInfo(),
-                    userId:this.id,
-                    ...this.form
+                    rankingType:rankingType,
+                    dateString:dateString
                 }
-                let fb=Vue.operationFeedback({text:'保存中...'});
-                Vue.api.updateUserInfo(params).then((resp)=>{
+                Vue.api.getEarningsRanking(params).then((resp)=>{
                     if(resp.respCode=='00'){
-                        Object.assign(this.userDetail,this.form);
-                        this.dialogFormVisible = false;
-                        fb.setOptions({type:'complete',text:'保存成功'});
-                    }else{
-                        fb.setOptions({type:'warn',text:'保存失败，'+resp.respMsg});
+                        this.entryList=JSON.parse(resp.respMsg);
+                      /*  console.log('this.entryList:',this.entryList);*/
                     }
                 });
-            }
+            },
         },
         mounted () {
             /**/
-            this.id=this.$route.params.id;
+            let curDate=new Date();
+            this.curYear=curDate.getFullYear();
+            this.curMonth=curDate.getMonth()+1;
+            this.selectedYear=this.curYear;
+            this.selectedMonth=this.curMonth;
+            for(let i=0;i<20;i++){
+                this.yearArr.push({
+                    label:this.curYear-i+'年',
+                    value:this.curYear-i+''
+                });
+            }
+            for(let i=0;i<12;i++){
+                this.monthArr.push({
+                    label:12-i+'月',
+                    value:12-i+''
+                });
+            }
+
             /**/
-            this.getUserDetail();
+            this.getList();
+            //
         },
     }
 </script>

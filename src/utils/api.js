@@ -274,6 +274,22 @@ export default {
                 url: basicUrl + '/admin/accountantManagerLogin',
                 params: params
             });
+        },
+        //获取收益排名(只返回前10,不用分页)
+        getEarningsRanking:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl + '/ranking/getEarningsRanking',
+                params: params
+            });
+        },
+        //获取销售排名(只返回前10,不用分页)
+        getSaleRanking:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl + '/ranking/getSaleRanking',
+                params: params
+            });
         }
     }
   },

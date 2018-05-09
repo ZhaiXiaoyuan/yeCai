@@ -41,7 +41,7 @@
                 </el-row>
                 <el-row class="block">
                     <el-row class="info-row">
-                        <h2>总收益:{{userDetail.subject?userDetail.subject:0}}元</h2>
+                        <h2>总收益:{{userDetail.revenue?userDetail.revenue:0}}元</h2>
                     </el-row>
                 </el-row>
             </div>
