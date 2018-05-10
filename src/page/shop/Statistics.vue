@@ -10,7 +10,7 @@
               <!--  <el-col :span="12">
                     <el-button type="primary" icon="el-icon-back" @click="$router.go(-1)">返回</el-button>
                 </el-col>-->
-                <el-col :span="12" style="text-align: right;">
+                <el-col :span="24" style="text-align: right;">
                     <el-button type="primary" icon="el-icon-edit" v-if="userDetail.accountState=='enable'" @click="dialogFormVisible=true">编辑</el-button>
                 </el-col>
             </el-row>
@@ -36,10 +36,10 @@
                 </el-row>
                 <el-row class="block">
                     <el-row class="info-row">
-                        <h2>总收益:{{userDetail.subject?userDetail.subject:0}}元</h2>
-                        <h2>今日收益:{{userDetail.subject?userDetail.subject:0}}元</h2>
-                        <h2>今月收益:{{userDetail.subject?userDetail.subject:0}}元</h2>
-                        <h2>今年收益:{{userDetail.subject?userDetail.subject:0}}元</h2>
+                        <h2>总收益:{{userDetail.revenue?userDetail.revenue:0}}元</h2>
+                        <h2>今日收益:{{userDetail.dayEarnings?userDetail.dayEarnings:0}}元</h2>
+                        <h2>今月收益:{{userDetail.monthEarnings?userDetail.monthEarnings:0}}元</h2>
+                        <h2>今年收益:{{userDetail.yearEarnings?userDetail.yearEarnings:0}}元</h2>
                     </el-row>
                 </el-row>
             </div>

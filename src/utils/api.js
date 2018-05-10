@@ -290,7 +290,15 @@ export default {
                 url: basicUrl + '/ranking/getSaleRanking',
                 params: params
             });
-        }
+        },
+        //用户短信登陆
+        genPhoneCode:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl + '/user/smsLogin',
+                params: params
+            });
+        },
     }
   },
 

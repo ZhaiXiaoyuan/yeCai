@@ -70,12 +70,12 @@ export default new Router({
                     component: resolve => require(['../page/shop/SaleStatistics.vue'], resolve)
                 },
                 {
-                    path: '/orderStatistics',
+                    path: '/orderStatistics/:id?',
                     name:'orderStatistics',
                     component: resolve => require(['../page/shop/OrderStatistics.vue'], resolve)
                 },
                 {
-                    path: '/statistics',
+                    path: '/statistics/:id?',
                     name:'statistics',
                     component: resolve => require(['../page/shop/Statistics.vue'], resolve)
                 },
@@ -89,6 +89,16 @@ export default new Router({
         {
             path: '/adminLogin',
             name:'adminLogin',
+            component: resolve => require(['../page/account/Login.vue'], resolve)
+        },
+        {
+            path: '/shopLogin',
+            name:'shopLogin',
+            component: resolve => require(['../page/account/Login.vue'], resolve)
+        },
+        {
+            path: '/userLogin',
+            name:'userLogin',
             component: resolve => require(['../page/account/Login.vue'], resolve)
         },
     ]

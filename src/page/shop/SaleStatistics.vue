@@ -7,10 +7,10 @@
         </div>
         <div class="container">
             <el-row class="container-hd">
-            <!--    <el-col :span="12">
-                    <el-button type="primary" icon="el-icon-back" @click="$router.go(-1)">返回</el-button>
-                </el-col>-->
-                <el-col :span="12" style="text-align: right;">
+                <el-col :span="12">
+                    <!--<el-button type="primary" icon="el-icon-back" @click="$router.go(-1)">返回</el-button>-->
+                </el-col>
+                <el-col :span="24" style="text-align: right;">
                     <el-button type="primary" icon="el-icon-edit" v-if="shopDetail.accountState=='enable'" @click="dialogFormVisible=true">编辑</el-button>
                 </el-col>
             </el-row>
@@ -59,7 +59,7 @@
                 <el-row class="block">
                     <el-row class="info-row">
                         <el-col :span="12">日时销售额 {{curDateStrArr.join('.')}}：{{shopDetail.daySale}}元</el-col>
-                        <el-col :span="12">总销售额 元</el-col>
+                        <el-col :span="12">总销售额{{shopDetail.revenue}}元</el-col>
                     </el-row>
                     <el-row class="info-row">月销售额 {{curDateStrArr[0]+'.'+curDateStrArr[1]}}：{{shopDetail.monthSale}}元</el-row>
                     <el-row class="info-row">年销售额 {{curDateStrArr[0]}}：{{shopDetail.yearSale}}元</el-row>
@@ -96,9 +96,9 @@
                         <el-form-item label="电话" :label-width="formLabelWidth">
                             <el-input v-model="form.telephoneNums" auto-complete="off"></el-input>
                         </el-form-item>
-                        <el-form-item label="门店渠道返点" :label-width="formLabelWidth">
+                    <!--    <el-form-item label="门店渠道返点" :label-width="formLabelWidth">
                             <el-input v-model="form.shopRebates" auto-complete="off"></el-input>
-                        </el-form-item>
+                        </el-form-item>-->
                         <el-form-item label="地区" :label-width="formLabelWidth">
                             <v-distpicker class="cm-area-picker" :province="form.province" :city="form.city" :area="form.county"></v-distpicker>
                         </el-form-item>
@@ -106,7 +106,10 @@
                             <el-input v-model="form.address" auto-complete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="状态" :label-width="formLabelWidth">
-                            <el-input v-model="form.status" auto-complete="off"></el-input>
+                            <span v-if="shopDetail.accountState=='enable'">可用</span>
+                            <span v-if="shopDetail.accountState=='disable'">禁止</span>
+                            <span v-if="shopDetail.accountState=='del'">已删除</span>
+                          <!--  <el-input v-model="form.status" auto-complete="off"></el-input>-->
                         </el-form-item>
                     </el-form>
                 </el-col>
@@ -117,9 +120,6 @@
                            :disabled="!form.companyName||form.companyName==''
                            ||!form.socialCreditCode||form.socialCreditCode==''
                            ||!form.telephoneNums||form.telephoneNums==''
-                           ||!form.shopRebates||form.shopRebates==''
-                           ||!form.marketingRebates||form.marketingRebates==''
-                           ||!form.otherRebates||form.otherRebates==''
                            ||!form.province||form.province==''
                            ||!form.city||form.city==''
                            ||!form.county||form.county==''

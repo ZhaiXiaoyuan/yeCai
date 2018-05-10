@@ -2,9 +2,17 @@
     <div class="login-wrap">
         <div class="ms-title">
             <span v-if="pageName=='login'">夜彩平台超级管理员</span>
-            <span v-if="pageName=='adminLogin'">夜彩平台<span v-if="accountType=='marketManager'">市场</span><span v-if="accountType=='accountantManager'">财务</span>管理员</span>
+            <span v-if="pageName=='adminLogin'">
+                夜彩平台<span v-if="accountType=='marketManager'">市场</span><span v-if="accountType=='accountantManager'">财务</span>管理员
+            </span>
+            <span v-if="pageName=='shopLogin'">
+                夜彩门店
+            </span>
+            <span v-if="pageName=='userLogin'">
+                夜彩用户
+            </span>
         </div>
-        <div class="ms-login">
+        <div class="ms-login" v-if="pageName=='login'||pageName=='adminLogin'">
             <el-radio-group v-model="accountType" style="margin-bottom: 20px;" v-if="pageName=='adminLogin'">
                 <el-radio label="marketManager">市场管理员</el-radio>
                 <el-radio label="accountantManager">财务管理员</el-radio>
@@ -19,6 +27,21 @@
                 <el-form-item prop="identifyCode" id="identify-code" style="position:relative;">
                     <el-input type="password" placeholder="验证码" v-model="ruleForm.identifyCode" @keyup.enter.native="submitForm()" style="padding-right: 100px;"></el-input>
                     <identify style="position:absolute;top:0px;bottom: 0px;right: 0px;margin: auto;"></identify>
+                </el-form-item>
+                <div class="login-btn">
+                    <el-button type="primary" size="large" @click="submitForm()">登&nbsp;录</el-button>
+                </div>
+
+            </el-form>
+        </div>
+        <div class="ms-login" v-if="pageName=='userLogin'||pageName=='shopLogin'">
+            <el-form :model="ruleForm"  ref="ruleForm" label-width="0px" class="demo-ruleForm">
+                <el-form-item prop="phone">
+                    <el-input v-model="ruleForm.phone" placeholder="手机号"></el-input>
+                </el-form-item>
+                <el-form-item prop="phoneCode" id="identify-code" style="position:relative;">
+                    <el-input type="text" placeholder="手机验证码验证码" v-model="ruleForm.phoneCode" @keyup.enter.native="submitForm()" style="padding-right: 100px;"></el-input>
+                    <gen-code :phone="ruleForm.phone"></gen-code>
                 </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" size="large" @click="submitForm()">登&nbsp;录</el-button>
@@ -82,11 +105,13 @@
         data: function(){
             return {
                 pageName:null,
-                accountType:'marketManager',//superManager:'超级管理员',marketManager:市场管理员账号,accountantManager:财务管理员账号
+                accountType:'marketManager',//superManager:'超级管理员',marketManager:市场管理员账号,accountantManager:财务管理员账号,shopManager:门店角色,userManger:用户角色
                 ruleForm: {
                     username: '',
                     password: '',
-                    identifyCode:''
+                    identifyCode:'',
+                    phone:'',
+                    phoneCode:'',
                 },
             }
         },

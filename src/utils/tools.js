@@ -78,7 +78,7 @@ export default {
         },
         sessionInfo:function () {
           let timestamp=this.genTimestamp();
-          let userId='07d2cbfa55cf4e6582d67e164405b36b';
+          let userId='07d2cbfa55cf4e6582d67e164405b36b';//临时测试
           return{
               timeStamp:timestamp,
               userId:userId,

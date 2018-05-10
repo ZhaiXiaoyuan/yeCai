@@ -6,7 +6,8 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-            <el-row class="handle-box">
+            <p style="font-size:20px;padding:40px;color:#666;text-align:center">敬请期待</p>
+          <!--  <el-row class="handle-box">
                 <el-col :span="14">
                     <span style="padding-right: 5px;">日期</span>
                     <el-date-picker
@@ -36,7 +37,7 @@
                     layout="prev, pager, next"
                     :total="pager.total">
                 </el-pagination>
-            </div>
+            </div>-->
         </div>
     </div>
 </template>
