@@ -43,7 +43,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="winInfo.mobile" label="中奖号码" align="center"></el-table-column>
-                <el-table-column prop="winInfo.prizeTime" label="时间" width="200"  align="center"></el-table-column>
+                <el-table-column prop="winInfo.createdAt" label="时间" width="200"  align="center"></el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination

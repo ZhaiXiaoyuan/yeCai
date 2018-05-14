@@ -255,7 +255,7 @@
                     time:parseInt(curDate.getHours()+''+curDate.getMinutes())
                 }
 
-                var targetUrl='http://yecai.happycp.com/index.htm?reqChannel='+getRequest().channels;//系统开放时的目标跳转地址
+                var targetUrl='http://yecai.happycp.net/index.htm?reqChannel='+getRequest().channels;//系统开放时的目标跳转地址
 
                 getData(basicUrl+'sys/checkQRTime','POST',params,function (resp) {
                     $('.loading').addClass('cm-hidden');
