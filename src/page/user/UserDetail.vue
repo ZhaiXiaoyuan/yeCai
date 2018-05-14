@@ -33,15 +33,13 @@
                     <el-row class="info-row">姓名：{{userDetail.name}}</el-row>
                     <el-row class="info-row">身份证：{{userDetail.idCard}}</el-row>
                     <el-row class="info-row">邮箱：{{userDetail.email}}</el-row>
-                    <!--临时测试-->
-                   <!-- <el-row class="info-row">返点比例：{{userDetail.revenue}}%</el-row>-->
                     <el-row class="info-row">开户行：{{userDetail.bankName}}</el-row>
                     <el-row class="info-row">支行：{{userDetail.subbranch}}</el-row>
                     <el-row class="info-row">银行账户：{{userDetail.bankAccount}}</el-row>
                 </el-row>
                 <el-row class="block">
                     <el-row class="info-row">
-                        <h2>总收益:{{userDetail.revenue?userDetail.revenue:0}}元</h2>
+                        <h2>总收益:{{(userDetail.revenue?userDetail.revenue:0)|moneyFormat}}元</h2>
                     </el-row>
                 </el-row>
             </div>

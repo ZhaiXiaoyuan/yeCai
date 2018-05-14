@@ -31,7 +31,7 @@
                     <v-distpicker class="cm-area-picker select-region" :callback="changeArea"></v-distpicker>
                 </el-col>
             </el-row>
-            <el-table :data="entryList" border style="width: 100%;" ref="multipleTable">
+            <el-table :data="entryList" border style="width: 100%;" ref="multipleTable" v-loading="loading">
                 <el-table-column label="序号" align="center" width="50">
                     <template slot-scope="scope">
                         {{scope.$index+1}}
@@ -40,9 +40,21 @@
                 <el-table-column prop="companyName" label="公司名" align="center"></el-table-column>
                 <el-table-column prop="name" label="联系人姓名"  align="center"></el-table-column>
                 <el-table-column prop="telephoneNums" label="联系人号码"  align="center"></el-table-column>
-                <el-table-column prop="daySale" label="日销售额"  align="center"></el-table-column>
-                <el-table-column prop="monthSale" label="月销售额"  align="center"></el-table-column>
-                <el-table-column prop="yearSale" label="年销售额"  align="center"></el-table-column>
+                <el-table-column label="日销售额"  align="center">
+                    <template slot-scope="scope">
+                        {{scope.row.daySale|moneyFormat}}
+                    </template>
+                </el-table-column>
+                <el-table-column  label="月销售额"  align="center">
+                    <template slot-scope="scope">
+                        {{scope.row.monthSale|moneyFormat}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="年销售额"  align="center">
+                    <template slot-scope="scope">
+                        {{scope.row.yearSale|moneyFormat}}
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作"  align="center">
                     <template slot-scope="scope">
                         <router-link :to="'/shopDetail/'+scope.row.id" size="small">查看详情</router-link>
@@ -81,9 +93,7 @@
         }
     }
     .select-region{
-       /* background: red;*/
-        select{
-        }
+
     }
 </style>
 <script>
@@ -105,6 +115,7 @@
                 county:null,
                 regionKeyword:null,
 
+                loading:false,
                 entryList:[],
             }
         },
@@ -119,27 +130,34 @@
                 let month=this.selectedMonth;
                 let rankingType=null;
                 let dateString=Vue.formatDate(new Date(year,month?month:12,0),'yyyy-MM-dd');
-                if(year==this.curYear){
-                    rankingType='thisYear';
+                if(month){
+                    if(year==this.curYear&&month==this.curMonth){
+                        rankingType='thisMonth';
+                    }else{
+                        rankingType='month';
+                    }
                 }else{
-                    rankingType='year';
-                }
-                if(month==this.curMonth){
-                    rankingType='thisMonth';
-                }else{
-                    rankingType='month';
+                    if(year==this.curYear){
+                        rankingType='thisYear';
+                    }else{
+                        rankingType='year';
+                    }
                 }
                 let params={
                     ...Vue.sessionInfo(),
                     rankingType:rankingType,
                     dateString:dateString,
-                    searchContent:this.regionKeyword
+                    searchContent:this.regionKeyword?this.regionKeyword:null
                 }
+                this.loading=true;
                 Vue.api.getSaleRanking(params).then((resp)=>{
                     if(resp.respCode=='00'){
                         this.entryList=JSON.parse(resp.respMsg);
                         /*  console.log('this.entryList:',this.entryList);*/
                     }
+                    setTimeout(()=>{
+                        this.loading=false;
+                    },500)
                 });
             },
             changeArea:function (data) {
@@ -178,8 +196,8 @@
             }
             for(let i=0;i<12;i++){
                 this.monthArr.push({
-                    label:12-i+'月',
-                    value:12-i+''
+                    label:i+1+'月',
+                    value:i+1+''
                 });
             }
             /**/

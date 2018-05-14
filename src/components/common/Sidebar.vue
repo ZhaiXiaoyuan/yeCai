@@ -65,7 +65,7 @@
                         title: '账户系统',
                         subs: [
                             {
-                                index: '/',
+                                index: '/shop',
                                 title: '门店管理'
                             },
                             {
@@ -124,21 +124,21 @@
                     },
                     {
                         code:'06',
+                        icon: '#icon-weibiaoti4',
+                        index: '/statistics',
+                        title: '用户信息',
+                    },
+               /*     {
+                        code:'07',
                         icon: '#icon-tongji',
                         index: '/saleStatistics',
                         title: '销售统计',
-                    },
+                    },*/
                     {
-                        code:'07',
+                        code:'08',
                         icon: '#icon-dingdan',
                         index: '/orderStatistics',
                         title: '订单统计',
-                    },
-                    {
-                        code:'08',
-                        icon: '#icon-weibiaoti4',
-                        index: '/statistics',
-                        title: '统计',
                     },
                 ],
                 items: []
@@ -164,6 +164,10 @@
                 this.accountAccess=['02'];
             }else if(this.accountInfo.type=='accountantManager'){
                 this.accountAccess=['03'];
+            }else if(this.accountInfo.type=='userManager'){
+                this.accountAccess=['06','07','08'];
+            } else if(this.accountInfo.type=='shopManager'){
+               /* this.accountAccess=['07','08'];*/
             }
             if(this.accountAccess=='all'){
                 this.items=this.itemsConfig;

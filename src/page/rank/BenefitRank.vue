@@ -36,7 +36,11 @@
                 </el-table-column>
                 <el-table-column prop="phoneNums" label="账号" align="center"></el-table-column>
                 <el-table-column prop="name" label="姓名"  align="center"></el-table-column>
-                <el-table-column prop="revenue" label="累计收益"  align="center"></el-table-column>
+                <el-table-column label="累计收益"  align="center">
+                    <template slot-scope="scope">
+                        {{scope.row.revenue|moneyFormat}}
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作"  align="center">
                     <template slot-scope="scope">
                         <router-link :to="'/userDetail/'+scope.row.id" size="small">查看详情</router-link>
@@ -105,15 +109,18 @@
                 let month=this.selectedMonth;
                 let rankingType=null;
                 let dateString=Vue.formatDate(new Date(year,month?month:12,0),'yyyy-MM-dd');
-                if(year==this.curYear){
-                    rankingType='thisYear';
+                if(month){
+                    if(year==this.curYear&&month==this.curMonth){
+                        rankingType='thisMonth';
+                    }else{
+                        rankingType='month';
+                    }
                 }else{
-                    rankingType='year';
-                }
-                if(month==this.curMonth){
-                    rankingType='thisMonth';
-                }else{
-                    rankingType='month';
+                    if(year==this.curYear){
+                        rankingType='thisYear';
+                    }else{
+                        rankingType='year';
+                    }
                 }
                 let params={
                     ...Vue.sessionInfo(),
@@ -143,8 +150,8 @@
             }
             for(let i=0;i<12;i++){
                 this.monthArr.push({
-                    label:12-i+'月',
-                    value:12-i+''
+                    label:i+1+'月',
+                    value:i+1+''
                 });
             }
 

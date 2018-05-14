@@ -242,7 +242,11 @@
             window.location.href=window.location.origin+'/yecaiWeb/index.html#/login';
         }else if(hostname=='admin.yeahcai.com'){
             window.location.href=window.location.origin+'/yecaiWeb/index.html#/adminLogin';
-        }else{
+        }else if(hostname=='user.yeahcai.com'){
+           window.location.href=window.location.origin+'/yecaiWeb/index.html#/userLogin';
+        }else if(hostname=='shop.yeahcai.com'){
+         /*  window.location.href=window.location.origin+'/yecaiWeb/index.html#/shopLogin';*/
+       }else{
             if(chanel&&chanel!=''){
                 var basicUrl='http://api.yeahcai.com/yecai/';//请求域名设置
                 var curDate=new Date();

@@ -31,7 +31,11 @@
                 <el-table-column prop="name" label="姓名"  align="center"></el-table-column>
                 <el-table-column prop="idCard" label="身份证"  align="center"></el-table-column>
                 <el-table-column prop="email" label="邮箱"  align="center"></el-table-column>
-                <el-table-column prop="revenue" :formatter="percentFormatter" label="返点比例"  align="center"></el-table-column>
+                <el-table-column label="总收益"  align="center">
+                    <template slot-scope="scope">
+                       {{scope.row.revenue|moneyFormat}}
+                    </template>
+                </el-table-column>
                 <el-table-column prop="bankName" label="开户行"  align="center"></el-table-column>
                 <el-table-column prop="subbranch" label="支行" align="center"></el-table-column>
                 <el-table-column prop="bankAccount" label="银行账户" width="200"  align="center"></el-table-column>

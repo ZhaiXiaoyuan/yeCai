@@ -291,11 +291,27 @@ export default {
                 params: params
             });
         },
-        //用户短信登陆
-        genPhoneCode:function (params) {
+        //获取手机验证码
+        genPhoneCode:function (params,url) {
             return Vue.http.ajax({
                 method: 'post',
-                url: basicUrl + '/user/smsLogin',
+                url: basicUrl + url,
+                params: params
+            });
+        },
+        //获取门店订单列表
+        getShopOrderList:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl + '/user/getUserShopOrderList',
+                params: params
+            });
+        },
+        //校验短信
+        checkPhoneCode:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl + '/sms/verifySms',
                 params: params
             });
         },

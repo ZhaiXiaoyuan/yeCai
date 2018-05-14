@@ -38,6 +38,9 @@
       },
       url:{
         type:String,
+      },
+      options:{
+          type:Object,
       }
     },
     data: function () {
@@ -63,12 +66,15 @@
         this.isRequesting=true;
         let params={
           ...Vue.tools.sessionInfo(),
-          mobilephone:this.phone
+            telephoneNums:this.phone,
+            phoneNums:this.phone
         }
         let fb=this.operationFeedback({text:'发送中...'});
-        Vue.api.genPhoneCode(params).then(function (resp) {
+        Vue.api.genPhoneCode(params,this.url).then(function (resp) {
           that.isRequesting=false;
           if(resp.respCode=='00'){
+            let data=JSON.parse(resp.respMsg);
+              that.options.ok&&that.options.ok(data);
             fb.setOptions({type:'complete','text':'发送成功'});
             var interval=setInterval(function () {
               if(that.time==0){
@@ -79,7 +85,7 @@
               }
             },1000);
           }else{
-            fb.setOptions({type:'warn','text':resp.description});
+            fb.setOptions({type:'warn','text':resp.respMsg});
           }
         });
       }

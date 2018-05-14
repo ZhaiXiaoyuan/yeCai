@@ -58,12 +58,27 @@
                 </el-row>
                 <el-row class="block">
                     <el-row class="info-row">
-                        <el-col :span="12">日时销售额 {{curDateStrArr.join('.')}}：{{shopDetail.daySale}}元</el-col>
-                        <el-col :span="12">总销售额{{shopDetail.revenue}}元</el-col>
+                        <el-col :span="5" style="text-align: left;">
+                            日销售额 {{curDateStrArr.join('.')}}：
+                        </el-col>
+                        <el-col :span="5">
+                            {{shopDetail.daySale|moneyFormat}}元
+                        </el-col>
+                        <el-col :span="14">总销售额：{{shopDetail.revenue|moneyFormat}}元</el-col>
                     </el-row>
-                    <el-row class="info-row">月销售额 {{curDateStrArr[0]+'.'+curDateStrArr[1]}}：{{shopDetail.monthSale}}元</el-row>
-                    <el-row class="info-row">年销售额 {{curDateStrArr[0]}}：{{shopDetail.yearSale}}元</el-row>
+                    <el-row class="info-row">
+                        <el-col :span="5" style="text-align: left;">
+                            月销售额 {{curDateStrArr[0]+'.'+curDateStrArr[1]}}：
+                        </el-col>
+                        {{shopDetail.monthSale|moneyFormat}}元
+                    </el-row>
+                    <el-row class="info-row">
+                        <el-col :span="5" style="text-align: left;">
+                            年销售额 {{curDateStrArr[0]}}：
+                        </el-col>
+                        {{shopDetail.yearSale|moneyFormat}}元</el-row>
                 </el-row>
+
                 <el-row class="block">
                     <el-row class="info-row">
                         <el-col :span="8">门店账户：{{shopChannelsUser.name}}&nbsp;{{shopChannelsUser.phoneNums}}</el-col>
@@ -288,8 +303,8 @@
             },
         },
         mounted () {
-            /**/
-            this.id=this.$route.params.id;
+            let account=JSON.parse(this.$cookie.get('account'));
+            this.id=this.$route.params.id?this.$route.params.id:account.id;
             /**/
             this.getShopDetail();
             /**/

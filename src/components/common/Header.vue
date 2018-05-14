@@ -3,7 +3,13 @@
         <div class="collapse-btn" @click="collapseChage">
             <i class="el-icon-menu"></i>
         </div>
-        <div class="logo">夜彩平台·<span v-if="accountInfo.type=='superManager'">超级</span><span v-if="accountInfo.type=='marketManager'">市场</span><span v-if="accountInfo.type=='accountantManager'">财务</span>管理员</div>
+        <div class="logo">
+            夜彩平台·<span v-if="accountInfo.type=='superManager'">超级管理员</span>
+            <span v-if="accountInfo.type=='marketManager'">市场管理员</span>
+            <span v-if="accountInfo.type=='accountantManager'">财务管理员</span>
+            <span v-if="accountInfo.type=='userManager'">用户</span>
+            <span v-if="accountInfo.type=='shopManager'">门店</span>
+        </div>
         <div class="user-info">
             <el-dropdown trigger="click" @command="handleCommand">
                 <span class="el-dropdown-link">

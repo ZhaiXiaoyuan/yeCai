@@ -9,7 +9,8 @@
         <div class="container">
             <el-row class="handle-box">
                 <el-col :span="14">
-                    <v-distpicker class="cm-area-picker" :callback="changeArea"></v-distpicker>
+                    <v-distpicker class="cm-area-picker" :callback="changeArea" style="display: inline-block;"></v-distpicker>
+                    <el-button size="small" style="margin-left: 5px;" @click="getAll()">全部</el-button>
                 </el-col>
                 <el-col :span="10" style="text-align: right">
                     <el-button type="primary" icon="el-icon-plus" @click="dialogFormVisible=true">新建门店</el-button>
@@ -24,7 +25,7 @@
                     <a id="downlink"></a>
                 </el-col>
             </el-row>
-            <el-table :data="entryList" border style="width: 100%;" ref="multipleTable" >
+            <el-table :data="entryList" border style="width: 100%;" ref="multipleTable" v-loading="pager.loading">
                 <el-table-column label="序号" align="center" width="50">
                     <template slot-scope="scope">
                         {{scope.$index+1}}
@@ -137,6 +138,7 @@
                     pageIndex:1,
                     pageSize:20,
                     total:0,
+                    loading:false
                 },
                 entryList:[],
                 timer:null,
@@ -350,6 +352,7 @@
                     pageSize:this.pager.pageSize,
                     searchContent:this.regionKeyword?this.regionKeyword:null,
                 }
+                this.pager.loading=true;
                 Vue.api.getShopList(params).then((resp)=>{
                     if(resp.respCode=='00'){
                         let data=JSON.parse(resp.respMsg);
@@ -357,7 +360,18 @@
                         this.pager.total=data.shopCount;
                       /*  console.log('this.entryList:',this.entryList[0]);*/
                     }
+                    let timeout=setTimeout(()=>{
+                        this.pager.loading=false;
+                        clearTimeout(timeout);
+                    },500)
                 });
+            },
+            getAll:function () {
+                this.province=null;
+                this.city=null;
+                this.county=null;
+                this.regionKeyword=null;
+                this.getList();
             },
             getAllList:function (pageIndex) {
                 let params={
@@ -396,7 +410,7 @@
                                 7:item['shopChannelsId-phoneNums'],//手机号码
                                 8:item['shopChannelsId-name'],//姓名
                                 9:Vue.basicConfig.basicUrl+item.qRCodeId,//外链
-                                10:'www.yeahcai.com/channels='+item.channelId,//信息
+                                10:Vue.basicConfig.yeCaiBasicUrl+'/?channels='+item.channelId,//信息
                             });
                         });
                         this.downloadExl(jsonData,'二维码导出表');

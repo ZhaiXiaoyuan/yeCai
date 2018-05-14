@@ -27,3 +27,8 @@ Vue.filter('formatDate',function(date,fmt){
     if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
   return fmt;
 });
+
+/*格式化金额*/
+Vue.filter('moneyFormat',function(str){
+    return (str/100).toFixed(2);
+});

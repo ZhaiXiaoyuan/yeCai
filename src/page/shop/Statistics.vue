@@ -2,7 +2,7 @@
     <div class="shop-detail">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>统计</el-breadcrumb-item>
+                <el-breadcrumb-item>用户信息</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
@@ -28,18 +28,16 @@
                     <el-row class="info-row">姓名：{{userDetail.name}}</el-row>
                     <el-row class="info-row">身份证：{{userDetail.idCard}}</el-row>
                     <el-row class="info-row">邮箱：{{userDetail.email}}</el-row>
-                    <!--临时测试-->
-                   <!-- <el-row class="info-row">返点比例：{{userDetail.revenue}}%</el-row>-->
                     <el-row class="info-row">开户行：{{userDetail.bankName}}</el-row>
                     <el-row class="info-row">支行：{{userDetail.subbranch}}</el-row>
                     <el-row class="info-row">银行账户：{{userDetail.bankAccount}}</el-row>
                 </el-row>
                 <el-row class="block">
                     <el-row class="info-row">
-                        <h2>总收益:{{userDetail.revenue?userDetail.revenue:0}}元</h2>
-                        <h2>今日收益:{{userDetail.dayEarnings?userDetail.dayEarnings:0}}元</h2>
-                        <h2>今月收益:{{userDetail.monthEarnings?userDetail.monthEarnings:0}}元</h2>
-                        <h2>今年收益:{{userDetail.yearEarnings?userDetail.yearEarnings:0}}元</h2>
+                        <h2>总收益:{{(userDetail.revenue?userDetail.revenue:0)|moneyFormat}}元</h2>
+                        <h2>今日收益:{{(userDetail.dayEarnings?userDetail.dayEarnings:0)|moneyFormat}}元</h2>
+                        <h2>今月收益:{{(userDetail.monthEarnings?userDetail.monthEarnings:0)|moneyFormat}}元</h2>
+                        <h2>今年收益:{{(userDetail.yearEarnings?userDetail.yearEarnings:0)|moneyFormat}}元</h2>
                     </el-row>
                 </el-row>
             </div>
@@ -178,7 +176,8 @@
         },
         mounted () {
             /**/
-            this.id=this.$route.params.id;
+            let account=JSON.parse(this.$cookie.get('account'));
+            this.id=this.$route.params.id?this.$route.params.id:account.id;
             /**/
             this.getUserDetail();
         },

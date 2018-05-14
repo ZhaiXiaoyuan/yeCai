@@ -45,8 +45,8 @@ export default {
         //
       Vue.tools = {
           basicConfig:{
-              //临时测试
-              basicUrl:false&&process.env.NODE_ENV=='development'?'http://zyu-server.wicp.net:19356/':'http://api.yeahcai.com'
+              basicUrl:false&&process.env.NODE_ENV=='development'?'http://zyu-server.wicp.net:19356/':'http://api.yeahcai.com',
+              yeCaiBasicUrl:'http://yecai.happycp.com'
           },
         /*生成请求时间戳*/
         genTimestamp:function () {
@@ -78,7 +78,7 @@ export default {
         },
         sessionInfo:function () {
           let timestamp=this.genTimestamp();
-          let userId='07d2cbfa55cf4e6582d67e164405b36b';//临时测试
+          let userId='07d2cbfa55cf4e6582d67e164405b36b';//临时测试，上线时要检查该字段值
           return{
               timeStamp:timestamp,
               userId:userId,
