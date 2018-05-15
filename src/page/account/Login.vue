@@ -39,9 +39,13 @@
                 <el-form-item prop="phone">
                     <el-input v-model="ruleForm.phone" placeholder="手机号"></el-input>
                 </el-form-item>
+                <el-form-item prop="identifyCode" id="identify-code" style="position:relative;">
+                    <el-input type="password" placeholder="图片验证码" v-model="ruleForm.identifyCode" @keyup.enter.native="submitForm()" style="padding-right: 100px;"></el-input>
+                    <identify style="position:absolute;top:0px;bottom: 0px;right: 0px;margin: auto;"></identify>
+                </el-form-item>
                 <el-form-item prop="phoneCode" id="identify-code" style="position:relative;">
                     <el-input type="text" placeholder="手机验证码验证码" v-model="ruleForm.phoneCode" @keyup.enter.native="submitForm()" style="padding-right: 100px;"></el-input>
-                    <gen-code :phone="ruleForm.phone" :url="genCodeUrl" :options="{ok:genCodeData}"></gen-code>
+                    <gen-code :phone="ruleForm.phone" :identifyCode="ruleForm.identifyCode" :url="genCodeUrl" :options="{ok:genCodeData}"></gen-code>
                 </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" size="large" @click="submitForm()">登&nbsp;录</el-button>
@@ -171,7 +175,7 @@
                     }
                     let fb=Vue.operationFeedback({text:'登录中...'});
                     if(this.accountType=='marketManager'){
-                        Vue.api.marketManagerLogin({...Vue.sessionInfo(),account:this.ruleForm.username,password:this.ruleForm.password}).then((resp)=>{
+                        Vue.api.adminLogin({...Vue.sessionInfo(),account:this.ruleForm.username,password:this.ruleForm.password}).then((resp)=>{
                             if(resp.respCode=='00'){
                                 localStorage.setItem('loginPage','adminLogin');
                                 this.$cookie.set('account',JSON.stringify({
@@ -185,7 +189,7 @@
                             }
                         });
                     }else if(this.accountType=='accountantManager'){
-                        Vue.api.accountantManagerLogin({...Vue.sessionInfo(),account:this.ruleForm.username,password:this.ruleForm.password}).then((resp)=>{
+                        Vue.api.adminLogin({...Vue.sessionInfo(),account:this.ruleForm.username,password:this.ruleForm.password}).then((resp)=>{
                             if(resp.respCode=='00'){
                                 localStorage.setItem('loginPage','adminLogin');
                                 this.$cookie.set('account',JSON.stringify({

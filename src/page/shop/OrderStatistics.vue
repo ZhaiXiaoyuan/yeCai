@@ -43,7 +43,12 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="winInfo.mobile" label="中奖号码" align="center"></el-table-column>
-                <el-table-column prop="winInfo.createdAt" label="时间" width="200"  align="center"></el-table-column>
+                <el-table-column prop="shop" label="门店" align="center"></el-table-column>
+                <el-table-column label="时间" width="200"  align="center">
+                    <template slot-scope="scope">
+                        {{scope.row.tpOrder.createdAt|formatDate('yyyy-MM-dd hh:mm:ss')}}
+                    </template>
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -121,7 +126,7 @@
                                 winInfo:item.winInfo?JSON.parse(item.winInfo):{}
                             });
                         })
-                     /*   console.log('this.entryList:',this.entryList);*/
+                        console.log('this.entryList:',this.entryList);
                         this.pager.total=data.orderCount;
                     }
                     this.pager.loading=false;

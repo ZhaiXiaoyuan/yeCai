@@ -46,6 +46,7 @@ export default {
       Vue.tools = {
           basicConfig:{
               basicUrl:false&&process.env.NODE_ENV=='development'?'http://zyu-server.wicp.net:19356/':'http://api.yeahcai.com',
+              qrCodeBasicUrl:'http://shopqrcode.yeahcai.com',
               yeCaiBasicUrl:'http://yecai.happycp.com'
           },
         /*生成请求时间戳*/

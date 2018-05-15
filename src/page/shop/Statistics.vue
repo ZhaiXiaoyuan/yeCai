@@ -17,27 +17,57 @@
             <div class="container-bd">
                 <el-row class="block">
                     <el-row class="info-row">
-                        <el-col :span="10">手机号：{{userDetail.phoneNums}}</el-col>
-                        <el-col :span="14">
+                        <el-col :span="3" style="text-align: right;">手机号：</el-col>
+                        <el-col :span="6">
+                            {{userDetail.phoneNums}}</el-col>
+                        <el-col :span="4">
                             状态:
                             <span v-if="userDetail.accountState=='enable'">可用</span>
                             <span v-if="userDetail.accountState=='disable'">禁止</span>
                             <span v-if="userDetail.accountState=='del'">已删除</span>
                         </el-col>
                     </el-row>
-                    <el-row class="info-row">姓名：{{userDetail.name}}</el-row>
-                    <el-row class="info-row">身份证：{{userDetail.idCard}}</el-row>
-                    <el-row class="info-row">邮箱：{{userDetail.email}}</el-row>
-                    <el-row class="info-row">开户行：{{userDetail.bankName}}</el-row>
-                    <el-row class="info-row">支行：{{userDetail.subbranch}}</el-row>
-                    <el-row class="info-row">银行账户：{{userDetail.bankAccount}}</el-row>
+                    <el-row class="info-row">
+                        <el-col :span="3" style="text-align: right;"> 姓名：</el-col>
+                        {{userDetail.name}}
+                    </el-row>
+                    <el-row class="info-row">
+                        <el-col :span="3" style="text-align: right;"> 身份证：</el-col>
+                        {{userDetail.idCard}}</el-row>
+                    <el-row class="info-row">
+                        <el-col :span="3" style="text-align: right;">  邮箱：</el-col>
+                        {{userDetail.email}}
+                    </el-row>
+                    <el-row class="info-row">
+                        <el-col :span="3" style="text-align: right;">  开户行：</el-col>
+                        {{userDetail.bankName}}</el-row>
+                    <el-row class="info-row">
+                        <el-col :span="3" style="text-align: right;">   支行：</el-col>
+                        {{userDetail.subbranch}}
+                    </el-row>
+                    <el-row class="info-row">
+                        <el-col :span="3" style="text-align: right;">   银行账户：</el-col>
+                        {{userDetail.bankAccount}}
+                    </el-row>
                 </el-row>
                 <el-row class="block">
                     <el-row class="info-row">
-                        <h2>总收益:{{(userDetail.revenue?userDetail.revenue:0)|moneyFormat}}元</h2>
-                        <h2>今日收益:{{(userDetail.dayEarnings?userDetail.dayEarnings:0)|moneyFormat}}元</h2>
-                        <h2>今月收益:{{(userDetail.monthEarnings?userDetail.monthEarnings:0)|moneyFormat}}元</h2>
-                        <h2>今年收益:{{(userDetail.yearEarnings?userDetail.yearEarnings:0)|moneyFormat}}元</h2>
+                        <h2>
+                            <el-col :span="3" style="text-align: right">总收益:</el-col>
+                            {{(userDetail.revenue?userDetail.revenue:0)|moneyFormat}}元
+                        </h2>
+                        <h2>
+                            <el-col :span="3" style="text-align: right"> 今日收益:</el-col>
+                            {{(userDetail.dayEarnings?userDetail.dayEarnings:0)|moneyFormat}}元
+                        </h2>
+                        <h2>
+                            <el-col :span="3" style="text-align: right"> 今月收益:</el-col>
+                            {{(userDetail.monthEarnings?userDetail.monthEarnings:0)|moneyFormat}}元
+                        </h2>
+                        <h2>
+                            <el-col :span="3" style="text-align: right"> 今年收益:</el-col>
+                            {{(userDetail.yearEarnings?userDetail.yearEarnings:0)|moneyFormat}}元
+                        </h2>
                     </el-row>
                 </el-row>
             </div>

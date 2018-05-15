@@ -23,21 +23,61 @@
                 <el-row class="block">
                     <el-col :span="16">
                         <el-row class="info-row">
-                            <el-col :span="12">门店编号：{{shopDetail.channelId}}</el-col>
-                            <el-col :span="12">
-                                状态:
+                            <el-col :span="5" style="text-align: right;">
+                                门店编号：
+                            </el-col>
+                            <el-col :span="8">
+                                {{shopDetail.channelId}}
+                            </el-col>
+                            <el-col :span="4">
+                                状态：
                                 <span v-if="shopDetail.accountState=='enable'">可用</span>
                                 <span v-if="shopDetail.accountState=='disable'">禁止</span>
                                 <span v-if="shopDetail.accountState=='del'">已删除</span>
                             </el-col>
                         </el-row>
-                        <el-row class="info-row">公司：{{shopDetail.companyName}}</el-row>
-                        <el-row class="info-row">社会信用代码：{{shopDetail.socialCreditCode}}</el-row>
-                        <el-row class="info-row">电话：{{shopDetail.telephoneNums}}</el-row>
-                        <el-row class="info-row">省份：{{shopDetail.province}}</el-row>
-                        <el-row class="info-row">市区：{{shopDetail.city}}</el-row>
-                        <el-row class="info-row">县：{{shopDetail.county}}</el-row>
-                        <el-row class="info-row">详细地址：{{shopDetail.address}}</el-row>
+                        <el-row class="info-row">
+                            <el-col :span="5" style="text-align: right;">
+                                公司：
+                            </el-col>
+                            {{shopDetail.companyName}}
+                        </el-row>
+                        <el-row class="info-row">
+                            <el-col :span="5" style="text-align: right;">
+                                社会信用代码：
+                            </el-col>
+                            {{shopDetail.socialCreditCode}}
+                        </el-row>
+                        <el-row class="info-row">
+                            <el-col :span="5" style="text-align: right;">
+                                电话：
+                            </el-col>
+                            {{shopDetail.telephoneNums}}
+                        </el-row>
+                        <el-row class="info-row">
+                            <el-col :span="5" style="text-align: right;">
+                                省份：
+                            </el-col>
+                            {{shopDetail.province}}
+                        </el-row>
+                        <el-row class="info-row">
+                            <el-col :span="5" style="text-align: right;">
+                                市区：
+                            </el-col>
+                            {{shopDetail.city}}
+                        </el-row>
+                        <el-row class="info-row">
+                            <el-col :span="5" style="text-align: right;">
+                                县：
+                            </el-col>
+                            {{shopDetail.county}}
+                        </el-row>
+                        <el-row class="info-row">
+                            <el-col :span="5" style="text-align: right;">
+                                详细地址：
+                            </el-col>
+                            {{shopDetail.address}}
+                        </el-row>
                     </el-col>
                     <el-col :span="8">
                         <el-col :span="11" class="img-item">
@@ -62,23 +102,26 @@
                     </el-col>
                 </el-row>
                 <el-row class="block">
-                    <el-row class="info-row">
-                        <el-col :span="5" style="text-align: left;">
-                            日销售额 {{curDateStrArr.join('.')}}：
-                        </el-col>
-                        {{shopDetail.daySale|moneyFormat}}元
-                    </el-row>
-                    <el-row class="info-row">
-                        <el-col :span="5" style="text-align: left;">
-                            月销售额 {{curDateStrArr[0]+'.'+curDateStrArr[1]}}：
-                        </el-col>
-                        {{shopDetail.monthSale|moneyFormat}}元
-                    </el-row>
-                    <el-row class="info-row">
-                        <el-col :span="5" style="text-align: left;">
-                            年销售额 {{curDateStrArr[0]}}：
-                        </el-col>
-                        {{shopDetail.yearSale|moneyFormat}}元</el-row>
+                    <el-col :span="16">
+                        <el-row class="info-row">
+                            <el-col :span="8" style="text-align: right;">
+                                日销售额 {{curDateStrArr[0]+'年'+curDateStrArr[1]+'月'+curDateStrArr[2]+'日'}}：
+                            </el-col>
+                            {{shopDetail.daySale|moneyFormat}}元
+                        </el-row>
+                        <el-row class="info-row">
+                            <el-col :span="8" style="text-align: right;">
+                                月销售额 {{curDateStrArr[0]+'年'+curDateStrArr[1]}}月：
+                            </el-col>
+                            {{shopDetail.monthSale|moneyFormat}}元
+                        </el-row>
+                        <el-row class="info-row">
+                            <el-col :span="8" style="text-align: right;">
+                                年销售额 {{curDateStrArr[0]}}年：
+                            </el-col>
+                            {{shopDetail.yearSale|moneyFormat}}元
+                        </el-row>
+                    </el-col>
                 </el-row>
                 <el-row class="block">
                     <el-row class="info-row">
@@ -110,13 +153,13 @@
                             <el-input v-model="form.telephoneNums" auto-complete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="门店渠道返点" :label-width="formLabelWidth">
-                            <el-input v-model="form.shopRebates" auto-complete="off"></el-input>
+                            <el-input v-model="form.shopRebates" disabled auto-complete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="中介渠道返点" :label-width="formLabelWidth">
-                            <el-input v-model="form.marketingRebates" auto-complete="off"></el-input>
+                            <el-input v-model="form.marketingRebates" disabled auto-complete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="其他渠道返点" :label-width="formLabelWidth">
-                            <el-input v-model="form.otherRebates" auto-complete="off"></el-input>
+                            <el-input v-model="form.otherRebates" disabled auto-complete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="地区" :label-width="formLabelWidth">
                             <v-distpicker class="cm-area-picker" :province="form.province" :city="form.city" :area="form.county"></v-distpicker>
@@ -133,9 +176,7 @@
                            :disabled="!form.companyName||form.companyName==''
                            ||!form.socialCreditCode||form.socialCreditCode==''
                            ||!form.telephoneNums||form.telephoneNums==''
-                           ||!form.shopRebates||form.shopRebates==''
-                           ||!form.marketingRebates||form.marketingRebates==''
-                           ||!form.otherRebates||form.otherRebates==''
+
                            ||!form.province||form.province==''
                            ||!form.city||form.city==''
                            ||!form.county||form.county==''

@@ -36,6 +36,9 @@
       phone:{
         type:String,
       },
+      identifyCode:{
+         type:String,
+      },
       url:{
         type:String,
       },
@@ -56,6 +59,15 @@
     methods: {
       genCode:function () {
         let that=this;
+          let code=document.getElementsByClassName('code-value')[0].value;
+          if(!this.identifyCode){
+              this.operationFeedback({type:'warn',text:'请出入图片验证码'});
+              return;
+          }
+          if(this.identifyCode!=code){
+              this.operationFeedback({type:'warn',text:'图片验证码错误'});
+              return;
+          }
         if(!regex.phone.test(this.phone)){
           this.operationFeedback({type:'warn',text:regex.phoneAlert})
           return;

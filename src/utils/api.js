@@ -259,19 +259,11 @@ export default {
                 params: params
             });
         },
-        //marketManagerLogin
-        marketManagerLogin:function (params) {
+        //管理人员登录
+        adminLogin:function (params) {
             return Vue.http.ajax({
                 method: 'post',
-                url: basicUrl + '/admin/marketManagerLogin',
-                params: params
-            });
-        },
-        //财务管理员登陆
-        accountantManagerLogin:function (params) {
-            return Vue.http.ajax({
-                method: 'post',
-                url: basicUrl + '/admin/accountantManagerLogin',
+                url: basicUrl + '/admin/adminLogin',
                 params: params
             });
         },
