@@ -87,7 +87,8 @@
                             </el-row>
                         </el-col>
                         <el-col :span="11" :offset="2"  class="img-item">
-                            <img class="img" :src="basicConfig.basicUrl+shopDetail.companyPic" @click="viewPicModal({imgUrl:basicConfig.basicUrl+shopDetail.companyPic})" alt="">
+                            <img class="img" v-if="shopDetail.companyPic" :src="basicConfig.basicUrl+shopDetail.companyPic" @click="viewPicModal({imgUrl:basicConfig.basicUrl+shopDetail.companyPic})" alt="">
+                            <i class="icon cm-default-pic img" v-if="!shopDetail.companyPic"></i>
 <!--
                             <div class="img" :style="{background: 'url('+basicConfig.basicUrl+shopDetail.companyPic+') no-repeat center',backgroundSize: 'cover'}"></div>
 -->
@@ -162,7 +163,7 @@
                             <el-input v-model="form.otherRebates" disabled auto-complete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="地区" :label-width="formLabelWidth">
-                            <v-distpicker class="cm-area-picker" :province="form.province" :city="form.city" :area="form.county"></v-distpicker>
+                            <v-distpicker class="cm-area-picker" :province="form.province" :city="form.city" :area="form.area" @selected="changeArea"></v-distpicker>
                         </el-form-item>
                         <el-form-item label="详细地址" :label-width="formLabelWidth">
                             <el-input v-model="form.address" auto-complete="off"></el-input>
@@ -179,7 +180,7 @@
 
                            ||!form.province||form.province==''
                            ||!form.city||form.city==''
-                           ||!form.county||form.county==''
+                           ||!form.area||form.area==''
                            ||!form.address||form.address==''"
                            @click="update()">提交</el-button>
             </div>
@@ -269,10 +270,10 @@
                     if(resp.respCode=='00'){
                     this.shopDetail=JSON.parse(resp.respMsg);
                     this.form=Object.assign({},this.shopDetail);
+                    this.form.area=this.form.county;
                     this.shopChannelsUser=JSON.parse(this.shopDetail.shopChannelsUser);
                     this.marketingChannelsUser=JSON.parse(this.shopDetail.marketingChannelsUser);
                     this.otherUser=JSON.parse(this.shopDetail.otherUser);
-                    console.log('this.form:',this.form);
                 }
             });
             },
@@ -339,6 +340,7 @@
                     shopId:this.id,
                     ...this.form
                 }
+                console.log('this.form:',this.form);
                 let fb=Vue.operationFeedback({text:'保存中...'});
                 Vue.api.updateShopInfo(params).then((resp)=>{
                     if(resp.respCode=='00'){
@@ -381,6 +383,13 @@
                     }
                 });
             },
+            changeArea:function (data) {
+                console.log('data:',data);
+                this.form.province=data.province.value;
+                this.form.city=data.city.value;
+                this.form.area=data.area.value;
+                this.form.county=data.area.value;
+            }
         },
         mounted () {
             /**/

@@ -140,6 +140,12 @@
                         index: '/orderStatistics',
                         title: '订单统计',
                     },
+                    {
+                        code:'09',
+                        icon: '#icon-xiugaimima',
+                        index: '/setPassword',
+                        title: '修改密码',
+                    },
                 ],
                 items: []
             }
@@ -158,7 +164,7 @@
             this.accountInfo=this.getAccountInfo();
             this.accountAccess=null;
             if(this.accountInfo.type=='superManager'){
-                this.accountAccess=['01','02','03','04','05'];
+                this.accountAccess=['01','02','03','04','05','09'];
                /* this.accountAccess='all';*/
             }else if(this.accountInfo.type=='marketManager'){
                 this.accountAccess=['02'];

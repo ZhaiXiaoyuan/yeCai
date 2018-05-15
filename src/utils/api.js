@@ -307,6 +307,14 @@ export default {
                 params: params
             });
         },
+        //修改超级管理员密码
+        updateSuperManagerPassword:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl + '/admin/updateSuperManagerPassword',
+                params: params
+            });
+        },
     }
   },
 

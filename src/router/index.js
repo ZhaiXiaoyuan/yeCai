@@ -79,6 +79,11 @@ export default new Router({
                     name:'statistics',
                     component: resolve => require(['../page/shop/Statistics.vue'], resolve)
                 },
+                {
+                    path: '/setPassword',
+                    name:'statistics',
+                    component: resolve => require(['../page/account/setPassword.vue'], resolve)
+                },
             ]
         },
         {

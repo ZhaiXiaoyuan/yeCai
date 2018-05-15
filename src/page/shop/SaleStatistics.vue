@@ -82,10 +82,8 @@
                             </el-row>
                         </el-col>
                         <el-col :span="11" :offset="2"  class="img-item">
-                            <img class="img" :src="basicConfig.basicUrl+shopDetail.companyPic" @click="viewPicModal({imgUrl:basicConfig.basicUrl+shopDetail.companyPic})" alt="">
-                            <!--
-                                                        <div class="img" :style="{background: 'url('+basicConfig.basicUrl+shopDetail.companyPic+') no-repeat center',backgroundSize: 'cover'}"></div>
-                            -->
+                            <img class="img" v-if="shopDetail.companyPic" :src="basicConfig.basicUrl+shopDetail.companyPic" @click="viewPicModal({imgUrl:basicConfig.basicUrl+shopDetail.companyPic})" alt="">
+                            <i class="icon cm-default-pic img" v-if="!shopDetail.companyPic"></i>
                             <el-row style="text-align: center">
                                 <el-col :span="12">营业执照</el-col>
                                 <el-col :span="12" class="cm-link-btn" style="text-align: right;position: relative">

@@ -13,10 +13,10 @@
             </span>
         </div>
         <div class="ms-login" v-if="pageName=='login'||pageName=='adminLogin'">
-            <el-radio-group v-model="accountType" style="margin-bottom: 20px;" v-if="pageName=='adminLogin'">
+           <!-- <el-radio-group v-model="accountType" style="margin-bottom: 20px;" v-if="pageName=='adminLogin'">
                 <el-radio label="marketManager">市场管理员</el-radio>
                 <el-radio label="accountantManager">财务管理员</el-radio>
-            </el-radio-group>
+            </el-radio-group>-->
             <el-form :model="ruleForm"  ref="ruleForm" label-width="0px" class="demo-ruleForm">
                 <el-form-item prop="username">
                     <el-input v-model="ruleForm.username" placeholder="账号"></el-input>
@@ -40,7 +40,7 @@
                     <el-input v-model="ruleForm.phone" placeholder="手机号"></el-input>
                 </el-form-item>
                 <el-form-item prop="identifyCode" id="identify-code" style="position:relative;">
-                    <el-input type="password" placeholder="图片验证码" v-model="ruleForm.identifyCode" @keyup.enter.native="submitForm()" style="padding-right: 100px;"></el-input>
+                    <el-input type="text" placeholder="图片验证码" v-model="ruleForm.identifyCode" @keyup.enter.native="submitForm()" style="padding-right: 100px;"></el-input>
                     <identify style="position:absolute;top:0px;bottom: 0px;right: 0px;margin: auto;"></identify>
                 </el-form-item>
                 <el-form-item prop="phoneCode" id="identify-code" style="position:relative;">
@@ -174,36 +174,20 @@
                         return;
                     }
                     let fb=Vue.operationFeedback({text:'登录中...'});
-                    if(this.accountType=='marketManager'){
-                        Vue.api.adminLogin({...Vue.sessionInfo(),account:this.ruleForm.username,password:this.ruleForm.password}).then((resp)=>{
-                            if(resp.respCode=='00'){
-                                localStorage.setItem('loginPage','adminLogin');
-                                this.$cookie.set('account',JSON.stringify({
-                                    type:this.accountType,
-                                    account:this.ruleForm.username,
-                                }),7);
-                                this.$router.push({name:'benefitRank',params:{}});
-                                fb.setOptions({type:'complete',text:'登录成功'});
-                            }else{
-                                fb.setOptions({type:'warn',text:'登录失败，'+resp.respMsg});
-                            }
-                        });
-                    }else if(this.accountType=='accountantManager'){
-                        Vue.api.adminLogin({...Vue.sessionInfo(),account:this.ruleForm.username,password:this.ruleForm.password}).then((resp)=>{
-                            if(resp.respCode=='00'){
-                                localStorage.setItem('loginPage','adminLogin');
-                                this.$cookie.set('account',JSON.stringify({
-                                    type:this.accountType,
-                                    account:this.ruleForm.username,
-                                }),7);
-                                this.$router.push({name:'rebatesRecord',params:{}});
-                                fb.setOptions({type:'complete',text:'登录成功'});
-                            }else{
-                                fb.setOptions({type:'warn',text:'登录失败，'+resp.respMsg});
-                            }
-                        });
-
-                    }
+                    Vue.api.adminLogin({...Vue.sessionInfo(),account:this.ruleForm.username,password:this.ruleForm.password}).then((resp)=>{
+                        if(resp.respCode=='00'){
+                            let data=JSON.parse(resp.respMsg);
+                            localStorage.setItem('loginPage','adminLogin');
+                            this.$cookie.set('account',JSON.stringify({
+                                type:data.role,
+                                account:this.ruleForm.username,
+                            }),7);
+                            this.$router.push({name:'benefitRank',params:{}});
+                            fb.setOptions({type:'complete',text:'登录成功'});
+                        }else{
+                            fb.setOptions({type:'warn',text:'登录失败，'+resp.respMsg});
+                        }
+                    });
                 }else if(this.pageName=='userLogin'||this.pageName=='shopLogin'){
                     if(!this.codeData){
                         Vue.operationFeedback({type:'warn',text:'请先发送短信获取验证码'});
