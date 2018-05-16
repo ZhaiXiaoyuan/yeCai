@@ -42,17 +42,17 @@
                 <el-table-column prop="telephoneNums" label="联系人号码"  align="center"></el-table-column>
                 <el-table-column label="日销售额"  align="center">
                     <template slot-scope="scope">
-                        {{scope.row.daySale|moneyFormat}}
+                        <span class="cm-amount">{{scope.row.daySale|moneyFormat}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column  label="月销售额"  align="center">
                     <template slot-scope="scope">
-                        {{scope.row.monthSale|moneyFormat}}
+                        <span class="cm-amount">{{scope.row.monthSale|moneyFormat}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="年销售额"  align="center">
                     <template slot-scope="scope">
-                        {{scope.row.yearSale|moneyFormat}}
+                        <span class="cm-amount"> {{scope.row.yearSale|moneyFormat}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作"  align="center">
@@ -145,7 +145,9 @@
                 }
                 let params={
                     ...Vue.sessionInfo(),
+                 /*   rankingType:'day',//临时测试*/
                     rankingType:rankingType,
+                  /*  dateString:'2018-04-27',//临时测试*/
                     dateString:dateString,
                     searchContent:this.regionKeyword?this.regionKeyword:null
                 }

@@ -39,7 +39,7 @@
                 </el-table-column>
                 <el-table-column label="中奖金额"  align="center">
                     <template slot-scope="scope">
-                        {{(scope.row.winInfo.prizeMoney?scope.row.winInfo.prizeMoney:0)|moneyFormat}}
+                        <span class="cm-amount">{{(scope.row.winInfo.prizeMoney?scope.row.winInfo.prizeMoney:0)|moneyFormat}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="winInfo.mobile" label="中奖号码" align="center"></el-table-column>

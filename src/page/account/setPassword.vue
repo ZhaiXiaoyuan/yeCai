@@ -1,5 +1,5 @@
 <template>
-    <div class="system-setting">
+    <div class="cm-page-content-min system-setting">
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>修改密码</el-breadcrumb-item>

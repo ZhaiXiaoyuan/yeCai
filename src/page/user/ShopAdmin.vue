@@ -69,19 +69,23 @@
                                 <el-input v-model="form.shopChannelsPhoneNums" maxLength="50" auto-complete="off"></el-input>
                             </el-form-item>
                             <el-form-item label="门店渠道返点" :label-width="formLabelWidth">
-                                <el-input v-model="form.shopRebates" maxLength="50" auto-complete="off"></el-input>
+                                <el-input v-model="form.shopRebates" maxLength="4" auto-complete="off"></el-input>
+                               <!-- 请输入返点数，如输入1，则生效数额为1%-->
+                             <!--   <span class="unit">%</span>-->
                             </el-form-item>
                             <el-form-item label="中介渠道账户号码" :label-width="formLabelWidth">
                                 <el-input v-model="form.marketingChannelsPhoneNums" maxLength="50" auto-complete="off"></el-input>
                             </el-form-item>
                             <el-form-item label="中介渠道返点" :label-width="formLabelWidth">
-                                <el-input v-model="form.marketingRebates" maxLength="50" auto-complete="off"></el-input>
+                                <el-input v-model="form.marketingRebates"  maxLength="4" auto-complete="off"></el-input>
+                               <!-- <span class="unit">%</span>-->
                             </el-form-item>
                             <el-form-item label="其他渠道账户号码" :label-width="formLabelWidth">
                                 <el-input v-model="form.otherPhoneNums" maxLength="50" auto-complete="off"></el-input>
                             </el-form-item>
                             <el-form-item label="其他渠道返点" :label-width="formLabelWidth">
-                                <el-input v-model="form.otherRebates" maxLength="50" auto-complete="off"></el-input>
+                                <el-input v-model="form.otherRebates"  maxLength="4" auto-complete="off"></el-input>
+                              <!--  <span class="unit">%</span>-->
                             </el-form-item>
                             <el-form-item label="地区" :label-width="formLabelWidth">
                                 <v-distpicker class="cm-area-picker"  :callback="addShopChangeArea"></v-distpicker>
@@ -114,9 +118,20 @@
         </div>
     </div>
 </template>
-<style scoped>
+<style lang="less" rel="stylesheet/less" scoped>
     .handle-box{
         margin-bottom: 20px;
+    }
+    .el-input{
+    }
+    .unit{
+        position: absolute;
+        top:0px;;
+        bottom: 0px;
+        right: 0px;
+        padding: 2px 10px;
+        font-weight: bold;
+        color: #F56C6C;
     }
 </style>
 <script>

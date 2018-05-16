@@ -81,7 +81,7 @@ export default new Router({
                 },
                 {
                     path: '/setPassword',
-                    name:'statistics',
+                    name:'setPassword',
                     component: resolve => require(['../page/account/setPassword.vue'], resolve)
                 },
             ]

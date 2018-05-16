@@ -57,7 +57,7 @@
                 </el-row>
                 <el-row class="block">
                     <el-row class="info-row">
-                        <h2>总收益:{{(userDetail.revenue?userDetail.revenue:0)|moneyFormat}}元</h2>
+                        <h2>总收益:<span class="cm-amount">{{(userDetail.revenue?userDetail.revenue:0)|moneyFormat}}</span>元</h2>
                     </el-row>
                 </el-row>
             </div>
@@ -88,7 +88,7 @@
                             <el-input v-model="form.bankAccount" maxLength="50" auto-complete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="地区" :label-width="formLabelWidth">
-                            <v-distpicker class="cm-area-picker" :province="form.province" :city="form.city" :area="form.county"></v-distpicker>
+                            <v-distpicker class="cm-area-picker" :province="form.province" :city="form.city" :area="form.county" @selected="changeArea"></v-distpicker>
                         </el-form-item>
                         <el-form-item label="详细地址" :label-width="formLabelWidth">
                             <el-input v-model="form.address" maxLength="100" auto-complete="off"></el-input>
@@ -145,6 +145,9 @@
         .el-dialog{
             width: 500px;
         }
+    }
+    .cm-amount{
+        font-size: 32px;
     }
 </style>
 <script>
@@ -249,6 +252,13 @@
                         fb.setOptions({type:'warn',text:'保存失败，'+resp.respMsg});
                     }
                 });
+            },
+            changeArea:function (data) {
+                console.log('data:',data);
+                this.form.province=data.province.value;
+                this.form.city=data.city.value;
+                this.form.area=data.area.value;
+                this.form.county=data.area.value;
             }
         },
         mounted () {

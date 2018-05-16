@@ -38,7 +38,7 @@
                 <el-table-column prop="name" label="姓名"  align="center"></el-table-column>
                 <el-table-column label="累计收益"  align="center">
                     <template slot-scope="scope">
-                        {{scope.row.revenue|moneyFormat}}
+                        <span class="cm-amount">{{scope.row.revenue|moneyFormat}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作"  align="center">

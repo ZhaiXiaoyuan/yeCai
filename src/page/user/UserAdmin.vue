@@ -33,7 +33,7 @@
                 <el-table-column prop="email" label="邮箱"  align="center"></el-table-column>
                 <el-table-column label="总收益"  align="center">
                     <template slot-scope="scope">
-                       {{scope.row.revenue|moneyFormat}}
+                        <span class="cm-amount">{{scope.row.revenue|moneyFormat}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="bankName" label="开户行"  align="center"></el-table-column>

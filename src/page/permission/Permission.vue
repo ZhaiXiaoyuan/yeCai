@@ -1,5 +1,5 @@
 <template>
-    <div class="shop-detail">
+    <div class="cm-page-content-min">
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>权限管理</el-breadcrumb-item>

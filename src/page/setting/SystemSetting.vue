@@ -1,5 +1,5 @@
 <template>
-    <div class="system-setting">
+    <div class="cm-page-content-min system-setting">
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>系统设置</el-breadcrumb-item>

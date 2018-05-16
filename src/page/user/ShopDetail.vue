@@ -17,6 +17,10 @@
                     <el-button type="primary" icon="el-icon-warning" v-if="shopDetail.accountState=='enable'" @click="disable()">禁用</el-button>
                     <el-button type="primary" icon="el-icon-view" v-if="shopDetail.accountState=='disable'" @click="enable()">恢复</el-button>
                     <el-button type="primary" icon="el-icon-edit" v-if="shopDetail.accountState=='enable'" @click="dialogFormVisible=true">编辑</el-button>
+                    <el-button type="primary" class="mr10" @click="downloadQrcodeInfo()">
+                        导出二维码
+                    </el-button>
+                    <a id="downlink"></a>
                 </el-col>
             </el-row>
             <div class="container-bd">
@@ -108,19 +112,19 @@
                             <el-col :span="8" style="text-align: right;">
                                 日销售额 {{curDateStrArr[0]+'年'+curDateStrArr[1]+'月'+curDateStrArr[2]+'日'}}：
                             </el-col>
-                            {{shopDetail.daySale|moneyFormat}}元
+                            <span class="cm-amount">{{shopDetail.daySale|moneyFormat}}</span>元
                         </el-row>
                         <el-row class="info-row">
                             <el-col :span="8" style="text-align: right;">
                                 月销售额 {{curDateStrArr[0]+'年'+curDateStrArr[1]}}月：
                             </el-col>
-                            {{shopDetail.monthSale|moneyFormat}}元
+                            <span class="cm-amount"> {{shopDetail.monthSale|moneyFormat}}</span>元
                         </el-row>
                         <el-row class="info-row">
                             <el-col :span="8" style="text-align: right;">
                                 年销售额 {{curDateStrArr[0]}}年：
                             </el-col>
-                            {{shopDetail.yearSale|moneyFormat}}元
+                            <span class="cm-amount">{{shopDetail.yearSale|moneyFormat}}</span>元
                         </el-row>
                     </el-col>
                 </el-row>
@@ -229,6 +233,7 @@
 </style>
 <script>
     import Vue from 'vue'
+    let XLSX = require('xlsx');
     export default {
         data() {
             return {
@@ -255,7 +260,15 @@
                 uploadFb:null,
                 uploadedCount:0,
 
-                curDateStrArr:Vue.formatDate(new Date(),'yyyy.MM.dd').split('.')
+                curDateStrArr:Vue.formatDate(new Date(),'yyyy.MM.dd').split('.'),
+
+                fullscreenLoading: false, // 加载中
+                imFile: '', // 导入文件el
+                outFile: '',  // 导出文件el
+                errorDialog: false, // 错误信息弹窗
+                errorMsg: '', // 错误信息内容
+                excelData: [],
+                downLoadFb:null,
             }
         },
         created(){
@@ -269,6 +282,7 @@
                 Vue.api.getShopDetail({...Vue.sessionInfo(),shopId:this.id}).then((resp)=>{
                     if(resp.respCode=='00'){
                     this.shopDetail=JSON.parse(resp.respMsg);
+                    console.log('this.shopDetail:',this.shopDetail);
                     this.form=Object.assign({},this.shopDetail);
                     this.form.area=this.form.county;
                     this.shopChannelsUser=JSON.parse(this.shopDetail.shopChannelsUser);
@@ -389,6 +403,119 @@
                 this.form.city=data.city.value;
                 this.form.area=data.area.value;
                 this.form.county=data.area.value;
+            },
+
+            downloadFile: function (rs) { // 按钮导出
+                let data = [{}]
+                for (let k in rs[0]) {
+                    data[0][k] = k
+                }
+                data = data.concat(rs)
+                this.downloadExl(data, '菜单')
+            },
+            downloadExl: function (json, downName, type) {  // 导出到excel
+                let that=this;
+                //
+                let keyMap = [] // 获取键
+                for (let k in json[0]) {
+                    keyMap.push(k)
+                }
+                console.info('keyMap', keyMap, json)
+                let tmpdata = [] // 用来保存转换好的json
+                json.map((v, i) => keyMap.map((k, j) => Object.assign({}, {
+                    v: v[k],
+                    position: (j > 25 ? this.getCharCol(j) : String.fromCharCode(65 + j)) + (i + 1)
+                }))).reduce((prev, next) => prev.concat(next)).forEach(function (v) {
+                    tmpdata[v.position] = {
+                        v: v.v
+                    }
+                })
+                let outputPos = Object.keys(tmpdata)  // 设置区域,比如表格从A1到D10
+                let tmpWB = {
+                    SheetNames: ['mySheet'], // 保存的表标题
+                    Sheets: {
+                        'mySheet': Object.assign({},
+                            tmpdata, // 内容
+                            {
+                                '!ref': outputPos[0] + ':' + outputPos[outputPos.length - 1] // 设置填充区域
+                            })
+                    }
+                }
+                let tmpDown = new Blob([this.s2ab(XLSX.write(tmpWB,
+                    {bookType: (type === undefined ? 'xlsx' : type), bookSST: false, type: 'binary'} // 这里的数据是用来定义导出的格式类型
+                ))], {
+                    type: ''
+                })  // 创建二进制对象写入转换好的字节流
+                var href = URL.createObjectURL(tmpDown)  // 创建对象超链接
+                this.outFile.download = downName + '.xlsx'  // 下载名称
+                this.outFile.href = href  // 绑定a标签
+                this.outFile.click()  // 模拟点击实现下载
+                this.downLoadFb.setOptions({type:'complete',text:'导出成功，请留意浏览器的下载文件'});
+                setTimeout(function () {  // 延时释放
+                    URL.revokeObjectURL(tmpDown) // 用URL.revokeObjectURL()来释放这个object URL
+                }, 100)
+            },
+            analyzeData: function (data) {  // 此处可以解析导入数据
+                return data
+            },
+            s2ab: function (s) { // 字符串转字符流
+                var buf = new ArrayBuffer(s.length)
+                var view = new Uint8Array(buf)
+                for (var i = 0; i !== s.length; ++i) {
+                    view[i] = s.charCodeAt(i) & 0xFF
+                }
+                return buf
+            },
+            getCharCol: function (n) { // 将指定的自然数转换为26进制表示。映射关系：[0-25] -> [A-Z]。
+                let s = ''
+                let m = 0
+                while (n > 0) {
+                    m = n % 26 + 1
+                    s = String.fromCharCode(m + 64) + s
+                    n = (n - m) / 26
+                }
+                return s
+            },
+            fixdata: function (data) {  // 文件流转BinaryString
+                var o = ''
+                var l = 0
+                var w = 10240
+                for (; l < data.byteLength / w; ++l) {
+                    o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w, l * w + w)))
+                }
+                o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w)))
+                return o
+            },
+            downloadQrcodeInfo:function () {
+                let jsonData=[
+                    {
+                        1:'序号',
+                        2:'公司名',
+                        3:'省份',
+                        4:'市区',
+                        5:'县',
+                        6:'详细地址',
+                        7:'手机号码',
+                        8:'姓名',
+                        9:'外链',
+                        10:'信息'
+                    }
+                ];
+                let shopChannelsUser=JSON.parse(this.shopDetail.shopChannelsUser);
+                jsonData.push({
+                    1:1,
+                    2:this.shopDetail.companyName,//公司名
+                    3:this.shopDetail.province,//省份
+                    4:this.shopDetail.city,//市区
+                    5:this.shopDetail.county,//县
+                    6:this.shopDetail.address,//详细地址
+                    7:shopChannelsUser.phoneNums,//手机号码
+                    8:shopChannelsUser.name,//姓名
+                    9:Vue.basicConfig.basicUrl+this.shopDetail.qRCodeId,//外链
+                    10:Vue.basicConfig.qrCodeBasicUrl+'?channles='+this.shopDetail.channelId,//信息
+                });
+                this.downLoadFb=Vue.operationFeedback({text:'导出中...'});
+                this.downloadExl(jsonData,'二维码导出表');
             }
         },
         mounted () {
@@ -397,6 +524,7 @@
             /**/
             this.getShopDetail();
             /**/
+            this.outFile = document.getElementById('downlink');
         },
     }
 </script>
