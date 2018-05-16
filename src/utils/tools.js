@@ -79,10 +79,10 @@ export default {
         },
         sessionInfo:function () {
           let timestamp=this.genTimestamp();
-          let userId='07d2cbfa55cf4e6582d67e164405b36b';//临时测试，上线时要检查该字段值
+        /*  let userId='07d2cbfa55cf4e6582d67e164405b36b';//临时测试，上线时要检查该字段值*/
           return{
               timeStamp:timestamp,
-              userId:userId,
+            /*  userId:userId,*/
           }
         },
         /*获取事件当前元素*/

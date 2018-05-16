@@ -290,6 +290,8 @@
                     this.form.area=this.form.county;
                     this.shopChannelsUser=JSON.parse(this.shopDetail.shopChannelsUser);
                     this.marketingChannelsUser=JSON.parse(this.shopDetail.marketingChannelsUser);
+                        console.log(' this.shopChannelsUser:', this.shopChannelsUser);
+                        console.log(' this.marketingChannelsUser:', this.marketingChannelsUser);
                     this.otherUser=JSON.parse(this.shopDetail.otherUser);
                 }
             });
@@ -305,6 +307,9 @@
                         if(resp.respCode=='00'){
                             this.shopDetail.accountState='del';
                             fb.setOptions({type:'complete',text:'删除成功'});
+                            setTimeout(()=>{
+                                window.history.go(-1);
+                            },1500);
                         }else{
                             fb.setOptions({type:'warn',text:'删除失败，'+resp.respMsg});
                         }

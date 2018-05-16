@@ -319,7 +319,7 @@
                    if(this.excelData.length>0){
                        let fb=Vue.operationFeedback({text:'导入中...'});
                        Vue.api.addShopBatch({...Vue.sessionInfo(),shopData:JSON.stringify(this.excelData)}).then((resp)=>{
-                           if(resp.respStatus=='success'){
+                           if(resp.respCode=='00'){
                                this.getList();
                                fb.setOptions({type:'complete',text:'导入成功'});
                            }else{
