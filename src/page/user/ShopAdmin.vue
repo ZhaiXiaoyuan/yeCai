@@ -52,7 +52,7 @@
                     :total="pager.total">
                 </el-pagination>
             </div>
-            <el-dialog title="新建" class="edit-dialog" :visible.sync="dialogFormVisible" width="40%">
+            <el-dialog title="新建" class="edit-dialog" :visible.sync="dialogFormVisible" width="45%">
                 <el-row type="flex">
                     <el-col :sm="24" :md="22" :lg="20">
                         <el-form :model="form">
@@ -69,23 +69,22 @@
                                 <el-input v-model="form.shopChannelsPhoneNums" maxLength="50" auto-complete="off"></el-input>
                             </el-form-item>
                             <el-form-item label="门店渠道返点" :label-width="formLabelWidth">
-                                <el-input v-model="form.shopRebates" maxLength="4" auto-complete="off"></el-input>
-                               <!-- 请输入返点数，如输入1，则生效数额为1%-->
-                             <!--   <span class="unit">%</span>-->
+                                <el-input v-model="form.shopRebates" placeholder="请输入返点数，如输入1，则生效数额为1%" maxLength="4" auto-complete="off"></el-input>
+                                <span class="unit">%</span>
                             </el-form-item>
                             <el-form-item label="中介渠道账户号码" :label-width="formLabelWidth">
                                 <el-input v-model="form.marketingChannelsPhoneNums" maxLength="50" auto-complete="off"></el-input>
                             </el-form-item>
                             <el-form-item label="中介渠道返点" :label-width="formLabelWidth">
-                                <el-input v-model="form.marketingRebates"  maxLength="4" auto-complete="off"></el-input>
-                               <!-- <span class="unit">%</span>-->
+                                <el-input v-model="form.marketingRebates" placeholder="请输入返点数，如输入1，则生效数额为1%"  maxLength="4" auto-complete="off"></el-input>
+                                <span class="unit">%</span>
                             </el-form-item>
                             <el-form-item label="其他渠道账户号码" :label-width="formLabelWidth">
                                 <el-input v-model="form.otherPhoneNums" maxLength="50" auto-complete="off"></el-input>
                             </el-form-item>
                             <el-form-item label="其他渠道返点" :label-width="formLabelWidth">
-                                <el-input v-model="form.otherRebates"  maxLength="4" auto-complete="off"></el-input>
-                              <!--  <span class="unit">%</span>-->
+                                <el-input v-model="form.otherRebates" placeholder="请输入返点数，如输入1，则生效数额为1%"  maxLength="4" auto-complete="off"></el-input>
+                                <span class="unit">%</span>
                             </el-form-item>
                             <el-form-item label="地区" :label-width="formLabelWidth">
                                 <v-distpicker class="cm-area-picker"  :callback="addShopChangeArea"></v-distpicker>
@@ -103,11 +102,11 @@
                            ||!form.socialCreditCode||form.socialCreditCode==''
                            ||!form.telephoneNums||form.telephoneNums==''
                            ||!form.shopChannelsPhoneNums||form.shopChannelsPhoneNums==''
-                           ||!form.shopRebates||form.shopRebates==''
+                           ||form.shopRebates==''
                            ||!form.marketingChannelsPhoneNums||form.marketingChannelsPhoneNums==''
-                           ||!form.marketingRebates||form.marketingRebates==''
+                           ||form.marketingRebates==''
                            ||!form.otherPhoneNums||form.otherPhoneNums==''
-                           ||!form.otherRebates||form.otherRebates==''
+                           ||form.otherRebates==''
                            ||!form.province||form.province==''
                            ||!form.city||form.city==''
                            ||!form.county||form.county==''
@@ -288,7 +287,7 @@
                             this.excelData.push({
                               /*  "accountState":"enable",*/
                               /*  "monthSale":0.0,*/
-                                "marketingRebates":item.__EMPTY_12,
+                                "marketingRebates":item.__EMPTY_12/100,
                                 "address":item.__EMPTY_6,
                                 "marketingChannelsId":item.__EMPTY_11,
                                 "telephoneNums":item.__EMPTY_2,
@@ -300,12 +299,12 @@
                               /*  "qRCodeId":"6729ecdba5b248069628fffe2905da39",*/
                              /*   "monthRankings":-1,*/
                                 "socialCreditCode":item.__EMPTY_1,
-                                "otherRebates":item.__EMPTY_15,
+                                "otherRebates":item.__EMPTY_15/100,
                               /*  "dayRankings":-1,*/
                               /*  "yearSale":0.0,*/
                               /*  "companyPic":"",*/
                                 "province":item.__EMPTY_3,
-                                "shopRebates":item.__EMPTY_9,
+                                "shopRebates":item.__EMPTY_9/100,
                             /*    "id":"6729ecdba5b248069628fffe2905da39",*/
                                /* "yearRankings":-1,*/
                                 "channelId":item.__EMPTY_8,
@@ -464,6 +463,9 @@
                 }
             },
             add:function () {
+                this.form.shopRebates=this.form.shopRebates/100;
+                this.form.marketingRebates=this.form.marketingRebates/100;
+                this.form.otherRebates=this.form.otherRebates/100;
                 let params={
                     ...Vue.sessionInfo(),
                     ...this.form

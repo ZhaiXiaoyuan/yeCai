@@ -5,13 +5,19 @@
         <div class="content" :class="{'content-collapse':collapse}">
             <transition name="move" mode="out-in"><router-view></router-view></transition>
         </div>
+        <vFooter></vFooter>
     </div>
 </template>
-
+<style scoped>
+    .content{
+        padding-bottom: 70px;
+    }
+</style>
 <script>
     import Vue from 'vue'
     import vHead from './Header.vue';
     import vSidebar from './Sidebar.vue';
+    import vFooter from './Footer.vue';
     import bus from '../common/bus';
     export default {
         data(){
@@ -20,7 +26,7 @@
             }
         },
         components:{
-            vHead, vSidebar
+            vHead, vSidebar,vFooter
         },
         watch:{
 

@@ -11,7 +11,7 @@
                     <!--<el-button type="primary" icon="el-icon-back" @click="$router.go(-1)">返回</el-button>-->
                 </el-col>
                 <el-col :span="24" style="text-align: right;">
-                    <el-button type="primary" icon="el-icon-edit" v-if="shopDetail.accountState=='enable'" @click="dialogFormVisible=true">编辑</el-button>
+                    <!--<el-button type="primary" icon="el-icon-edit" v-if="shopDetail.accountState=='enable'" @click="dialogFormVisible=true">编辑</el-button>-->
                     <el-button type="primary" class="mr10" @click="downloadQrcodeInfo()">
                         导出二维码
                     </el-button>
@@ -122,16 +122,19 @@
                 </el-row>
                 <el-row class="block">
                     <el-row class="info-row">
-                        <el-col :span="8">门店账户：{{shopChannelsUser.name}}&nbsp;{{shopChannelsUser.phoneNums}}</el-col>
-                        <el-col :span="15" :offset="1">返点比例：{{shopDetail.shopRebates}}% </el-col>
+                        <el-col :span="3" style="text-align: right;">商户账户：</el-col>
+                        <el-col :span="8">{{shopChannelsUser.name}}&nbsp;{{shopChannelsUser.phoneNums}}</el-col>
+                        <el-col :span="9" :offset="1">返点比例：{{shopDetail.shopRebates*100}}% </el-col>
                     </el-row>
                     <el-row class="info-row">
-                        <el-col :span="8">渠道账户：{{marketingChannelsUser.name}}&nbsp;{{marketingChannelsUser.phoneNums}}</el-col>
-                        <el-col :span="15" :offset="1">返点比例：{{shopDetail.marketingRebates}}%</el-col>
+                        <el-col :span="3" style="text-align: right;">代理账户：</el-col>
+                        <el-col :span="8">{{marketingChannelsUser.name}}&nbsp;{{marketingChannelsUser.phoneNums}}</el-col>
+                        <el-col :span="9" :offset="1">返点比例：{{shopDetail.marketingRebates*100}}%</el-col>
                     </el-row>
                     <el-row class="info-row">
-                        <el-col :span="8">店家账户：{{otherUser.name}}&nbsp;{{otherUser.phoneNums}}</el-col>
-                        <el-col :span="15" :offset="1">返点比例：{{shopDetail.otherRebates}}% </el-col>
+                        <el-col :span="3" style="text-align: right;">账户1 ：</el-col>
+                        <el-col :span="8">{{otherUser.name}}&nbsp;{{otherUser.phoneNums}}</el-col>
+                        <el-col :span="9" :offset="1">返点比例：{{shopDetail.otherRebates*100}}% </el-col>
                     </el-row>
                 </el-row>
             </div>

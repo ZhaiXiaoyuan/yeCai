@@ -53,6 +53,7 @@
 
             </el-form>
         </div>
+        <vFooter class="login-page-footer"></vFooter>
     </div>
 </template>
 
@@ -97,14 +98,22 @@
     #identify-code input{
         width: 180px;
     }
+    .login-page-footer{
+        padding-left: 0px !important;
+        background: none !important;
+    }
+    .login-page-footer p{
+        color: #fff !important;
+    }
 </style>
 <script>
     import Vue from 'vue'
     import Identify from '../../components/Identify'
+    import vFooter from '../../components/common/Footer.vue';
 
     export default {
         components:{
-            Identify,
+            Identify,vFooter
         },
         data: function(){
             return {

@@ -130,16 +130,19 @@
                 </el-row>
                 <el-row class="block">
                     <el-row class="info-row">
-                        <el-col :span="8">门店账户：{{shopChannelsUser.name}}&nbsp;{{shopChannelsUser.phoneNums}}</el-col>
-                        <el-col :span="15" :offset="1">返点比例：{{shopDetail.shopRebates}}% </el-col>
+                        <el-col :span="3" style="text-align: right;">商户账户：</el-col>
+                        <el-col :span="8">{{shopChannelsUser.name}}&nbsp;{{shopChannelsUser.phoneNums}}</el-col>
+                        <el-col :span="9" :offset="1">返点比例：{{shopDetail.shopRebates*100}}% </el-col>
                     </el-row>
                     <el-row class="info-row">
-                        <el-col :span="8">渠道账户：{{marketingChannelsUser.name}}&nbsp;{{marketingChannelsUser.phoneNums}}</el-col>
-                        <el-col :span="15" :offset="1">返点比例：{{shopDetail.marketingRebates}}%</el-col>
+                        <el-col :span="3" style="text-align: right;">代理账户：</el-col>
+                        <el-col :span="8">{{marketingChannelsUser.name}}&nbsp;{{marketingChannelsUser.phoneNums}}</el-col>
+                        <el-col :span="9" :offset="1">返点比例：{{shopDetail.marketingRebates*100}}%</el-col>
                     </el-row>
                     <el-row class="info-row">
-                        <el-col :span="8">店家账户：{{otherUser.name}}&nbsp;{{otherUser.phoneNums}}</el-col>
-                        <el-col :span="15" :offset="1">返点比例：{{shopDetail.otherRebates}}% </el-col>
+                        <el-col :span="3" style="text-align: right;">账户1 ：</el-col>
+                        <el-col :span="8">{{otherUser.name}}&nbsp;{{otherUser.phoneNums}}</el-col>
+                        <el-col :span="9" :offset="1">返点比例：{{shopDetail.otherRebates*100}}% </el-col>
                     </el-row>
                 </el-row>
             </div>
@@ -158,13 +161,13 @@
                             <el-input v-model="form.telephoneNums" auto-complete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="门店渠道返点" :label-width="formLabelWidth">
-                            <el-input v-model="form.shopRebates" disabled auto-complete="off"></el-input>
+                            <el-input v-model="form.shopRebates*100" disabled auto-complete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="中介渠道返点" :label-width="formLabelWidth">
-                            <el-input v-model="form.marketingRebates" disabled auto-complete="off"></el-input>
+                            <el-input v-model="form.marketingRebates*100" disabled auto-complete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="其他渠道返点" :label-width="formLabelWidth">
-                            <el-input v-model="form.otherRebates" disabled auto-complete="off"></el-input>
+                            <el-input v-model="form.otherRebates*100" disabled auto-complete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="地区" :label-width="formLabelWidth">
                             <v-distpicker class="cm-area-picker" :province="form.province" :city="form.city" :area="form.area" @selected="changeArea"></v-distpicker>

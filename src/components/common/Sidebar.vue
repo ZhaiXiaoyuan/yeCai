@@ -33,6 +33,7 @@
     .sidebar{
         display: block;
         position: absolute;
+        z-index: 2;
         left: 0;
         top: 70px;
         bottom:0;

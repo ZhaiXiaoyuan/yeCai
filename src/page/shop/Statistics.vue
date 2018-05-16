@@ -11,7 +11,7 @@
                     <el-button type="primary" icon="el-icon-back" @click="$router.go(-1)">返回</el-button>
                 </el-col>-->
                 <el-col :span="24" style="text-align: right;">
-                    <el-button type="primary" icon="el-icon-edit" v-if="userDetail.accountState=='enable'" @click="dialogFormVisible=true">编辑</el-button>
+                   <!-- <el-button type="primary" icon="el-icon-edit" v-if="userDetail.accountState=='enable'" @click="dialogFormVisible=true">编辑</el-button>-->
                 </el-col>
             </el-row>
             <div class="container-bd">
