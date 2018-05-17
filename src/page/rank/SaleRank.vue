@@ -38,7 +38,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="companyName" label="公司名" align="center"></el-table-column>
-                <el-table-column prop="name" label="联系人姓名"  align="center"></el-table-column>
+           <!--     <el-table-column prop="name" label="联系人姓名"  align="center"></el-table-column>-->
                 <el-table-column prop="telephoneNums" label="联系人号码"  align="center"></el-table-column>
                 <el-table-column label="日销售额"  align="center">
                     <template slot-scope="scope">
