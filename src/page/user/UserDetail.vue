@@ -189,6 +189,9 @@
                         if(resp.respCode=='00'){
                             this.userDetail.accountState='del';
                             fb.setOptions({type:'complete',text:'删除成功'});
+                            setTimeout(()=>{
+                                window.history.go(-1);
+                            },1500);
                         }else{
                             fb.setOptions({type:'warn',text:'删除失败，'+resp.respMsg});
                         }

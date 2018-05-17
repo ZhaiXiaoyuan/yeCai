@@ -145,9 +145,7 @@
                 }
                 let params={
                     ...Vue.sessionInfo(),
-                 /*   rankingType:'day',//临时测试*/
                     rankingType:rankingType,
-                  /*  dateString:'2018-04-27',//临时测试*/
                     dateString:dateString,
                     searchContent:this.regionKeyword?this.regionKeyword:null
                 }

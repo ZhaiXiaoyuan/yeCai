@@ -6,57 +6,97 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-            <el-row class="handle-box">
-                <el-col :span="14">
-                    <span style="padding-right: 5px;">日期</span>
-                    <el-date-picker
-                        v-model="dateStr"
-                        type="date"
-                        @change="getList()"
-                        placeholder="选择日期">
-                    </el-date-picker>
-                    <el-button size="small" style="margin-left: 5px;" @click="getAll()">全部</el-button>
-                </el-col>
-            </el-row>
-            <el-table :data="entryList" border style="width: 100%;" ref="multipleTable" v-loading="pager.loading">
-                <el-table-column label="序号" align="center" width="50">
-                    <template slot-scope="scope">
-                        {{scope.$index+1}}
-                    </template>
-                </el-table-column>
-                <el-table-column prop="tpOrder.outOrderId" label="订单号" align="center"></el-table-column>
-                <el-table-column prop="tpOrder.lotteryNo" label="彩票号"  align="center"></el-table-column>
-                <el-table-column label="金额"  align="center">
-                    <template slot-scope="scope">
-                       {{scope.row.tpOrder.lotteryAmount|moneyFormat}}
-                    </template>
-                </el-table-column>
-                <el-table-column label="是否中奖"  align="center">
-                    <template slot-scope="scope">
-                        <span v-if="scope.row.win">是</span>
-                        <span v-if="!scope.row.win">否</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="中奖金额"  align="center">
-                    <template slot-scope="scope">
-                        <span class="cm-amount">{{(scope.row.winInfo.prizeMoney?scope.row.winInfo.prizeMoney:0)|moneyFormat}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="winInfo.mobile" label="中奖号码" align="center"></el-table-column>
-                <el-table-column prop="shop" label="门店" align="center"></el-table-column>
-                <el-table-column label="时间" width="200"  align="center">
-                    <template slot-scope="scope">
-                        {{scope.row.tpOrder.createdAt|formatDate('yyyy-MM-dd hh:mm:ss')}}
-                    </template>
-                </el-table-column>
-            </el-table>
-            <div class="pagination">
-                <el-pagination
-                    @current-change ="getList"
-                    layout="prev, pager, next"
-                    :total="pager.total">
-                </el-pagination>
-            </div>
+            <el-tabs v-model="activeName">
+                <el-tab-pane label="订单报表" name="first">
+                    <el-row class="handle-box">
+                        <el-col :span="14">
+                            <span style="padding-right: 5px;">日期</span>
+                            <el-date-picker
+                                v-model="orderDateStr"
+                                type="date"
+                                placeholder="选择日期">
+                            </el-date-picker>
+                            <el-button size="small" style="margin-left: 5px;" @click="getAllOrder()">全部</el-button>
+                        </el-col>
+                    </el-row>
+                    <el-table :data="orderList" border style="width: 100%;" ref="multipleTable" v-loading="orderPage.loading">
+                        <el-table-column label="序号" align="center" width="50">
+                            <template slot-scope="scope">
+                                {{scope.$index+1}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="outOrderId" label="订单号" align="center"></el-table-column>
+                        <el-table-column prop="lotteryNo" label="彩票编号"  align="center"></el-table-column>
+                        <el-table-column label="购彩金额"  align="center">
+                            <template slot-scope="scope">
+                                <span class="cm-amount">{{scope.row.lotteryAmount|moneyFormat}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="lotteryNoteCode" label="购彩注码" align="center"></el-table-column>
+                        <el-table-column label="订单状态" align="center">
+                            <template slot-scope="scope">
+                                <span v-if="scope.row.orderState=='success'">成功</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="channel" label="商户号" align="center"></el-table-column>
+                        <el-table-column prop="shop" label="公司名" align="center"></el-table-column>
+                        <el-table-column label="时间" width="200"  align="center">
+                            <template slot-scope="scope">
+                                {{scope.row.createdAt|formatDate('yyyy-MM-dd hh:mm:ss')}}
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <div class="pagination">
+                        <el-pagination
+                            @current-change ="getOrderList"
+                            layout="prev, pager, next"
+                            :total="orderPage.total">
+                        </el-pagination>
+                    </div>
+                </el-tab-pane>
+                <el-tab-pane label="中奖报表" name="second">
+                    <el-row class="handle-box">
+                        <el-col :span="14">
+                            <span style="padding-right: 5px;">日期</span>
+                            <el-date-picker
+                                v-model="winDateStr"
+                                type="date"
+                                placeholder="选择日期">
+                            </el-date-picker>
+                            <el-button size="small" style="margin-left: 5px;" @click="getAllWin()">全部</el-button>
+                        </el-col>
+                    </el-row>
+                    <el-table :data="winList" border style="width: 100%;" ref="multipleTable" v-loading="winPage.loading">
+                        <el-table-column label="序号" align="center" width="50">
+                            <template slot-scope="scope">
+                                {{scope.$index+1}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="outOrderId" label="订单号" align="center"></el-table-column>
+                        <el-table-column prop="lotteryNo" label="彩票编号"  align="center"></el-table-column>
+                        <el-table-column label="中奖金额"  align="center">
+                            <template slot-scope="scope">
+                                <span class="cm-amount">{{(scope.row.prizeMoney?scope.row.prizeMoney:0)|moneyFormat}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="mobile" label="用户手机号" align="center"></el-table-column>
+                        <el-table-column prop="userId" label="商户号" align="center"></el-table-column>
+                        <el-table-column prop="shop" label="公司名" align="center"></el-table-column>
+                        <el-table-column label="时间" width="200"  align="center">
+                            <template slot-scope="scope">
+                                {{scope.row.prizeTime?(scope.row.prizeTime|formatDate('yyyy-MM-dd hh:mm:ss')):''}}
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <div class="pagination">
+                        <el-pagination
+                            @current-change ="getWinList"
+                            layout="prev, pager, next"
+                            :total="winPage.total">
+                        </el-pagination>
+                    </div>
+                </el-tab-pane>
+            </el-tabs>
         </div>
     </div>
 </template>
@@ -77,72 +117,130 @@
     export default {
         data() {
             return {
-                pager:{
+                account:null,
+
+                activeName: 'first',
+                orderPage:{
                   pageIndex:1,
                   pageSize:20,
                   total:0,
                   loading:false
                 },
-                keyword:null,
-                entryList:[],
-                dateStr:'all'
+                orderList:[],
+                orderDateStr:'all',
+
+                winPage:{
+                    pageIndex:1,
+                    pageSize:20,
+                    total:0,
+                    loading:false
+                },
+                winList:[],
+                winDateStr:'all'
             }
         },
         created(){
         },
         watch: {
-            dateStr(value) {
-                console.log('value:',value);
+            orderDateStr(value) {
                 if(value){
-                    this.dateStr=Vue.formatDate(value,'yyyy-MM-dd');
+                    this.orderDateStr=Vue.formatDate(value,'yyyy-MM-dd');
                 }else{
-                    this.dateStr='all';
+                    this.orderDateStr='all';
                 }
-                this.getList();
+                if(!this.orderPage.loading){
+                    this.getOrderList();
+                }
+            },
+            winDateStr(value) {
+                if(value){
+                    this.winDateStr=Vue.formatDate(value,'yyyy-MM-dd');
+                }else{
+                    this.winDateStr='all';
+                }
+                if(!this.winPage.loading){
+                    this.getWinList();
+                }
             },
         },
         computed: {
         },
         methods: {
-            getList:function (pageIndex) {
+            getOrderList:function (pageIndex) {
                 let that=this;
-                this.pager.pageIndex=pageIndex?pageIndex:1;
+                this.orderPage.pageIndex=pageIndex?pageIndex:1;
                 let params={
                     ...Vue.sessionInfo(),
-                    pageIndex:this.pager.pageIndex,
-                    pageSize:this.pager.pageSize,
-                    dateString:this.dateStr,
+                    userId:this.account.id,
+                    pageIndex:this.orderPage.pageIndex,
+                    pageSize:this.orderPage.pageSize,
+                    dateString:this.orderDateStr,
                 }
-                this.pager.loading=true;
+                this.orderPage.loading=true;
                 Vue.api.getShopOrderList(params).then((resp)=>{
                     if(resp.respCode=='00'){
                         let data=JSON.parse(resp.respMsg);
                         let list=JSON.parse(data.orderList);
-                        that.entryList=[];
+                        that.orderList=[];
                         list.forEach(function (item,i) {
-                            that.entryList.push({
-                                tpOrder:JSON.parse(item.tpOrder),
-                                win:item.winInfo?true:false,
-                                winInfo:item.winInfo?JSON.parse(item.winInfo):{}
+                            that.orderList.push({
+                               ...JSON.parse(item.tpOrder),
+                                shop:item.shop,
                             });
                         })
-                        console.log('this.entryList:',this.entryList);
-                        this.pager.total=data.orderCount;
+                     /*   console.log('this.orderList:',this.orderList);*/
+                        this.orderPage.total=data.orderCount;
                     }
-                    this.pager.loading=false;
+                    this.orderPage.loading=false;
                 });
             },
-            getAll:function () {
-                this.dateStr='all';
-                this.getList();
+            getAllOrder:function () {
+                this.orderDateStr='all';
+                this.getOrderList();
+            },
+
+            getWinList:function (pageIndex) {
+                let that=this;
+                this.winPage.pageIndex=pageIndex?pageIndex:1;
+                let params={
+                    ...Vue.sessionInfo(),
+                      userId:this.account.id,
+                    pageIndex:this.winPage.pageIndex,
+                    pageSize:this.winPage.pageSize,
+                    dateString:this.winDateStr,
+                }
+                this.winPage.loading=true;
+                Vue.api.getUserShopWinInfoList(params).then((resp)=>{
+                    if(resp.respCode=='00'){
+                        let data=JSON.parse(resp.respMsg);
+                        let list=JSON.parse(data.winInfoList);
+                        this.winList=[];
+                        list.forEach(function (item,i) {
+                            that.winList.push({
+                                shop:item.shop,
+                                ...JSON.parse(item.winInfo),
+                            });
+                        })
+                      /*  console.log('this.winList:',this.winList);*/
+                        this.winPage.total=data.winInfoCount;
+                    }
+                    this.winPage.loading=false;
+                });
+            },
+            getAllWin:function () {
+                this.winDateStr='all';
+                this.getWinList();
             }
         },
         mounted () {
-            let account=JSON.parse(this.$cookie.get('account'));
+            this.account=JSON.parse(this.$cookie.get('account'));
             /**/
       /*      this.dateStr=Vue.formatDate(new Date(),'yyyy-MM-dd')*/
             /**/
-            this.getList();
+            this.getOrderList();
+            /**/
+            this.getWinList();
+
         },
     }
 </script>

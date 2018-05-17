@@ -299,6 +299,14 @@ export default {
                 params: params
             });
         },
+        //获取中奖列表
+        getUserShopWinInfoList:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl + '/user/getUserShopWinInfoList',
+                params: params
+            });
+        },
         //校验短信
         checkPhoneCode:function (params) {
             return Vue.http.ajax({
