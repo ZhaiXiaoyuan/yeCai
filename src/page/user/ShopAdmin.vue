@@ -424,7 +424,7 @@
                                 7:item['shopChannelsId-phoneNums'],//手机号码
                                 8:item['shopChannelsId-name'],//姓名
                                 9:Vue.basicConfig.basicUrl+item.qRCodeId,//外链
-                                10:Vue.basicConfig.qrCodeBasicUrl+'?channles='+item.channelId,//信息
+                                10:Vue.basicConfig.qrCodeBasicUrl+'?channels='+item.channelId,//信息
                             });
                         });
                         this.downloadExl(jsonData,'二维码导出表');

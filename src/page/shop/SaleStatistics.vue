@@ -462,7 +462,7 @@
                     7:shopChannelsUser.phoneNums,//手机号码
                     8:shopChannelsUser.name,//姓名
                     9:Vue.basicConfig.basicUrl+this.shopDetail.qRCodeId,//外链
-                    10:Vue.basicConfig.qrCodeBasicUrl+'?channles='+this.shopDetail.channelId,//信息
+                    10:Vue.basicConfig.qrCodeBasicUrl+'?channels='+this.shopDetail.channelId,//信息
                 });
                 this.downLoadFb=Vue.operationFeedback({text:'导出中...'});
                 this.downloadExl(jsonData,'二维码导出表');
