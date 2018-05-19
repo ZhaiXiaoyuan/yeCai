@@ -35,7 +35,7 @@
                         <el-table-column prop="lotteryNoteCode" label="购彩注码" align="center"></el-table-column>
                         <el-table-column label="订单状态" align="center">
                             <template slot-scope="scope">
-                                <span v-if="scope.row.orderState=='success'">成功</span>
+                                <span v-if="scope.row.orderState=='success'||scope.row.orderState=='SUCCESS'">成功</span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="channel" label="商户号" align="center"></el-table-column>
