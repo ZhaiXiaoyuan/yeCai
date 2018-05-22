@@ -256,6 +256,9 @@
                 }
 
                 var targetUrl='http://yeahcai.happycp.net/index.htm?reqChannel='+getRequest().channels;//系统开放时的目标跳转地址
+                if(hostname=='happcpapp.yeahcai.cn'){
+                    targetUrl='https://yeahcai.happycp.net/invationActivity.htm?promoChannel='+getRequest().channels;
+                }
                 getData(basicUrl+'sys/checkQRTime','POST',params,function (resp) {
                     $('.loading').addClass('cm-hidden');
                     if(resp.respMsg=='系统未开放'){

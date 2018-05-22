@@ -3,7 +3,7 @@
         <div class="ms-title">
             <span v-if="pageName=='login'">夜彩平台超级管理员</span>
             <span v-if="pageName=='adminLogin'">
-                夜彩平台<span v-if="accountType=='marketManager'">市场</span><span v-if="accountType=='accountantManager'">财务</span>管理员
+                夜彩平台管理员
             </span>
             <span v-if="pageName=='shopLogin'">
                 夜彩-商户后台
