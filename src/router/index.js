@@ -84,6 +84,11 @@ export default new Router({
                     name:'setPassword',
                     component: resolve => require(['../page/account/setPassword.vue'], resolve)
                 },
+                {
+                    path: '/order',
+                    name:'order',
+                    component: resolve => require(['../page/admin/Order.vue'], resolve)
+                },
             ]
         },
         {

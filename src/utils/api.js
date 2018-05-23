@@ -40,9 +40,8 @@ export default {
     }
 
     /**/
-    //临时测试
-    let basicUrl=false&&process.env.NODE_ENV=='development'?'http://zyu-server.wicp.net:19356/yecai':'http://api.yeahcai.com/yecai';
-/*      let basicUrl=false&&process.env.NODE_ENV=='development'?'http://api.yeahcai.com/yecai':'http://api.yeahcai.cn/yecai';*/
+   /* let basicUrl=false&&process.env.NODE_ENV=='development'?'http://zyu-server.wicp.net:19356/yecai':'http://api.yeahcai.com/yecai';*/
+      let basicUrl=false&&process.env.NODE_ENV=='development'?'http://api.yeahcai.com/yecai':'http://api.yeahcai.cn/yecai';
     Vue.api={
         //获取用户详细信息
       getUserDetail:function (params) {
@@ -305,6 +304,22 @@ export default {
             return Vue.http.ajax({
                 method: 'post',
                 url: basicUrl + '/user/getUserShopWinInfoList',
+                params: params
+            });
+        },
+        //获取平台订单列表
+        getPlatformOderList:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl + '/order/getOrderList',
+                params: params
+            });
+        },
+        //获取平台中奖信息
+        getPlatforWinInfoList:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl + '/order/getWinInfoList',
                 params: params
             });
         },

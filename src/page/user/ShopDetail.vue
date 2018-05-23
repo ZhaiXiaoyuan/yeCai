@@ -84,26 +84,36 @@
                         </el-row>
                     </el-col>
                     <el-col :span="8">
-                        <el-col :span="11" class="img-item">
-                            <img class="img" :src="basicConfig.basicUrl+shopDetail.qRCodeId" alt="">
-                            <el-row style="text-align: center">
-                                二维码
-                            </el-row>
-                        </el-col>
-                        <el-col :span="11" :offset="2"  class="img-item">
-                            <img class="img" v-if="shopDetail.companyPic" :src="basicConfig.basicUrl+shopDetail.companyPic" @click="viewPicModal({imgUrl:basicConfig.basicUrl+shopDetail.companyPic})" alt="">
-                            <i class="icon cm-default-pic img" v-if="!shopDetail.companyPic"></i>
-<!--
-                            <div class="img" :style="{background: 'url('+basicConfig.basicUrl+shopDetail.companyPic+') no-repeat center',backgroundSize: 'cover'}"></div>
--->
-                            <el-row style="text-align: center">
-                                <el-col :span="12">营业执照</el-col>
-                                <el-col :span="12" class="cm-link-btn" style="text-align: right;position: relative">
-                                    设置
-                                    <input type="file" id="file-input" multiple @change="selectFile()">
-                                </el-col>
-                            </el-row>
-                        </el-col>
+                       <el-row>
+                           <el-col :span="11" class="img-item">
+                               <img class="img" :src="basicConfig.basicUrl+shopDetail.qRCodeId" alt="">
+                               <el-row style="text-align: center">
+                                   html跳转二维码
+                               </el-row>
+                           </el-col>
+                           <el-col :span="11" :offset="2" class="img-item">
+                               <img class="img" :src="basicConfig.basicUrl+shopDetail.appQrCodeId" alt="">
+                               <el-row style="text-align: center">
+                                   app推广二维码
+                               </el-row>
+                           </el-col>
+                       </el-row>
+                        <el-row style="margin-top: 10px;">
+                            <el-col :span="11"  class="img-item">
+                                <img class="img" v-if="shopDetail.companyPic" :src="basicConfig.basicUrl+shopDetail.companyPic" @click="viewPicModal({imgUrl:basicConfig.basicUrl+shopDetail.companyPic})" alt="">
+                                <i class="icon cm-default-pic img" v-if="!shopDetail.companyPic"></i>
+                                <!--
+                                                            <div class="img" :style="{background: 'url('+basicConfig.basicUrl+shopDetail.companyPic+') no-repeat center',backgroundSize: 'cover'}"></div>
+                                -->
+                                <el-row style="text-align: center">
+                                    <el-col :span="12">营业执照</el-col>
+                                    <el-col :span="12" class="cm-link-btn" style="text-align: right;position: relative">
+                                        设置
+                                        <input type="file" id="file-input" multiple @change="selectFile()">
+                                    </el-col>
+                                </el-row>
+                            </el-col>
+                        </el-row>
                     </el-col>
                 </el-row>
                 <el-row class="block">
@@ -506,7 +516,8 @@
                         7:'手机号码',
                         8:'姓名',
                         9:'外链',
-                        10:'信息'
+                        10:'app推广',
+                        11:'信息'
                     }
                 ];
                 let shopChannelsUser=JSON.parse(this.shopDetail.shopChannelsUser);
@@ -520,7 +531,8 @@
                     7:shopChannelsUser.phoneNums,//手机号码
                     8:shopChannelsUser.name,//姓名
                     9:Vue.basicConfig.basicUrl+this.shopDetail.qRCodeId,//外链
-                    10:Vue.basicConfig.qrCodeBasicUrl+'?channels='+this.shopDetail.channelId,//信息
+                    10:Vue.basicConfig.basicUrl+this.shopDetail.appQrCodeId,//app推广
+                    11:Vue.basicConfig.qrCodeBasicUrl+'?channels='+this.shopDetail.channelId,//信息
                 });
                 this.downLoadFb=Vue.operationFeedback({text:'导出中...'});
                 this.downloadExl(jsonData,'二维码导出表');

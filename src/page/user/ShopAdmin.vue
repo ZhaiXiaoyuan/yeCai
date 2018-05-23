@@ -68,6 +68,9 @@
                             <el-form-item label="门店渠道账户号码" :label-width="formLabelWidth">
                                 <el-input v-model="form.shopChannelsPhoneNums" maxLength="50" auto-complete="off"></el-input>
                             </el-form-item>
+                            <el-form-item label="渠道号" :label-width="formLabelWidth">
+                                <el-input v-model="form.channelId" placeholder="请输入渠道号" maxLength="20" auto-complete="off"></el-input>
+                            </el-form-item>
                             <el-form-item label="门店渠道返点" :label-width="formLabelWidth">
                                 <el-input v-model="form.shopRebates" placeholder="请输入返点数，如输入1，则生效数额为1%" maxLength="4" auto-complete="off"></el-input>
                                 <span class="unit">%</span>
@@ -102,6 +105,7 @@
                            ||!form.socialCreditCode||form.socialCreditCode==''
                            ||!form.telephoneNums||form.telephoneNums==''
                            ||!form.shopChannelsPhoneNums||form.shopChannelsPhoneNums==''
+                           ||!form.channelId||form.channelId==''
                            ||form.shopRebates==''
                            ||!form.marketingChannelsPhoneNums||form.marketingChannelsPhoneNums==''
                            ||form.marketingRebates==''
@@ -410,7 +414,8 @@
                                 7:'手机号码',
                                 8:'姓名',
                                 9:'外链',
-                                10:'信息'
+                                10:'app推广',
+                                11:'信息'
                             }
                         ];
                         allList.forEach((item,i)=>{
@@ -424,7 +429,8 @@
                                 7:item['shopChannelsId-phoneNums'],//手机号码
                                 8:item['shopChannelsId-name'],//姓名
                                 9:Vue.basicConfig.basicUrl+item.qRCodeId,//外链
-                                10:Vue.basicConfig.qrCodeBasicUrl+'?channels='+item.channelId,//信息
+                                10:Vue.basicConfig.basicUrl+item.appQrCodeId,//app推广
+                                11:Vue.basicConfig.qrCodeBasicUrl+'?channels='+item.channelId,//信息
                             });
                         });
                         this.downloadExl(jsonData,'二维码导出表');
@@ -463,6 +469,10 @@
                 }
             },
             add:function () {
+                if(this.form.channelId.length!=12){
+                    Vue.operationFeedback({type:'warn',text:'请输入12位的渠道号'});
+                    return;
+                }
                 this.form.shopRebates=this.form.shopRebates/100;
                 this.form.marketingRebates=this.form.marketingRebates/100;
                 this.form.otherRebates=this.form.otherRebates/100;
