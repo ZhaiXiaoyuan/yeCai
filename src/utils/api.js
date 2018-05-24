@@ -40,8 +40,9 @@ export default {
     }
 
     /**/
-   /* let basicUrl=false&&process.env.NODE_ENV=='development'?'http://zyu-server.wicp.net:19356/yecai':'http://api.yeahcai.com/yecai';*/
-      let basicUrl=false&&process.env.NODE_ENV=='development'?'http://api.yeahcai.com/yecai':'http://api.yeahcai.cn/yecai';
+    //临时测试
+    let basicUrl=false&&process.env.NODE_ENV=='development'?'http://zyu-server.wicp.net:19356/yecai':'http://api.yeahcai.com/yecai';
+     /* let basicUrl=false&&process.env.NODE_ENV=='development'?'http://api.yeahcai.com/yecai':'http://api.yeahcai.cn/yecai';*/
     Vue.api={
         //获取用户详细信息
       getUserDetail:function (params) {

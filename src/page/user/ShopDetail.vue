@@ -515,9 +515,10 @@
                         6:'详细地址',
                         7:'手机号码',
                         8:'姓名',
-                        9:'外链',
-                        10:'app推广',
-                        11:'信息'
+                        9:'HTML推广二维码',
+                        10:'HTML推广二维码内容',
+                        11:'app推广二维码',
+                        12:'app推广二维码内容',
                     }
                 ];
                 let shopChannelsUser=JSON.parse(this.shopDetail.shopChannelsUser);
@@ -530,9 +531,10 @@
                     6:this.shopDetail.address,//详细地址
                     7:shopChannelsUser.phoneNums,//手机号码
                     8:shopChannelsUser.name,//姓名
-                    9:Vue.basicConfig.basicUrl+this.shopDetail.qRCodeId,//外链
-                    10:Vue.basicConfig.basicUrl+this.shopDetail.appQrCodeId,//app推广
-                    11:Vue.basicConfig.qrCodeBasicUrl+'?channels='+this.shopDetail.channelId,//信息
+                    9:Vue.basicConfig.basicUrl+this.shopDetail.qRCodeId,//HTML推广二维码
+                    10:Vue.basicConfig.qrCodeBasicUrl+'?channels='+this.shopDetail.channelId,//HTML推广二维码内容
+                    11:Vue.basicConfig.basicUrl+this.shopDetail.appQrCodeId,//app推广二维码
+                    12:Vue.basicConfig.appBaickUrl+'?channels='+this.shopDetail.channelId,//app推广二维码内容
                 });
                 this.downLoadFb=Vue.operationFeedback({text:'导出中...'});
                 this.downloadExl(jsonData,'二维码导出表');

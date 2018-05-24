@@ -413,9 +413,10 @@
                                 6:'详细地址',
                                 7:'手机号码',
                                 8:'姓名',
-                                9:'外链',
-                                10:'app推广',
-                                11:'信息'
+                                9:'HTML推广二维码',
+                                10:'HTML推广二维码内容',
+                                11:'app推广二维码',
+                                12:'app推广二维码内容',
                             }
                         ];
                         allList.forEach((item,i)=>{
@@ -428,9 +429,10 @@
                                 6:item.address,//详细地址
                                 7:item['shopChannelsId-phoneNums'],//手机号码
                                 8:item['shopChannelsId-name'],//姓名
-                                9:Vue.basicConfig.basicUrl+item.qRCodeId,//外链
-                                10:Vue.basicConfig.basicUrl+item.appQrCodeId,//app推广
-                                11:Vue.basicConfig.qrCodeBasicUrl+'?channels='+item.channelId,//信息
+                                9:Vue.basicConfig.basicUrl+item.qRCodeId,//HTML推广二维码
+                                10:Vue.basicConfig.qrCodeBasicUrl+'?channels='+item.channelId,//HTML推广二维码内容
+                                11:Vue.basicConfig.basicUrl+item.appQrCodeId,//app推广二维码
+                                12:Vue.basicConfig.appBaickUrl+'?channels='+item.channelId,//app推广二维码内容
                             });
                         });
                         this.downloadExl(jsonData,'二维码导出表');
