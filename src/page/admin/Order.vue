@@ -106,6 +106,7 @@
                         <el-pagination
                             @current-change ="getWinList"
                             layout="prev, pager, next"
+                            :page-size="winPage.pageSize"
                             :total="winPage.total">
                         </el-pagination>
                     </div>

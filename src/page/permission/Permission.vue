@@ -44,6 +44,7 @@
                             <el-pagination
                                 @current-change ="getMarketManagerList"
                                 layout="prev, pager, next"
+                                :page-size="marketManagerPager.pageSize"
                                 :total="marketManagerPager.total">
                             </el-pagination>
                         </div>
@@ -84,6 +85,7 @@
                             <el-pagination
                                 @current-change ="getAccountantManagerList"
                                 layout="prev, pager, next"
+                                :page-size="accountantManagerPager.pageSize"
                                 :total="accountantManagerPager.total">
                             </el-pagination>
                         </div>
