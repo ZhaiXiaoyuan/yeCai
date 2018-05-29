@@ -57,6 +57,7 @@
                         <el-pagination
                             @current-change ="getOrderList"
                             layout="prev, pager, next"
+                            :page-size="orderPage.pageSize"
                             :total="orderPage.total">
                         </el-pagination>
                     </div>
