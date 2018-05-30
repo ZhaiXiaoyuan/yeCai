@@ -81,7 +81,7 @@
                             </template>
                         </el-table-column>
                         <el-table-column prop="mobile" label="用户手机号" align="center"></el-table-column>
-                        <el-table-column prop="userId" label="商户号" align="center"></el-table-column>
+                        <el-table-column prop="channel" label="商户号" align="center"></el-table-column>
                         <el-table-column prop="shop" label="公司名" align="center"></el-table-column>
                         <el-table-column label="时间" width="200"  align="center">
                             <template slot-scope="scope">
