@@ -220,6 +220,7 @@
                         list.forEach(function (item,i) {
                             that.winList.push({
                                 shop:item.shop,
+                                channel:item.channel,
                                 ...JSON.parse(item.winInfo),
                             });
                         })
