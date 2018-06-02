@@ -153,11 +153,9 @@
                 Vue.api.getSaleRanking(params).then((resp)=>{
                     if(resp.respCode=='00'){
                         this.entryList=JSON.parse(resp.respMsg);
-                        /*  console.log('this.entryList:',this.entryList);*/
+                          console.log('this.entryList:',this.entryList);
                     }
-                    setTimeout(()=>{
-                        this.loading=false;
-                    },500)
+                    this.loading=false;
                 });
             },
             changeArea:function (data) {

@@ -98,8 +98,8 @@
                         <el-table-column prop="channel" label="商户号" align="center"></el-table-column>
                         <el-table-column prop="shop" label="公司名" align="center"></el-table-column>
                         <el-table-column label="时间" width="200"  align="center">
-                            <template slot-scope="scope">
-                                {{scope.row.prizeTime?(scope.row.prizeTime|formatDate('yyyy-MM-dd hh:mm:ss')):''}}
+                            <template slot-scope="scope" v-if="scope.row.createdAt">
+                                {{scope.row.createdAt|formatDate('yyyy-MM-dd hh:mm:ss')}}
                             </template>
                         </el-table-column>
                     </el-table>
@@ -206,7 +206,6 @@
                                 shop:item.shop,
                             });
                         })
-                        console.log('this.orderList:',this.orderList);
                         this.orderPage.total=data.orderCount;
                     }
                     this.orderPage.loading=false;
@@ -241,7 +240,6 @@
                                 ...JSON.parse(item.winInfo),
                             });
                         })
-                        console.log('this.winList:',this.winList);
                         this.winPage.total=data.winInfoCount;
                     }
                     this.winPage.loading=false;
