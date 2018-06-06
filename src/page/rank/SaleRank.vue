@@ -153,7 +153,13 @@
                 Vue.api.getSaleRanking(params).then((resp)=>{
                     if(resp.respCode=='00'){
                         this.entryList=JSON.parse(resp.respMsg);
-                          console.log('this.entryList:',this.entryList);
+                        if(rankingType!='thisYear'||rankingType!='thisMonth'){
+                            this.entryList.forEach((item,i)=>{
+                                if(item.shop){
+                                    Object.assign(item,JSON.parse(item.shop));
+                                }
+                            })
+                        }
                     }
                     this.loading=false;
                 });

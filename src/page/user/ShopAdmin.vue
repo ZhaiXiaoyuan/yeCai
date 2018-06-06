@@ -288,38 +288,24 @@
                     data.forEach((item,key)=>{
                      /*   console.log('item:',item);*/
                         if(parseInt(item['夜彩门店信息'])>=1&&item.__EMPTY){
-                            console.log('item:',item);
                             this.excelData.push({
-                              /*  "accountState":"enable",*/
-                              /*  "monthSale":0.0,*/
-                                "marketingRebates":item.__EMPTY_12/100,
-                                "address":item.__EMPTY_6,
-                                "marketingChannelsId":item.__EMPTY_11,
                                 "telephoneNums":item.__EMPTY_2,
-                                "otherId":item.__EMPTY_14,
-                                "city":item.__EMPTY_4,
-                               /* "daySale":0.0,*/
+                                "shopChannelsPhoneNums":item.__EMPTY_8,
+                                "shopRebates":item.__EMPTY_10,
+                                "marketingChannelsPhoneNums":item.__EMPTY_11,
+                                "marketingRebates":item.__EMPTY_13,
+                                "otherPhoneNums":item.__EMPTY_14,
+                                "otherRebates":item.__EMPTY_16,
                                 "companyName":item.__EMPTY,
-                                "county":item.__EMPTY_5,
-                              /*  "qRCodeId":"6729ecdba5b248069628fffe2905da39",*/
-                             /*   "monthRankings":-1,*/
                                 "socialCreditCode":item.__EMPTY_1,
-                                "otherRebates":item.__EMPTY_15/100,
-                              /*  "dayRankings":-1,*/
-                              /*  "yearSale":0.0,*/
-                              /*  "companyPic":"",*/
-                                "province":item.__EMPTY_3,
-                                "shopRebates":item.__EMPTY_9/100,
-                            /*    "id":"6729ecdba5b248069628fffe2905da39",*/
-                               /* "yearRankings":-1,*/
-                                "channelId":item.__EMPTY_8,
-                                shopChannelsPhoneNums:item.__EMPTY_7,
-                                marketingChannelsPhoneNums:item.__EMPTY_10,
-                                otherPhoneNums:item.__EMPTY_13
-                            });
+                                "province":item.__EMPTY_4,
+                                "city":item.__EMPTY_5,
+                                "county":item.__EMPTY_6,
+                                "address":item.__EMPTY_7,
+                                channelId:item.__EMPTY_3,
+                            })
                         }
                     });
-                    console.log('test:', this.excelData);
                    /**/
                    if(this.excelData.length>0){
                        let fb=Vue.operationFeedback({text:'导入中...'});

@@ -130,7 +130,13 @@
                 Vue.api.getEarningsRanking(params).then((resp)=>{
                     if(resp.respCode=='00'){
                         this.entryList=JSON.parse(resp.respMsg);
-                      /*  console.log('this.entryList:',this.entryList);*/
+                        if(rankingType!='thisYear'||rankingType!='thisMonth'){
+                            this.entryList.forEach((item,i)=>{
+                                if(item.user){
+                                    Object.assign(item,JSON.parse(item.user));
+                                }
+                            })
+                        }
                     }
                 });
             },
