@@ -45,7 +45,7 @@ export default {
         //
       Vue.tools = {
           //临时测试
-        /*  basicConfig:{
+    /*      basicConfig:{
               basicUrl:false&&process.env.NODE_ENV=='development'?'http://zyu-server.wicp.net:19356/':'http://api.yeahcai.com',
               qrCodeBasicUrl:'http://shopqrcode.yeahcai.com',
               yeCaiBasicUrl:'http://yecai.happycp.com',

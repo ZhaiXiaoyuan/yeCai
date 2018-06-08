@@ -91,7 +91,7 @@
                         </div>
                     </el-tab-pane>
                 </el-tabs>
-                <el-dialog :title="(handleType=='add'?'新建':'编辑')+(activeName=='first'?'市场管理员':'会计管理员')" class="edit-dialog" :visible.sync="dialogFormVisible" width="40%">
+                <el-dialog :title="(handleType=='add'?'新建':'编辑')+(activeName=='first'?'市场管理员':'会计管理员')" class="edit-dialog" :visible.sync="dialogFormVisible"  v-if="dialogFormVisible" width="40%">
                     <el-row type="flex">
                         <el-col :sm="24" :md="22" :lg="20">
                             <el-form :model="form">

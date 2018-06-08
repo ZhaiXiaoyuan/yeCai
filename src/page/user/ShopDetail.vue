@@ -157,7 +157,7 @@
                 </el-row>
             </div>
         </div>
-        <el-dialog title="编辑" class="edit-dialog" :visible.sync="dialogFormVisible" width="40%">
+        <el-dialog title="编辑" class="edit-dialog" :visible.sync="dialogFormVisible"  v-if="dialogFormVisible" width="40%">
             <el-row type="flex">
                 <el-col :sm="24" :md="22" :lg="20">
                     <el-form :model="form">

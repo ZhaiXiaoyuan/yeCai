@@ -340,6 +340,22 @@ export default {
                 params: params
             });
         },
+        //获取用户关联的门店
+        getUserShop:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl + '/user/getUserShop',
+                params: params
+            });
+        },
+        //获取用户门店统计
+        getUserShopStatistics:function (params) {
+            return Vue.http.ajax({
+                method: 'post',
+                url: basicUrl + '/user/getUserShopStatistics',
+                params: params
+            });
+        },
     }
   },
 
