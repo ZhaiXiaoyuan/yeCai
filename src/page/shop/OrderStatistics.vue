@@ -158,8 +158,16 @@
                         </el-table-column>
                         <el-table-column prop="companyName" label="公司名" align="center"></el-table-column>
                         <el-table-column prop="channelId" label="渠道号"  align="center"></el-table-column>
-                        <el-table-column prop="daySale" label="订单总金额/日"  align="center"></el-table-column>
-                        <el-table-column prop="monthSale" label="订单总金额/月" align="center"></el-table-column>
+                        <el-table-column label="订单总金额/日"  align="center">
+                            <template slot-scope="scope">
+                                <span class="cm-amount">{{scope.row.daySale|moneyFormat}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="订单总金额/月" align="center">
+                            <template slot-scope="scope">
+                                <span class="cm-amount">{{scope.row.monthSale|moneyFormat}}</span>
+                            </template>
+                        </el-table-column>
                         <el-table-column prop="dayOrderCount" label="订单数/日" align="center"></el-table-column>
                         <el-table-column prop="monthOrderCount" label="订单数/月" align="center"></el-table-column>
                         <el-table-column prop="dayWinCount" label="中奖数/日" align="center"></el-table-column>
@@ -349,7 +357,7 @@
                                 1:i+1,
                                 2:item.outOrderId,
                                 3:item.lotteryNo,
-                                4:item.lotteryAmount,
+                                4:Vue.moneyFormat(item.lotteryAmount),
                                 5:item.lotteryNoteCode,
                                 6:item.orderState=='success'||item.orderState=='SUCCESS'?'成功':'失败',
                                 7:item.channel,
@@ -434,7 +442,7 @@
                                 1:i+1,
                                 2:item.outOrderId,
                                 3:item.lotteryNo,
-                                4:item.prizeMoney,
+                                4:Vue.moneyFormat(item.prizeMoney),
                                 5:item.mobile,
                                 6:item.channel,
                                 7:item.shop,
@@ -526,8 +534,8 @@
                                 1:i+1,
                                 2:item.companyName,
                                 3:item.channelId,
-                                4:item.daySale,
-                                5:item.monthSale,
+                                4:Vue.moneyFormat(item.daySale),
+                                5:Vue.moneyFormat(item.monthSale),
                                 6:item.dayOrderCount,
                                 7:item.monthOrderCount,
                                 8:item.dayWinCount,

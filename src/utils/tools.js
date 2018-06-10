@@ -45,7 +45,7 @@ export default {
         //
       Vue.tools = {
           //临时测试
-    /*      basicConfig:{
+        /*  basicConfig:{
               basicUrl:false&&process.env.NODE_ENV=='development'?'http://zyu-server.wicp.net:19356/':'http://api.yeahcai.com',
               qrCodeBasicUrl:'http://shopqrcode.yeahcai.com',
               yeCaiBasicUrl:'http://yecai.happycp.com',
@@ -144,6 +144,9 @@ export default {
                 router.push({name:loginPage?loginPage:'login'});
                 return{};
             }
+        },
+        moneyFormat:function (str) {
+            return (str/100).toFixed(2);
         }
       }
 

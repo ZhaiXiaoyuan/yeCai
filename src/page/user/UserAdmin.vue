@@ -195,7 +195,7 @@
                         let json = XLSX.utils.sheet_to_json($t.wb.Sheets[$t.wb.SheetNames[i]]);
                         $t.dealFile($t.analyzeData(json)) // analyzeData: 解析导入数据
                     }*/
-                    let json = XLSX.utils.sheet_to_json($t.wb.Sheets[$t.wb.SheetNames[1]]);
+                    let json = XLSX.utils.sheet_to_json($t.wb.Sheets[$t.wb.SheetNames[0]]);
                     $t.dealFile($t.analyzeData(json)) // analyzeData: 解析导入数据
                 }
                 if (this.rABS) {
@@ -247,7 +247,7 @@
                 return data
             },
             dealFile: function (data) {   // 处理导入的数据
-                console.log(data)
+              /*  console.log(data)*/
                 this.imFile.value = ''
                 this.fullscreenLoading = false
                 if (data.length <= 0) {
@@ -276,7 +276,7 @@
                     })
                     let fb=Vue.operationFeedback({text:'导入中...'});
                     Vue.api.addUserBatch({...Vue.sessionInfo(),userData:JSON.stringify(this.excelData)}).then((resp)=>{
-                        if(resp.respStatus=='success'){
+                        if(resp.respCode=='00'){
                             this.getList();
                             fb.setOptions({type:'complete',text:'导入成功'});
                         }else{
