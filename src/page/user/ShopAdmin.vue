@@ -472,6 +472,7 @@
                 let fb=Vue.operationFeedback({text:'保存中...'});
                 Vue.api.addShop(params).then((resp)=>{
                     if(resp.respCode=='00'){
+                        this.form={province:'',city:'',county:''};
                         this.getList();
                         this.dialogFormVisible = false;
                         fb.setOptions({type:'complete',text:'新建成功'});
