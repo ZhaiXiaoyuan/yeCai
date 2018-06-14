@@ -18,7 +18,7 @@
                             </el-date-picker>
                         </el-col>
                         <el-col :span="5">
-                            <el-input placeholder="门店名" v-model="orderKeyword">
+                            <el-input placeholder="门店名/渠道号" v-model="orderKeyword">
                                 <el-button slot="append" icon="el-icon-search" @click="getOrderList()"></el-button>
                             </el-input>
                         </el-col>
@@ -73,7 +73,7 @@
                             </el-date-picker>
                         </el-col>
                         <el-col :span="5">
-                            <el-input placeholder="门店名" v-model="winInfoKeyword">
+                            <el-input placeholder="门店名/渠道号" v-model="winInfoKeyword">
                                 <el-button slot="append" icon="el-icon-search" @click="getWinList()"></el-button>
                             </el-input>
                         </el-col>

@@ -105,6 +105,41 @@
                 </div>
             </el-dialog>
         </div>
+
+        <el-dialog
+            title="提示"
+            :visible.sync="failDialog"
+            width="60%">
+            <div style="height: 350px;overflow-y: auto;">
+                <p style="font-size: 16px;color: #333;padding: 10px 0px;"><i class="icon el-icon-warning" style="color:#F56C6C;font-size: 22px;margin-right: 8px;"></i>以下账号未导入成功，请仔细核查您的excel文件</p>
+                <el-table :data="failList" stripe style="width: 100%;border-top: 1px solid #e5e5e5">
+                    <el-table-column
+                        prop="user.phoneNums"
+                        label="手机号"
+                        width="180">
+                    </el-table-column>
+                    <el-table-column
+                        prop="user.name"
+                        label="姓名"
+                        width="180">
+                    </el-table-column>
+                    <el-table-column
+                        prop="user.idCard"
+                        label="身份证">
+                    </el-table-column>
+                    <el-table-column label="状态">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.state=='fail'">导入失败</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="mgs" label="原因"></el-table-column>
+                </el-table>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="failDialog = false">取 消</el-button>
+                <el-button type="primary" @click="failDialog = false">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <style scoped>
@@ -118,6 +153,7 @@
         width: 300px;
         display: inline-block;
     }
+
 </style>
 <script>
     import Vue from 'vue'
@@ -148,6 +184,8 @@
                 errorDialog: false, // 错误信息弹窗
                 errorMsg: '', // 错误信息内容
                 excelData: [ ],
+                failDialog:false,
+                failList:[],
 
                 dialogFormVisible: false,
                 form:{},
@@ -277,8 +315,24 @@
                     let fb=Vue.operationFeedback({text:'导入中...'});
                     Vue.api.addUserBatch({...Vue.sessionInfo(),userData:JSON.stringify(this.excelData)}).then((resp)=>{
                         if(resp.respCode=='00'){
+                            let data=JSON.parse(resp.respMsg);
+                            let failList=JSON.parse(data.failJsonArray);
+                            this.failList=failList;
+                            this.failList.forEach((item,i)=>{
+                                item.user=JSON.parse(item.user);
+                            })
+                            console.log('this.failList:',this.failList);
+                            this.failDialog=true;
+                            if(failList.length>0){
+                                if(data.length==failList.length){
+                                    fb.setOptions({type:'warn',text:'导入失败'});
+                                }else{
+                                    fb.setOptions({type:'warn',text:'部分账号导入失败'});
+                                }
+                            }else{
+                                fb.setOptions({type:'complete',text:'导入成功'});
+                            }
                             this.getList();
-                            fb.setOptions({type:'complete',text:'导入成功'});
                         }else{
                             fb.setOptions({type:'warn',text:'导入失败，'+resp.respMsg});
                         }

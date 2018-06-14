@@ -462,13 +462,16 @@
                     Vue.operationFeedback({type:'warn',text:'请输入12位的渠道号'});
                     return;
                 }
-                this.form.shopRebates=this.form.shopRebates/100;
-                this.form.marketingRebates=this.form.marketingRebates/100;
-                this.form.otherRebates=this.form.otherRebates/100;
+                let shopRebates=this.form.shopRebates/100;
+                let marketingRebates=this.form.marketingRebates/100;
+                let otherRebates=this.form.otherRebates/100;
                 let params={
                     ...Vue.sessionInfo(),
                     ...this.form
                 }
+                params.shopRebates=shopRebates;
+                params.marketingRebates=marketingRebates;
+                params.otherRebates=otherRebates;
                 let fb=Vue.operationFeedback({text:'保存中...'});
                 Vue.api.addShop(params).then((resp)=>{
                     if(resp.respCode=='00'){

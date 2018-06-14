@@ -174,7 +174,7 @@
                 this.accountAccess=['01','02','03','04','05','09','10'];
                /* this.accountAccess='all';*/
             }else if(this.accountInfo.type=='marketManager'){
-                this.accountAccess=['02','10'];
+                this.accountAccess=['01','02','10'];
             }else if(this.accountInfo.type=='accountantManager'){
                 this.accountAccess=['03'];
             }else if(this.accountInfo.type=='userManager'){
