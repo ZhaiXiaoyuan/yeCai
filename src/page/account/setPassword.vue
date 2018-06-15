@@ -39,7 +39,7 @@
     export default {
         data() {
             return {
-              account:'root',
+              account:'szYeahcai3870',
               pwd:'',
               rePwd:'',
             }
