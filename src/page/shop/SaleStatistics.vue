@@ -9,8 +9,16 @@
             <el-row class="container-hd">
                 <el-col :span="12">
                     <!--<el-button type="primary" icon="el-icon-back" @click="$router.go(-1)">返回</el-button>-->
+                    <el-select v-model="selectedShopId" @change="shopChange" class="handle cm-select" v-if="account.type=='userManager'">
+                        <el-option
+                            v-for="(item,index) in shopOptions"
+                            :key="index"
+                            :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-col>
-                <el-col :span="24" style="text-align: right;">
+                <el-col :span="12" style="text-align: right;">
                     <!--<el-button type="primary" icon="el-icon-edit" v-if="shopDetail.accountState=='enable'" @click="dialogFormVisible=true">编辑</el-button>-->
                     <el-button type="primary" class="mr10" @click="downloadQrcodeInfo()">
                         导出二维码
@@ -88,12 +96,15 @@
                         <el-col :span="11" :offset="2"  class="img-item">
                             <img class="img" v-if="shopDetail.companyPic" :src="basicConfig.basicUrl+shopDetail.companyPic" @click="viewPicModal({imgUrl:basicConfig.basicUrl+shopDetail.companyPic})" alt="">
                             <i class="icon cm-default-pic img" v-if="!shopDetail.companyPic"></i>
-                            <el-row style="text-align: center">
+                            <el-row style="text-align: center"  v-if="account.type!='userManager'">
                                 <el-col :span="12">营业执照</el-col>
                                 <el-col :span="12" class="cm-link-btn" style="text-align: right;position: relative">
                                     设置
                                     <input type="file" id="file-input" multiple @change="selectFile()">
                                 </el-col>
+                            </el-row>
+                            <el-row style="text-align: center"  v-if="account.type=='userManager'">
+                                营业执照
                             </el-row>
                         </el-col>
                     </el-col>
@@ -120,7 +131,7 @@
                         </el-row>
                     </el-col>
                 </el-row>
-                <el-row class="block">
+                <el-row class="block"  v-if="account.type!='userManager'">
                     <el-row class="info-row">
                         <el-col :span="3" style="text-align: right;">商户账户：</el-col>
                         <el-col :span="8">{{shopChannelsUser.name}}&nbsp;{{shopChannelsUser.phoneNums}}</el-col>
@@ -235,6 +246,7 @@
     export default {
         data() {
             return {
+                account:{},
                 dialogFormVisible: false,
                 areaSelect: { province: '', city: '', area: '' },
                 form: {
@@ -258,7 +270,11 @@
                 uploadFb:null,
                 uploadedCount:0,
 
-                curDateStrArr:Vue.formatDate(new Date(),'yyyy.MM.dd').split('.')
+                curDateStrArr:Vue.formatDate(new Date(),'yyyy.MM.dd').split('.'),
+
+                selectedShop:null,
+                selectedShopId:null,
+                shopOptions:[],
             }
         },
         created(){
@@ -268,8 +284,8 @@
 
         },
         methods: {
-            getShopDetail:function () {
-                Vue.api.getShopDetail({...Vue.sessionInfo(),shopId:this.id}).then((resp)=>{
+            getShopDetail:function (id) {
+                Vue.api.getShopDetail({...Vue.sessionInfo(),shopId:id}).then((resp)=>{
                     if(resp.respCode=='00'){
                     this.shopDetail=JSON.parse(resp.respMsg);
                     this.form=Object.assign({},this.shopDetail);
@@ -348,7 +364,6 @@
                 });
             },
             changeArea:function (data) {
-                console.log('data:',data);
                 this.form.province=data.province.value;
                 this.form.city=data.city.value;
                 this.form.area=data.area.value;
@@ -466,13 +481,42 @@
                 });
                 this.downLoadFb=Vue.operationFeedback({text:'导出中...'});
                 this.downloadExl(jsonData,'二维码导出表');
-            }
+            },
+            getUserShop:function () {
+                let params={
+                    ...Vue.sessionInfo(),
+                    userId:this.account.id,
+                }
+                Vue.api.getUserShop(params).then((resp)=>{
+                    if(resp.respCode=='00'){
+                        let data=JSON.parse(resp.respMsg);
+                        data.forEach((item,i)=>{
+                            this.shopOptions.push({
+                                label:item.channelId+item.companyName,
+                                value:item.id,
+                            })
+                        });
+                        this.selectedShopId=this.shopOptions[0].value;
+                        this.getShopDetail(this.selectedShopId);
+                        console.log('this.selectedShopId:',this.selectedShopId);
+                    }
+                });
+            },
+            shopChange:function (data) {
+                console.log('data:',data);
+                this.id=data;
+                this.getShopDetail(this.id);
+            },
         },
         mounted () {
-            let account=JSON.parse(this.$cookie.get('account'));
-            this.id=this.$route.params.id?this.$route.params.id:account.id;
-            /**/
-            this.getShopDetail();
+            this.account=JSON.parse(this.$cookie.get('account'));
+            console.log('account:',this.account);
+            if(this.account.type=='userManager'){
+                this.getUserShop();
+            }else{
+                this.id=this.$route.params.id
+                this.getShopDetail(this.id);
+            }
             /**/
             this.outFile = document.getElementById('downlink');
         },

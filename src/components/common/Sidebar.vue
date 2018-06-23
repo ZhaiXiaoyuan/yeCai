@@ -129,12 +129,12 @@
                         index: '/statistics',
                         title: '用户信息',
                     },
-               /*     {
+                    {
                         code:'07',
                         icon: '#icon-tongji',
                         index: '/saleStatistics',
                         title: '销售统计',
-                    },*/
+                    },
                     {
                         code:'08',
                         icon: '#icon-dingdan',

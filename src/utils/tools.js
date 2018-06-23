@@ -45,18 +45,18 @@ export default {
         //
       Vue.tools = {
           //临时测试
-       /*   basicConfig:{
+          basicConfig:{
               basicUrl:false&&process.env.NODE_ENV=='development'?'http://zyu-server.wicp.net:19356/':'http://api.yeahcai.com',
               qrCodeBasicUrl:'http://shopqrcode.yeahcai.com',
               yeCaiBasicUrl:'http://yecai.happycp.com',
               appBaickUrl:'http://happcpapp.yeahcai.com'
-          },*/
-          basicConfig:{
+          },
+  /*        basicConfig:{
               basicUrl:false&&process.env.NODE_ENV=='development'?'http://zyu-server.wicp.net:19356/':'http://api.yeahcai.cn',
               qrCodeBasicUrl:'http://shopqrcode.yeahcai.cn',
               yeCaiBasicUrl:'http://yecai.happycp.cn',
               appBaickUrl:'http://happcpapp.yeahcai.cn'
-          },
+          },*/
         /*生成请求时间戳*/
         genTimestamp:function () {
           return Math.ceil(new Date().getTime()/1000)
