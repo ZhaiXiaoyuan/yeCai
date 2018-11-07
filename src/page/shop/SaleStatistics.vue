@@ -2,7 +2,7 @@
     <div class="shop-detail">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>销售统计</el-breadcrumb-item>
+                <el-breadcrumb-item>门店信息</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">

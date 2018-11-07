@@ -133,7 +133,7 @@
                         code:'07',
                         icon: '#icon-tongji',
                         index: '/saleStatistics',
-                        title: '销售统计',
+                        title: '门店信息',
                     },
                     {
                         code:'08',
